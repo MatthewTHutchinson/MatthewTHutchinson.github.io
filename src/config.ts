@@ -96,10 +96,11 @@ bullets: [
 education: [
 {
 school: "University of California, Los Angeles",
-degree: "M.S. Mechanical Engineering (Design, Robotics & Manufacturing)",
+degree: "M.S. Mechanical Engineering",
 dateRange: "2025 – 2026",
 achievements: [
-"Graduate coursework in soft robotics, bionic systems, data science",
+"Specialization in Design, Robotics & Manufacturing",
+"Graduate coursework in soft robotics, bionic systems, data science, compliant mechanisms, artificial intelligence",
 "Focus: Robotics, Autonomous Systems, Fabrication"
 ],
 },

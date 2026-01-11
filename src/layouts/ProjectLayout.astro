@@ -1,25 +1,44 @@
 ---
+// src/layouts/ProjectLayout.astro
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { siteConfig } from "../config";
 import "../styles/global.css";
-
-// Optional: accept props like title or description
-const { title = "Untitled", description = siteConfig.description } = Astro.props;
+import { siteConfig } from "../config";
 ---
 
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{siteConfig.name} | Project</title>
+
+    <!-- Global Fonts (IBM Plex Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
-    <title>{title} – {siteConfig.name}</title>
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      :root {
+        --accent-color: {siteConfig.accentColor};
+      }
+    </style>
   </head>
-  <body>
+
+  <body class="bg-white text-gray-900 font-sans">
     <Header />
-    <main class="max-w-screen-lg mx-auto px-4 py-8">
+
+    <main class="max-w-4xl mx-auto px-4 py-32">
       <slot />
     </main>
     <Footer />

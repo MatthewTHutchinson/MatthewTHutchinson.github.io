@@ -3,31 +3,26 @@
 import { siteConfig } from "../config";
 ---
 
-<!-- FIXED full-screen background layer -->
 <div
-  class="fixed inset-0 -z-10 h-screen w-screen overflow-hidden pointer-events-none"
-  aria-hidden="true"
+  class="absolute top-0 left-0 w-full max-h-[600px] overflow-hidden pointer-events-none z-[-10]"
 >
-  <!-- Radial gradient backdrop -->
+  <!-- Radial Gradient -->
   <div
-    class="absolute inset-0"
-    style={`background: radial-gradient(ellipse 800px 1200px at 0% 0%, ${siteConfig.accentColor}40 0%, ${siteConfig.accentColor}25 20%, ${siteConfig.accentColor}10 40%, rgba(255,255,255,0.3) 70%, rgba(255,255,255,0.8) 90%, white 100%)`}
-  />
+    class="w-full h-[600px]"
+    style={`background: radial-gradient(ellipse 800px 1200px at 0% 0%, ${siteConfig.accentColor}40 0%, ${siteConfig.accentColor}25 20%, ${siteConfig.accentColor}10 40%, rgba(255, 255, 255, 0.3) 70%, rgba(255, 255, 255, 0.8) 90%, white 100%)`}
+  ></div>
 
-  <!-- SVG pattern layer -->
+  <!-- Programming Symbols -->
   <svg
-    class="absolute inset-0 w-full h-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
     aria-hidden="true"
+    class="absolute top-0 left-0 w-full h-[600px] stroke-gray-200"
+    style="
+      mask-image: linear-gradient(to bottom, white 0%, white 70%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, white 0%, white 70%, transparent 100%);
+    "
   >
     <defs>
-      <pattern
-        id="symbols"
-        x="0"
-        y="0"
-        width="400"
-        height="400"
-        patternUnits="userSpaceOnUse"
-      >
+      <pattern id="symbols" x="0" y="0" width="400" height="400" patternUnits="userSpaceOnUse">
         <text x="50" y="50" fill={siteConfig.accentColor} font-family="monospace" font-size="24" transform="rotate(-15)">&lt;/&gt;</text>
         <text x="150" y="100" fill={siteConfig.accentColor} font-family="monospace" font-size="20" transform="rotate(10)">{}</text>
         <text x="250" y="80" fill={siteConfig.accentColor} font-family="monospace" font-size="18" transform="rotate(-5)">=&gt;</text>

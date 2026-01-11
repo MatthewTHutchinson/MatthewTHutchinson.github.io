@@ -1,4 +1,5 @@
 export const siteConfig = {
+base: "MatthewTHutchinson.github.io",
 name: "Matthew Hutchinson",
 title: "UCLA Mechanical Engineering Master's Student",
 description:

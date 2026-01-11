@@ -1,75 +1,98 @@
 ---
 import { siteConfig } from "../config";
+import { Astro } from "astro";
+
+const currentPath = Astro.url.pathname;
+const isHomePage = currentPath === "/" || currentPath === "/MatthewTHutchinson.github.io/";
 
 const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
 const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
 const hasEducation = siteConfig.education && siteConfig.education.length > 0;
+
+const makeLink = (hash) => isHomePage ? `#${hash}` : `/${siteConfig.base || ''}#${hash}`;
 ---
 
-<header
-  id="header"
-  class="fixed top-0 left-0 right-0 z-50 hidden md:block transition-all duration-300"
->
-  <nav class="max-w-7xl mx-auto px-8 py-4">
-    <ul class="flex items-center gap-8 justify-center">
-      <li>
-        <a
-          href="#about"
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          About
-        </a>
-      </li>
-      {
-        hasProjects && (
-          <li>
-            <a
-              href="#projects"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Projects
-            </a>
-          </li>
-        )
-      }
-      {
-        hasExperience && (
-          <li>
-            <a
-              href="#experience"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Experience
-            </a>
-          </li>
-        )
-      }
-      {
-        hasEducation && (
-          <li>
-            <a
-              href="#education"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Education
-            </a>
-          </li>
-        )
-      }
-    </ul>
-  </nav>
-</header>
+<html lang="en" class="font-sans">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={siteConfig.description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<script>
-  window.addEventListener("scroll", () => {
-    const header = document.getElementById("header");
-    if (window.scrollY > 100) {
-      header?.classList.add("bg-white/80", "backdrop-blur-sm");
-    } else {
-      header?.classList.remove("bg-white/80", "backdrop-blur-sm");
-    }
-  });
-</script>
+  <body>
+    <header
+      id="header"
+      class="fixed top-0 left-0 right-0 z-50 hidden md:block transition-all duration-300 font-sans"
+    >
+      <nav class="max-w-7xl mx-auto px-8 py-4">
+        <ul class="flex items-center gap-8 justify-center">
+          <li>
+            <a
+              href={makeLink("about")}
+              class="text-gray-700 hover:text-black transition-colors font-medium"
+            >
+              About
+            </a>
+          </li>
+          {
+            hasProjects && (
+              <li>
+                <a
+                  href={makeLink("projects")}
+                  class="text-gray-700 hover:text-black transition-colors font-medium"
+                >
+                  Projects
+                </a>
+              </li>
+            )
+          }
+          {
+            hasExperience && (
+              <li>
+                <a
+                  href={makeLink("experience")}
+                  class="text-gray-700 hover:text-black transition-colors font-medium"
+                >
+                  Experience
+                </a>
+              </li>
+            )
+          }
+          {
+            hasEducation && (
+              <li>
+                <a
+                  href={makeLink("education")}
+                  class="text-gray-700 hover:text-black transition-colors font-medium"
+                >
+                  Education
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </nav>
+    </header>
+
+    <script>
+      window.addEventListener("scroll", () => {
+        const header = document.getElementById("header");
+        if (window.scrollY > 100) {
+          header?.classList.add("bg-white/80", "backdrop-blur-sm");
+        } else {
+          header?.classList.remove("bg-white/80", "backdrop-blur-sm");
+        }
+      });
+    </script>
+  </body>
+</html>
 
 <style>
   html {

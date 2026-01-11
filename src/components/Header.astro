@@ -1,6 +1,5 @@
 ---
 import { siteConfig } from "../config";
-import { Astro } from "astro";
 
 const currentPath = Astro.url.pathname;
 const isHomePage = currentPath === "/" || currentPath === "/MatthewTHutchinson.github.io/";
@@ -9,7 +8,8 @@ const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
 const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
 const hasEducation = siteConfig.education && siteConfig.education.length > 0;
 
-const makeLink = (hash) => isHomePage ? `#${hash}` : `/${siteConfig.base || ''}#${hash}`;
+const makeLink = (hash: string) =>
+  isHomePage ? `#${hash}` : `/${siteConfig.base || ''}#${hash}`;
 ---
 
 <html lang="en" class="font-sans">

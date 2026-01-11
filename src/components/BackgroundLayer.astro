@@ -1,18 +1,19 @@
 ---
+// src/components/BackgroundLayer.astro
 import { siteConfig } from "../config";
 ---
 
 <div
-  class="fixed inset-0 -z-10 pointer-events-none"
+  class="fixed inset-0 -z-10 h-[100vh] bg-transparent pointer-events-none"
   aria-hidden="true"
 >
-  <!-- Gradient Overlay -->
+  <!-- Gradient -->
   <div
     class="absolute inset-0"
-    style={`background: radial-gradient(ellipse 800px 1200px at 0% 0%, ${siteConfig.accentColor}40 0%, ${siteConfig.accentColor}25 20%, ${siteConfig.accentColor}10 40%, rgba(255, 255, 255, 0.3) 70%, rgba(255, 255, 255, 0.8) 90%, white 100%)`}
-  ></div>
+    style={`background: radial-gradient(ellipse 800px 1200px at 0% 0%, ${siteConfig.accentColor}40 0%, ${siteConfig.accentColor}25 20%, ${siteConfig.accentColor}10 40%, rgba(255,255,255,0.3) 70%, rgba(255,255,255,0.8) 90%, white 100%)`}
+  />
 
-  <!-- Programming Symbols Pattern -->
+  <!-- Symbol SVG pattern -->
   <svg
     aria-hidden="true"
     class="absolute inset-0 size-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"

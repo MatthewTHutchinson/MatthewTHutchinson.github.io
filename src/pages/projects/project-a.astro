@@ -2,7 +2,26 @@
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
 ---
 
-<ProjectLayout title="Project A" description="This is a description of Project A.">
-  <img src="/images/project-a-screenshot.png" alt="Project A Screenshot" class="mb-6 rounded-lg shadow-lg" />
-  <p>This project is a web app that does something amazing. You can add more details here.</p>
+<ProjectLayout>
+  <h1 class="text-4xl sm:text-5xl font-bold mb-6">Autonomous Rover for Disk Transport</h1>
+
+  <p class="text-lg text-gray-700 mb-4">
+    Designed and built an autonomous rover to transport disks across ramps and platforms using camera-based path detection, PID control, and mechanical arm mechanisms.
+  </p>
+
+  <ul class="flex flex-wrap gap-3 mb-6">
+    <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Python</li>
+    <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">SolidWorks</li>
+    <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Arduino</li>
+  </ul>
+
+  <img
+    src="/images/rover.jpg"
+    alt="Autonomous Rover"
+    class="rounded-lg shadow-md w-full mb-8"
+  />
+
+  <p class="text-base leading-relaxed text-gray-600">
+    More detailed explanation of your rover project here. You can include additional sections, headers, or images.
+  </p>
 </ProjectLayout>

@@ -1,92 +1,116 @@
 export const siteConfig = {
-  name: "Ryan Fitzgerald",
-  title: "Senior Software Engineer",
-  description: "Portfolio website of Ryan Fitzgerald",
-  accentColor: "#1d4ed8",
-  social: {
-    email: "your-email@example.com",
-    linkedin: "https://linkedin.com/in/yourprofile",
-    twitter: "https://x.com/rfitzio",
-    github: "https://github.com/RyanFitzgerald",
-  },
-  aboutMe:
-    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem quos asperiores nihil consequatur tempore cupiditate architecto natus commodi corrupti quas quasi facere est, dignissimos odit nam veniam sapiente ut, vitae eligendi ipsum dolor, nostrum ullam impedit! Corrupti ratione mollitia temporibus necessitatibus, consectetur reiciendis recusandae id, dolorum quaerat, vero pariatur. Ratione!",
-  skills: ["Javascript", "React", "Node.js", "Python", "AWS", "Docker"],
-  projects: [
-    {
-      name: "AI Dev Roundup Newsletter",
-      description:
-        "One concise email. Five minutes. Every Tuesday. Essential AI news & trends, production-ready libraries, powerful AI tools, and real-world code examples",
-      link: "https://aidevroundup.com/?ref=devportfolio",
-      skills: ["React", "Node.js", "AWS"],
-    },
-    {
-      name: "Chrome Extension Mastery: Build Full-Stack Extensions with React & Node.js",
-      description:
-        "Master the art of building production-ready, full-stack Chrome Extensions using modern web technologies and best practices",
-      link: "https://fullstackextensions.com/?ref=devportfolio",
-      skills: ["React", "Node.js", "AWS"],
-    },
-    {
-      name: "ExtensionKit",
-      description:
-        "Kit to jump-start your Chrome extension projects with a variety of battle-tested starter templates & examples",
-      link: "https://extensionkit.io/?ref=devportfolio",
-      skills: ["React", "Node.js", "AWS"],
-    },
-  ],
-  experience: [
-    {
-      company: "Tech Company",
-      title: "Senior Software Engineer",
-      dateRange: "Jan 2022 - Present",
-      bullets: [
-        "Led development of microservices architecture serving 1M+ users",
-        "Reduced API response times by 40% through optimization",
-        "Mentored team of 5 junior developers",
-      ],
-    },
-    {
-      company: "Startup Inc",
-      title: "Full Stack Developer",
-      dateRange: "Jun 2020 - Dec 2021",
-      bullets: [
-        "Built and launched MVP product from scratch using React and Node.js",
-        "Implemented CI/CD pipeline reducing deployment time by 60%",
-        "Collaborated with product team to define technical requirements",
-      ],
-    },
-    {
-      company: "Digital Agency",
-      title: "Frontend Developer",
-      dateRange: "Aug 2018 - May 2020",
-      bullets: [
-        "Developed responsive web applications for 20+ clients",
-        "Improved site performance scores by 35% on average",
-        "Introduced modern JavaScript frameworks to legacy codebases",
-      ],
-    },
-  ],
-  education: [
-    {
-      school: "University Name",
-      degree: "Bachelor of Science in Computer Science",
-      dateRange: "2014 - 2018",
-      achievements: [
-        "Graduated Magna Cum Laude with 3.8 GPA",
-        "Dean's List all semesters",
-        "President of Computer Science Club",
-      ],
-    },
-    {
-      school: "Online Platform",
-      degree: "Full Stack Development Certificate",
-      dateRange: "2019",
-      achievements: [
-        "Completed 500+ hours of coursework",
-        "Built 10+ portfolio projects",
-        "Specialized in React and Node.js",
-      ],
-    },
-  ],
+name: "Matthew Hutchinson",
+title: "UCLA Mechanical Engineering Master's Student",
+description:
+"Portfolio of Matthew Hutchinson, a UCLA-trained mechanical engineer passionate about robotics, design, and building advanced autonomous systems.",
+accentColor: "#1d4ed8",
+social: {
+email: "[mahutchinson@ucla.edu](mailto:mahutchinson@ucla.edu)",
+linkedin: "[https://www.linkedin.com/in/matt-hutch/](https://www.linkedin.com/in/matt-hutch/)",
+twitter: "",
+github: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
+},
+aboutMe:
+"I'm a mechanical engineer and digital fabricator passionate about robotics, additive manufacturing, and emerging technologies. I enjoy combining creative design with rigorous engineering to solve complex real-world problems. Currently pursuing my M.S. in Mechanical Engineering at UCLA (Design, Robotics & Manufacturing).",
+skills: [
+"Python",
+"MATLAB",
+"SolidWorks",
+"Data Science",
+"Additive Manufacturing",
+"Laser Cutting",
+"Control Systems",
+"C++",
+"Arduino",
+],
+projects: [
+{
+name: "Autonomous Rover for Disk Transport",
+description:
+"Designed and built a autonomous rover to transport disks across ramps and platforms using camera-based path detection, PID control, and mechanical arm mechanisms.",
+link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
+skills: ["Python", "SolidWorks", "Arduino"],
+},
+{
+name: "Robotic Arm for Fiber Placement",
+description:
+"Developed an impedance controller in PyDrake for automated composite fiber placement, focusing on accurate force control and dynamic interaction with mold surfaces.",
+link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
+skills: ["Python", "Control Systems", "Simulation", "Robotics"],
+},
+{
+name: "Metal Additive Manufacturing Research",
+description:
+"Explored multidirectional wire arc and laser wire additive manufacturing strategies, including robotic deposition, thermal gradient control, and digital twin simulation concepts.",
+link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
+skills: ["Manufacturing", "Design", "Thermal Analysis"],
+},
+{
+name: "Motorcycle Maintenance & Modding",
+description:
+"Hands-on work on my Suzuki SV650: performed valve inspections, coolant flush, exhaust upgrade, oil changes.",
+link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
+skills: ["Mechanical Systems", "Diagnostics", "Tools"],
+},
+{
+name: "Laser-Cut Japanese Lantern",
+description:
+"Designed and fabricated a multi-material lantern featuring wood joinery, acrylic panels, and engraving, blending precision design with physical craft.",
+link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
+skills: ["Laser Cutting", "Design for Fabrication", "Art & Engineering"],
+},
+],
+experience: [
+{
+company: "UCLA Engineering Makerspace",
+title: "Fabrication Lab Technician",
+dateRange: "Sep 2023 – Jun 2024",
+bullets: [
+"Assisted students in laser cutting, 3D printing, and digital fabrication tools",
+"Supported rapid prototyping for research and class projects",
+"Maintained and troubleshot fabrication equipment"
+],
+},
+{
+company: "NASA Langley Research Center",
+title: "AAM Research Intern",
+dateRange: "Feb 2022",
+bullets: [
+"Led a 10-person team in developing short-term lunar habitat mission pathways",
+"Used optimization models in Excel Solver to evaluate scientific return vs cost",
+"Co-led final review with NASA engineers and placed 1st out of 16 teams"
+],
+},
+{
+company: "UCLA DevX / MAE Capstone",
+title: "Robotics Developer",
+dateRange: "Jan 2024 – Jun 2024",
+bullets: [
+"Built autonomous rover with mechanical arm & vision tracking for disk transport",
+"Implemented OpenCV and PID motor control on Raspberry Pi/Arduino stack",
+"Designed chassis using laser cutting and 3D printing"
+],
+},
+],
+education: [
+{
+school: "University of California, Los Angeles",
+degree: "M.S. Mechanical Engineering (Design, Robotics & Manufacturing)",
+dateRange: "2025 – 2026",
+achievements: [
+"Graduate coursework in soft robotics, bionic systems, data science",
+"Focus: Robotics, Autonomous Systems, Fabrication"
+],
+},
+{
+school: "University of California, Los Angeles",
+degree: "B.S. Mechanical Engineering",
+dateRange: "2022 – 2024",
+achievements: [
+"Graduated with 3.54 GPA",
+"Completed 4 graduate-level robotics and manufacturing courses",
+"Designed & built multiple robotic and mechanical systems"
+],
+},
+],
 };

@@ -21,7 +21,7 @@ skills: [
 "Additive Manufacturing",
 "Laser Cutting",
 "Control Systems",
-"C++",
+"Git",
 "Arduino",
 ],
 projects: [
@@ -109,8 +109,8 @@ degree: "B.S. Mechanical Engineering",
 dateRange: "2022 – 2024",
 achievements: [
 "Graduated with 3.54 GPA",
-"Completed 4 graduate-level robotics and manufacturing courses",
-"Designed & built multiple robotic and mechanical systems"
+"Graduate-level coursework in robotics (Kinematics, Dynamics, & Control), Rapid Prototyping, data structures & algorithms",
+"Designed, simulated, & built multiple robotic and mechanical systems"
 ],
 },
 ],

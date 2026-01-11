@@ -36,12 +36,15 @@ import { siteConfig } from "../config";
     </style>
   </head>
 
-  <body class="bg-white text-gray-900 font-sans">
+  <body class="bg-white text-gray-900 font-sans relative overflow-hidden">
+    <BackgroundLayer />
+
     <Header />
 
-    <main class="max-w-4xl mx-auto px-4 pt-48 pb-32">
+    <main class="relative z-10 max-w-4xl mx-auto px-4 pt-48 pb-32">
       <slot />
     </main>
+
     <Footer />
   </body>
 </html>

@@ -1,7 +1,7 @@
 export const siteConfig = {
 base: "MatthewTHutchinson.github.io",
 name: "Matthew Hutchinson",
-title: "UCLA Mechanical Engineering Master's Student",
+title: "Mechanical Engineering Graduate Student",
 description:
 "Portfolio of Matthew Hutchinson, a UCLA-trained mechanical engineer passionate about robotics, design, and building advanced autonomous systems.",
 accentColor: "#1d4ed8",
@@ -12,7 +12,7 @@ twitter: "",
 github: "https://github.com/MatthewTHutchinson",
 },
 aboutMe:
-"I'm a mechanical engineer and digital fabricator passionate about robotics, additive manufacturing, and emerging technologies. I enjoy combining creative design with rigorous engineering to solve complex real-world problems. Currently pursuing my M.S. in Mechanical Engineering at UCLA (Design, Robotics & Manufacturing).",
+"I'm a mechanical engineer and digital fabricator passionate about robotics, additive manufacturing, and emerging technologies. I enjoy combining creative design with engineering to solve complex real-world problems. Currently pursuing my M.S. in Mechanical Engineering at UCLA (Design, Robotics & Manufacturing).",
 skills: [
 "Python",
 "MATLAB",

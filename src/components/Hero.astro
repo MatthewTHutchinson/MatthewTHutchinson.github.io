@@ -129,7 +129,8 @@ import { siteConfig } from "../config";
       height="100%"
       stroke-width={0}></rect>
   </svg>
-  <div class="h-full mx-auto p-8 sm:p-12 md:p-24 flex items-center">
+  
+  <!-- <div class="h-full mx-auto p-8 sm:p-12 md:p-24 flex items-center">
     <div>
       <h2
         class="text-pretty text-xl sm:text-2xl md:text-5xl font-bold tracking-tight text-gray-700 animate-fade-in"
@@ -149,6 +150,36 @@ import { siteConfig } from "../config";
         {siteConfig.title}
       </p>
     </div>
+  </div> -->
+
+  <div class="flex flex-col md:flex-row items-center gap-6">
+    <!-- Left: Text -->
+    <div class="text-center md:text-left">
+      <h2 class="text-xl sm:text-2xl md:text-5xl font-bold text-gray-700 animate-fade-in">Hello! 👋</h2>
+      <h1 class="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-gray-800 animate-fade-in animation-delay-200">
+        I'm <span style={{ color: siteConfig.accentColor }}>{siteConfig.name}</span>
+      </h1>
+      <p class="mt-4 text-base sm:text-lg md:text-xl text-gray-600 animate-fade-in animation-delay-400">
+        {siteConfig.title}
+      </p>
+
+      <!-- Resume Button -->
+      <a 
+        href="/resume.pdf" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-block mt-6 px-6 py-3 border-2 border-[var(--accent-color)] text-[var(--accent-color)] font-semibold rounded hover:bg-[var(--accent-color)] hover:text-white transition-colors animate-fade-in animation-delay-600"
+      >
+        View My Resume
+      </a>
+    </div>
+
+    <!-- Right: Headshot -->
+    <img 
+      src="/headshot.jpg" 
+      alt="Matthew Hutchinson headshot" 
+      class="w-40 h-40 md:w-56 md:h-56 object-cover rounded-full border-4 border-[var(--accent-color)] shadow-lg animate-fade-in animation-delay-800"
+    />
   </div>
   <div
     class="absolute bottom-0 left-0 right-0 p-8 sm:p-12 md:p-24 flex gap-x-4 sm:gap-x-6 md:gap-x-8 text-gray-700 animate-fade-in animation-delay-600"

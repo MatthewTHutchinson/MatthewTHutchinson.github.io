@@ -1,6 +1,6 @@
 # Matthew Hutchinson's Portfolio
 
-Welcome to my personal website! Built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/).
+Welcome to my [personal website](https://MatthewTHutchinson.github.io)! Built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/).
 
 ## 🚀 About This Project
 

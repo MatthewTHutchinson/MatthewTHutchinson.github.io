@@ -1,0 +1,171 @@
+---
+import ProjectLayout from "../../layouts/ProjectLayout.astro";
+---
+
+<ProjectLayout>
+  {/* HERO */}
+  <section class="mb-12">
+    <div class="flex flex-col gap-6">
+      <div>
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4">Autonomous Rover for Disk Transport</h1>
+        <p class="text-lg text-gray-700 max-w-3xl">
+          Autonomous rover that navigates a constrained course, collects and stacks disk-shaped objects,
+          climbs a ramp, and delivers them to a designated drop-off location using camera-based perception
+          and closed-loop control.
+        </p>
+
+        <ul class="flex flex-wrap gap-3 mt-5">
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Python</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">OpenCV</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Controls (PID)</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Raspberry Pi</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Arduino</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">SolidWorks</li>
+        </ul>
+      </div>
+
+      <img
+        src="/images/autonomous-rover/rover-hero.jpg"
+        alt="Autonomous rover prototype (Scoop N' Do) with disk basket and actuation mechanisms"
+        class="rounded-lg shadow-md w-full"
+      />
+    </div>
+  </section>
+
+  {/* PROBLEM + CONSTRAINTS */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Problem & Constraints</h2>
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-3">
+        <p>
+          The rover must autonomously traverse a course (curves, ramp, obstacles), collect and stack disks,
+          and drop them off in a specified order under strict size and robustness constraints.
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Must fit within a compact volume and remain functional after a short drop test.</li>
+          <li>Line-following navigation through curved segments and a ramp.</li>
+          <li>Pick up and transport at least two disks; bonus for three.</li>
+        </ul>
+      </div>
+
+      <img
+        src="/images/autonomous-rover/venue-diagram.png"
+        alt="Testing venue diagram showing start, pickup, ramp, and drop-off zones"
+        class="rounded-lg shadow-sm w-full"
+      />
+    </div>
+  </section>
+
+  {/* SYSTEM OVERVIEW */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">System Overview</h2>
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-3">
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Raspberry Pi handles high-level compute (vision + navigation decisions).</li>
+          <li>Arduino Nano handles low-level actuation (servos, lift, scoop sequencing).</li>
+          <li>Drive motors use encoder feedback for consistent speed and repeatability.</li>
+        </ul>
+      </div>
+
+      <img
+        src="/images/autonomous-rover/electronics-schematic.png"
+        alt="Electronics and communication schematic for rover control stack"
+        class="rounded-lg shadow-sm w-full"
+      />
+    </div>
+  </section>
+
+  {/* MECHANICAL */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-6">Mechanical Design</h2>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Chassis</h3>
+        <img class="rounded-md mb-3" src="/images/autonomous-rover/cad-overview.png" alt="Assembled rover CAD overview" />
+        <p class="text-gray-600 text-sm">
+          Modular layered chassis designed for stability, rapid iteration, and serviceability.
+        </p>
+      </div>
+
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Basket Lift</h3>
+        <img class="rounded-md mb-3" src="/images/autonomous-rover/basket-lift.png" alt="Basket lift crank-slider mechanism" />
+        <p class="text-gray-600 text-sm">
+          Crank-slider lift raises the basket for controlled placement at the drop-off platform.
+        </p>
+      </div>
+
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Scoop Arm</h3>
+        <img class="rounded-md mb-3" src="/images/autonomous-rover/arm-rack-pinion.png" alt="Rack and pinion scoop arm mechanism" />
+        <p class="text-gray-600 text-sm">
+          Rack-and-pinion style extension with servo control for disk pickup and unloading.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* CONTROLS */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-3">
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>OpenCV line segmentation → lateral error estimate → steering correction.</li>
+          <li>PID-based line following and encoder feedback for consistent speed.</li>
+          <li>State machine orchestrates: follow line → pickup → incline → drop-off.</li>
+        </ul>
+      </div>
+
+      <div class="space-y-6">
+        <img
+          src="/images/autonomous-rover/cv-steering-diagram.png"
+          alt="Computer vision steering control diagram"
+          class="rounded-lg shadow-sm w-full"
+        />
+        <img
+          src="/images/autonomous-rover/state-machine.png"
+          alt="State machine diagram for rover behaviors"
+          class="rounded-lg shadow-sm w-full"
+        />
+      </div>
+    </div>
+  </section>
+
+  {/* RESULTS */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Results</h2>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="text-gray-700 space-y-3">
+        <h3 class="font-semibold">What worked</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Reliable mechanical pickup and transport when perception loop was stable.</li>
+          <li>Consistent drive behavior with encoder feedback.</li>
+        </ul>
+
+        <h3 class="font-semibold mt-6">Challenges</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Camera lag / warm-up time created inconsistent autonomy performance.</li>
+          <li>Integration across tasks was harder than individual task testing.</li>
+        </ul>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <img class="rounded-lg shadow-sm" src="/images/autonomous-rover/demo-1.jpg" alt="Rover navigating line" />
+        <img class="rounded-lg shadow-sm" src="/images/autonomous-rover/demo-2.jpg" alt="Rover performing pickup or drop-off" />
+      </div>
+    </div>
+  </section>
+
+  {/* LESSONS */}
+  <section class="mb-4">
+    <h2 class="text-2xl font-bold mb-4">Lessons Learned & Next Steps</h2>
+    <ul class="list-disc pl-5 space-y-2 text-gray-600">
+      <li>Add sensor redundancy (e.g., IR/ultrasonic) to reduce reliance on camera performance.</li>
+      <li>Reduce dependence on platform height by adding a small lift DOF.</li>
+      <li>Harden the autonomy pipeline for latency and reboot variability.</li>
+    </ul>
+  </section>
+</ProjectLayout>

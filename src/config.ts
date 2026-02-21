@@ -33,7 +33,7 @@ projects: [
 name: "Autonomous Rover for Disk Transport",
 description:
 "Designed and built a autonomous rover to transport disks across ramps and platforms using camera-based path detection, PID control, and mechanical arm mechanisms.",
-link: "/projects/project-a",
+link: "/projects/Autonomous-Rover",
 skills: ["Python", "SolidWorks", "Control Systems", "Arduino"],
 },
 {
@@ -42,13 +42,6 @@ description:
 "Developed an impedance controller in PyDrake for automated composite fiber placement, focusing on accurate force control and dynamic interaction with mold surfaces.",
 link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
 skills: ["Python", "Control Systems", "Simulation", "Robotics"],
-},
-{
-name: "Metal Additive Manufacturing Research",
-description:
-"Explored multidirectional wire arc and laser wire additive manufacturing strategies, including robotic deposition, thermal gradient control, and digital twin simulation concepts.",
-link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
-skills: ["Manufacturing", "Design", "Thermal Analysis"],
 },
 {
 name: "Motorcycle Maintenance & Modding",
@@ -104,7 +97,7 @@ degree: "M.S. Mechanical Engineering",
 dateRange: "2025 – 2026",
 achievements: [
 "Specialization in Design, Robotics & Manufacturing",
-"Graduate coursework in soft robotics, bionic systems, data science, compliant mechanisms, artificial intelligence",
+"Graduate coursework in reinforcement learning, soft robotics, bionic systems, data science, compliant mechanisms, smart grids",
 "Focus: Robotics, Autonomous Systems, Fabrication"
 ],
 },

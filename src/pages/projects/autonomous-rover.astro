@@ -24,11 +24,27 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </ul>
       </div>
 
-      <img
-        src="/images/autonomous-rover/rover-hero.jpg"
-        alt="Autonomous rover prototype (Scoop N' Do) with disk basket and actuation mechanisms"
-        class="rounded-lg shadow-md w-full"
-      />
+      {/* HERO MEDIA */}
+      <div class="rounded-lg shadow-md overflow-hidden w-full">
+        <video
+          class="w-full h-auto"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster="/images/autonomous-rover/hero-poster.jpg"
+        >
+          <source src="/images/autonomous-rover/hero.webm" type="video/webm" />
+          <source src="/images/autonomous-rover/hero.mp4" type="video/mp4" />
+          {/* Fallback for ancient browsers */}
+          <img
+            src="/images/autonomous-rover/rover-hero.jpg"
+            alt="Autonomous rover prototype transporting disks"
+            class="w-full h-auto"
+          />
+        </video>
+      </div>
     </div>
   </section>
 

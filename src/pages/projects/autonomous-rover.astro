@@ -168,11 +168,13 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </ul>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-4">
         <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
           <video
             class="w-full h-auto"
-            controls
+            autoplay
+            muted
+            loop
             playsinline
             preload="metadata"
             poster="/images/autonomous-rover/demo-pickup-poster.jpg"
@@ -187,7 +189,9 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
           <video
             class="w-full h-auto"
-            controls
+            autoplay
+            muted
+            loop
             playsinline
             preload="metadata"
             poster="/images/autonomous-rover/demo-dropoff-poster.jpg"

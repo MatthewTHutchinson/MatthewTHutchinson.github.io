@@ -33,7 +33,7 @@ projects: [
 name: "Autonomous Rover for Disk Transport",
 description:
 "Designed and built a autonomous rover to transport disks across ramps and platforms using camera-based path detection, PID control, and mechanical arm mechanisms.",
-link: "/projects/Autonomous-Rover",
+link: "/projects/autonomous-rover",
 skills: ["Python", "SolidWorks", "Control Systems", "Arduino"],
 },
 {

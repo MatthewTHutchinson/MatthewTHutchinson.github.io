@@ -168,10 +168,38 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </ul>
       </div>
 
-      <div class="grid grid-cols-2 gap-3">
-        <img class="rounded-lg shadow-sm" src="/images/autonomous-rover/demo-1.jpg" alt="Rover navigating line" />
-        <img class="rounded-lg shadow-sm" src="/images/autonomous-rover/demo-2.jpg" alt="Rover performing pickup or drop-off" />
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <video
+            class="w-full h-auto"
+            controls
+            playsinline
+            preload="metadata"
+            poster="/images/autonomous-rover/demo-pickup-poster.jpg"
+          >
+            <source src="/images/autonomous-rover/demo-pickup.mp4" type="video/mp4" />
+          </video>
+          <figcaption class="px-3 py-2 text-sm text-gray-600">
+            Pickup demo
+          </figcaption>
+        </figure>
+
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <video
+            class="w-full h-auto"
+            controls
+            playsinline
+            preload="metadata"
+            poster="/images/autonomous-rover/demo-dropoff-poster.jpg"
+          >
+            <source src="/images/autonomous-rover/demo-dropoff.mp4" type="video/mp4" />
+          </video>
+          <figcaption class="px-3 py-2 text-sm text-gray-600">
+            Drop-off demo
+          </figcaption>
+        </figure>
       </div>
+
     </div>
   </section>
 

@@ -248,51 +248,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </div>
       </div>
     </div>
-      
-
-    {/* DELETE MOTOR SIZING (OVERVIEW) */}
-    <div class="mt-10 rounded-lg border bg-white p-6 shadow-sm">
-      <h3 class="text-lg font-semibold mb-3">Drive Motor Sizing (High-Level)</h3>
-
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="text-gray-700 space-y-3">
-          <p class="text-gray-600">
-            We sized the drive system to reliably climb a <span class="font-medium">15° ramp</span> using
-            front-wheel drive, with friction and rolling resistance modeled against the plywood track.
-          </p>
-
-          <ul class="list-disc pl-5 space-y-2 text-gray-600">
-            <li>Wheel–plywood friction coefficient: <span class="font-medium">μ = 0.705</span> (FWD minimum)</li>
-            <li>Rolling resistance coefficient: <span class="font-medium">C<sub>rr</sub> = 0.003</span></li>
-            <li>Mass: <span class="font-medium">m = 2.90 kg</span></li>
-            <li>Ramp: <span class="font-medium">θ = 15°</span></li>
-          </ul>
-        </div>
-
-        <div class="text-gray-700 space-y-3">
-          <p class="text-gray-600">
-            Tractive force required on an incline (ignoring acceleration) is:
-          </p>
-
-          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
-    F_required ≈ m g ( sinθ + C_rr cosθ )
-          </pre>
-
-          <p class="text-gray-600">
-            With two driven wheels, torque per wheel is approximated by:
-          </p>
-
-          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
-    τ_wheel ≈ (F_required · r_wheel) / 2
-          </pre>
-
-          <p class="text-xs text-gray-500">
-            (In practice we add margin for acceleration, losses, and non-ideal contact.)
-          </p>
-        </div>
-      </div>
-    </div>
-
   </section>
 
   {/* CONTROLS */}

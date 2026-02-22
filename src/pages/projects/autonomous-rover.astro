@@ -155,7 +155,104 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
       </div>
     </div>
 
-    {/* MOTOR SIZING (OVERVIEW) */}
+    {/* DRIVE MOTOR SIZING */}
+    <div class="mt-10 rounded-lg border bg-white p-6 shadow-sm">
+      <h3 class="text-lg font-semibold mb-4">Drive Motor Sizing</h3>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="text-gray-700 space-y-4">
+          <p>
+            We sized the drive system based on the worst-case condition:
+            climbing a <span class="font-medium">15° ramp</span> at low speed
+            (8–10 cm/s) with the full 3-disk payload.
+          </p>
+
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>Total mass: <span class="font-medium">m = 2.90 kg</span></li>
+            <li>Ramp angle: <span class="font-medium">θ = 15°</span></li>
+            <li>Rolling resistance coefficient: <span class="font-medium">C<sub>rr</sub> = 0.003</span></li>
+            <li>Wheel radius: <span class="font-medium">r ≈ 0.065 m</span></li>
+          </ul>
+
+          <p class="text-gray-600">
+            The required tractive force on the incline was approximated as:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    F_required ≈ m g ( sinθ + C_rr cosθ )
+          </pre>
+
+          <p class="text-gray-600">
+            Using the rover's mass and ramp angle:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    F_required ≈ 8.21 N
+          </pre>
+
+          <p class="text-gray-600">
+            With two driven wheels, required torque per wheel:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    τ_wheel ≈ (F_required · r) / 2
+    τ_wheel ≈ 0.27 N·m  (per driven wheel)
+          </pre>
+        </div>
+
+        <div class="text-gray-700 space-y-4">
+          <h4 class="font-semibold">Motor Selection Strategy</h4>
+
+          <p class="text-gray-600">
+            Rather than directly assuming gearbox ratio or drivetrain efficiency,
+            we used the calculated <span class="font-medium">required wheel torque</span>
+            as the primary selection metric.
+          </p>
+
+          <p class="text-gray-600">
+            In practice, available wheel torque is:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    τ_wheel_available ≈ τ_motor · G · η
+          </pre>
+
+          <p class="text-gray-600">
+            where:
+          </p>
+
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>G = drivetrain gear ratio</li>
+            <li>η = drivetrain efficiency</li>
+          </ul>
+
+          <p class="text-gray-600">
+            To account for losses and uncertainty, we ensured the selected motors
+            could deliver <span class="font-medium">at least 1.3–1.5× the required wheel torque</span>
+            at operating speed.
+          </p>
+
+          <p class="text-gray-600">
+            This provided margin for:
+          </p>
+
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>Acceleration from rest</li>
+            <li>Surface variability</li>
+            <li>Electrical and gearbox losses</li>
+            <li>Minor misalignment or wheel slip</li>
+          </ul>
+
+          <p class="text-gray-600">
+            The rover successfully climbed a 15° ramp with three disks at the lowest motor speed,
+            validating the sizing approach.
+          </p>
+        </div>
+      </div>
+    </div>
+      
+
+    {/* DELETE MOTOR SIZING (OVERVIEW) */}
     <div class="mt-10 rounded-lg border bg-white p-6 shadow-sm">
       <h3 class="text-lg font-semibold mb-3">Drive Motor Sizing (High-Level)</h3>
 
@@ -196,54 +293,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           </p>
         </div>
       </div>
-    </div>
-
-    <!-- DELETE Key Specs -->
-    <div class="grid md:grid-cols-2 gap-8 items-start mb-8">
-      <div class="rounded-lg border bg-white p-5 shadow-sm">
-        <h3 class="font-semibold text-lg mb-3">Key Specs (from report)</h3>
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li><span class="font-medium">Footprint:</span> 257 mm × 210 mm</li>
-          <li><span class="font-medium">Wheelbase:</span> 210 mm</li>
-          <li><span class="font-medium">Wheel diameter:</span> 64 mm</li>
-          <li><span class="font-medium">Drive motors:</span> N20 6V 15000 RPM</li>
-          <li><span class="font-medium">Arm actuation:</span> 2 positional servos + 1 continuous servo</li>
-        </ul>
-      </div>
-
-      <div class="rounded-lg border bg-white p-5 shadow-sm">
-        <h3 class="font-semibold text-lg mb-3">Mass / Weight Breakdown</h3>
-        <img
-          class="rounded-md"
-          src="/images/autonomous-rover/weight.png"
-          alt="Rover weight breakdown table"
-        />
-        <p class="text-gray-600 text-sm mt-3">
-          Used for motor sizing, ramp force estimation, and stability checks.
-        </p>
-      </div>
-    </div>
-
-    <!-- Motor sizing (torque / ramp) -->
-    <div class="rounded-lg border bg-white p-5 shadow-sm mb-8">
-      <h3 class="font-semibold text-lg mb-3">Motor Sizing (Ramp Torque)</h3>
-      <p class="text-gray-700 mb-3">
-        To climb a ramp at constant speed, a first-order wheel torque estimate is:
-      </p>
-
-      <div class="bg-gray-50 border rounded-md p-4 text-gray-800 text-sm overflow-x-auto">
-        <pre class="whitespace-pre-wrap">
-  F_required ≈ m g (sin θ + μ cos θ)
-  τ_wheel ≈ F_required · r_wheel
-  τ_motor ≈ τ_wheel / (gear_ratio · η)
-        </pre>
-      </div>
-
-      <p class="text-gray-600 text-sm mt-3">
-        Where <span class="font-mono">m</span> comes from the weight table, <span class="font-mono">θ</span> is ramp angle,
-        <span class="font-mono">μ</span> is effective rolling/friction term, <span class="font-mono">r_wheel = 0.032 m</span>.
-        This lets you sanity-check whether the N20 gearmotor torque is in the right ballpark and how sensitive performance is to mass/friction.
-      </p>
     </div>
 
   </section>

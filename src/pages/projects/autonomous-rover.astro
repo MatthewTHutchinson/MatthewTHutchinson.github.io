@@ -304,19 +304,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </p>
       </div>
 
-      {/* High-level behavior state machine */}
-      <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
-        <img
-          src="/images/autonomous-rover/state-machine.png"
-          alt="High-level state machine for rover autonomy: line follow, pickup, ramp, drop-off, and termination"
-          class="w-full h-auto block"
-          loading="lazy"
-        />
-        <figcaption class="px-4 py-2 text-sm text-gray-600">
-          High-level autonomy flow: state machine sequencing line-following, pickup, ramp traversal, and drop-off.
-        </figcaption>
-      </figure>
-
       {/* ROS ARCHITECTURE */}
       <div class="space-y-3">
         <h3 class="font-semibold text-lg">ROS 2 Architecture</h3>
@@ -418,6 +405,19 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           stable under battery voltage variation and ramp loading.
         </p>
       </div>
+
+      {/* High-level behavior state machine */}
+      <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
+        <img
+          src="/images/autonomous-rover/state-machine.png"
+          alt="High-level state machine for rover autonomy: line follow, pickup, ramp, drop-off, and termination"
+          class="w-full h-auto block"
+          loading="lazy"
+        />
+        <figcaption class="px-4 py-2 text-sm text-gray-600">
+          High-level autonomy flow: state machine sequencing line-following, pickup, ramp traversal, and drop-off.
+        </figcaption>
+      </figure>
 
       {/* ACTUATION */}
       <div class="space-y-3">

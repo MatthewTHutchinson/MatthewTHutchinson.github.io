@@ -74,35 +74,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     </div>
   </section>
 
-  {/* SYSTEM OVERVIEW DELETE*/}
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">System Overview</h2>
-    <div class="grid md:grid-cols-2 gap-8 items-start">
-      <div class="text-gray-700 space-y-3">
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li><span class="font-medium">robot_ws:</span> Raspberry Pi running Ubuntu 20.04 + ROS 2 Humble.</li>
-          <li><span class="font-medium">dev_ws:</span> laptop on the same network for monitoring/debug (SSH + ROS tools).</li>
-          <li>ROS 2 nodes communicate via topics (e.g., <code>/image_in</code>, <code>/line_position</code>, <code>/cmd_vel</code>).</li>
-          <li>Camera stream viewable via <code>rqt_image_view</code>; logs streamed to dev terminal.</li>
-          <li>Arduino handles low-level actuation; ROS-to-Arduino bridge handles read/write for encoders + motor commands.</li>
-        </ul>
-      </div>
-
-      <div class="space-y-6">
-        <img
-          src="/images/autonomous-rover/ros-network-architecture.png"
-          alt="ROS 2 communication network between robot_ws and dev_ws"
-          class="rounded-lg shadow-sm w-full"
-        />
-        <img
-          src="/images/autonomous-rover/electronics-schematic.png"
-          alt="Electronics schematic and wiring overview"
-          class="rounded-lg shadow-sm w-full"
-        />
-      </div>
-    </div>
-  </section>
-
   {/* SYSTEM OVERVIEW 2 */}
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">System Overview</h2>

@@ -20,6 +20,7 @@ skills: [
 "GD&T",
 "FEA",
 "Data Science",
+"OpenCV",
 "Reinforcement Learning",
 "Nueral Networks",
 "Additive Manufacturing",

@@ -15,8 +15,10 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </p>
 
         <ul class="flex flex-wrap gap-3 mt-5">
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">ROS 2</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Ubuntu 20.04</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">OpenCV + cv_bridge</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Python</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">OpenCV</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Controls (PID)</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Raspberry Pi</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Arduino</li>
@@ -78,17 +80,26 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="text-gray-700 space-y-3">
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Raspberry Pi handles high-level compute (vision + navigation decisions).</li>
-          <li>Arduino Nano handles low-level actuation (servos, lift, scoop sequencing).</li>
-          <li>Drive motors use encoder feedback for consistent speed and repeatability.</li>
+          <li><span class="font-medium">robot_ws:</span> Raspberry Pi running Ubuntu 20.04 + ROS 2 Humble.</li>
+          <li><span class="font-medium">dev_ws:</span> laptop on the same network for monitoring/debug (SSH + ROS tools).</li>
+          <li>ROS 2 nodes communicate via topics (e.g., <code>/image_in</code>, <code>/line_position</code>, <code>/cmd_vel</code>).</li>
+          <li>Camera stream viewable via <code>rqt_image_view</code>; logs streamed to dev terminal.</li>
+          <li>Arduino handles low-level actuation; ROS-to-Arduino bridge handles read/write for encoders + motor commands.</li>
         </ul>
       </div>
 
-      <img
-        src="/images/autonomous-rover/electronics-schematic.png"
-        alt="Electronics and communication schematic for rover control stack"
-        class="rounded-lg shadow-sm w-full"
-      />
+      <div class="space-y-6">
+        <img
+          src="/images/autonomous-rover/ros-network-architecture.png"
+          alt="ROS 2 communication network between robot_ws and dev_ws"
+          class="rounded-lg shadow-sm w-full"
+        />
+        <img
+          src="/images/autonomous-rover/electronics-schematic.png"
+          alt="Electronics schematic and wiring overview"
+          class="rounded-lg shadow-sm w-full"
+        />
+      </div>
     </div>
   </section>
 
@@ -96,6 +107,55 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-6">Mechanical Design</h2>
 
+    <!-- Key Specs -->
+    <div class="grid md:grid-cols-2 gap-8 items-start mb-8">
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-3">Key Specs (from report)</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li><span class="font-medium">Footprint:</span> 257 mm × 210 mm</li>
+          <li><span class="font-medium">Wheelbase:</span> 210 mm</li>
+          <li><span class="font-medium">Wheel diameter:</span> 64 mm</li>
+          <li><span class="font-medium">Drive motors:</span> N20 6V 15000 RPM</li>
+          <li><span class="font-medium">Arm actuation:</span> 2 positional servos + 1 continuous servo</li>
+        </ul>
+      </div>
+
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-3">Mass / Weight Breakdown</h3>
+        <img
+          class="rounded-md"
+          src="/images/autonomous-rover/weight.png"
+          alt="Rover weight breakdown table"
+        />
+        <p class="text-gray-600 text-sm mt-3">
+          Used for motor sizing, ramp force estimation, and stability checks.
+        </p>
+      </div>
+    </div>
+
+    <!-- Motor sizing (torque / ramp) -->
+    <div class="rounded-lg border bg-white p-5 shadow-sm mb-8">
+      <h3 class="font-semibold text-lg mb-3">Motor Sizing (Ramp Torque)</h3>
+      <p class="text-gray-700 mb-3">
+        To climb a ramp at constant speed, a first-order wheel torque estimate is:
+      </p>
+
+      <div class="bg-gray-50 border rounded-md p-4 text-gray-800 text-sm overflow-x-auto">
+        <pre class="whitespace-pre-wrap">
+  F_required ≈ m g (sin θ + μ cos θ)
+  τ_wheel ≈ F_required · r_wheel
+  τ_motor ≈ τ_wheel / (gear_ratio · η)
+        </pre>
+      </div>
+
+      <p class="text-gray-600 text-sm mt-3">
+        Where <span class="font-mono">m</span> comes from the weight table, <span class="font-mono">θ</span> is ramp angle,
+        <span class="font-mono">μ</span> is effective rolling/friction term, <span class="font-mono">r_wheel = 0.032 m</span>.
+        This lets you sanity-check whether the N20 gearmotor torque is in the right ballpark and how sensitive performance is to mass/friction.
+      </p>
+    </div>
+
+    <!-- Your existing 3 mechanical cards below -->
     <div class="grid md:grid-cols-3 gap-6">
       <div class="rounded-lg border bg-white p-5 shadow-sm">
         <h3 class="font-semibold text-lg mb-2">Chassis</h3>
@@ -141,6 +201,108 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           alt="Computer vision steering control diagram"
           class="rounded-lg shadow-sm w-full"
         />
+        <img
+          src="/images/autonomous-rover/state-machine.png"
+          alt="State machine diagram for rover behaviors"
+          class="rounded-lg shadow-sm w-full"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-6">
+
+        <div>
+          <h3 class="font-semibold text-lg mb-2">ROS 2 Architecture</h3>
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li><span class="font-medium">LineDetector node</span>: subscribes <code>/image_in</code>, publishes <code>/processed_image</code>, outputs <code>/line_position</code>.</li>
+            <li><span class="font-medium">FollowLine node</span>: subscribes <code>/line_position</code>, publishes velocity commands to <code>/cmd_vel</code> (<code>geometry_msgs/Twist</code>).</li>
+            <li><span class="font-medium">Diff-drive controller</span>: converts <code>/cmd_vel</code> → wheel targets, closes the loop with encoders through ROS-to-Arduino read/write.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Differential Drive Commanding</h3>
+          <p class="text-gray-600 text-sm mb-3">
+            For a diff-drive robot, ROS typically uses <code>Twist</code>: <code>linear.x</code> (forward) and <code>angular.z</code> (turn).
+          </p>
+          <div class="bg-gray-50 border rounded-md p-4 text-gray-800 text-sm overflow-x-auto">
+            <pre class="whitespace-pre-wrap">
+              v_left  = v_linear + (ω · L) / (2 · r)
+              v_right = v_linear - (ω · L) / (2 · r)
+            </pre>
+          </div>
+          <p class="text-gray-600 text-sm mt-3">
+            <span class="font-mono">L</span> = wheel separation, <span class="font-mono">r</span> = wheel radius.
+            This mapping is where “high-level autonomy” becomes actual wheel motion.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Closed-Loop Motor Control (Encoders + PID)</h3>
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>Encoders provide wheel odometry (velocity/position estimate per wheel).</li>
+            <li>PID minimizes error between desired wheel velocity and measured wheel velocity.</li>
+            <li>Report gains used: <span class="font-mono">Kp=20, Kd=12, Ki=0, Ko=50</span>.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Computer Vision Pipeline</h3>
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>ROS image → OpenCV via <span class="font-medium">cv_bridge</span>.</li>
+            <li>Grayscale → crop/resize → threshold to isolate line.</li>
+            <li>Morphological cleanup → contour detection → choose largest contour.</li>
+            <li>Bounding box center → publish line x-position.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Special Cases (LineDetector Output Codes)</h3>
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li><span class="font-mono">x ≥ 0</span>: normal following (use center error).</li>
+            <li><span class="font-mono">x = -3 / -4</span>: sharp turn detected (box hits edge).</li>
+            <li><span class="font-mono">x = -2</span>: intersection (box hits both edges) → stop / handoff to next behavior.</li>
+            <li><span class="font-mono">x = -1</span>: line lost → recovery behavior (slow reverse / search).</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Arm Control (pigpio + Bash)</h3>
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>Servos driven via PWM (500–2500 μs) using <code>pigpiod</code>.</li>
+            <li>Pickup/dropoff sequences implemented as bash scripts with timed steps.</li>
+            <li>Zone scripts interpret argument patterns (numbers/letters) to repeat motion primitives.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="space-y-6">
+        <!-- Wide image: contain it so it doesn't look broken -->
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <div class="w-full bg-white">
+            <img
+              src="/images/autonomous-rover/cv-steering-diagram.jpg"
+              alt="Computer vision steering control diagram"
+              class="w-full h-auto object-contain"
+            />
+          </div>
+          <figcaption class="px-3 py-2 text-sm text-gray-600">
+            CV perception → steering command mapping (ROS 2 nodes + topics).
+          </figcaption>
+        </figure>
+
+        <img
+          src="/images/autonomous-rover/cv-thresholding.png"
+          alt="Thresholding pipeline output for line segmentation"
+          class="rounded-lg shadow-sm w-full"
+        />
+
         <img
           src="/images/autonomous-rover/state-machine.png"
           alt="State machine diagram for rover behaviors"

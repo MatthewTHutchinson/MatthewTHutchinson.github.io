@@ -304,6 +304,19 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </p>
       </div>
 
+      {/* High-level behavior state machine */}
+      <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
+        <img
+          src="/images/autonomous-rover/state-machine.png"
+          alt="High-level state machine for rover autonomy: line follow, pickup, ramp, drop-off, and termination"
+          class="w-full h-auto block"
+          loading="lazy"
+        />
+        <figcaption class="px-4 py-2 text-sm text-gray-600">
+          High-level autonomy flow: state machine sequencing line-following, pickup, ramp traversal, and drop-off.
+        </figcaption>
+      </figure>
+
       {/* ROS ARCHITECTURE */}
       <div class="space-y-3">
         <h3 class="font-semibold text-lg">ROS 2 Architecture</h3>
@@ -351,11 +364,24 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
           <li><span class="font-mono">x ≥ 0</span> → normal tracking</li>
-          <li><span class="font-mono">x = -3 / -4</span> → sharp turn detected</li>
-          <li><span class="font-mono">x = -2</span> → intersection detected → behavior handoff</li>
-          <li><span class="font-mono">x = -1</span> → line lost → recovery search</li>
+          <li><span class="font-mono">x = -3 / -4</span> → sharp turn detected (bounding box hits an edge)</li>
+          <li><span class="font-mono">x = -2</span> → intersection detected (box hits both edges) → behavior handoff</li>
+          <li><span class="font-mono">x = -1</span> → line lost → slow reverse / recovery search</li>
         </ul>
       </div>
+
+      {/* CV steering diagram */}
+      <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
+        <img
+          src="/images/autonomous-rover/cv-steering-diagram.jpg"
+          alt="Computer vision steering: segmented regions and extracted line center used to compute lateral error"
+          class="w-full h-auto block"
+          loading="lazy"
+        />
+        <figcaption class="px-4 py-2 text-sm text-gray-600">
+          CV steering output: the pipeline isolates the line, extracts its x-center, and produces a lateral error signal used for steering.
+        </figcaption>
+      </figure>
 
       {/* DIFFERENTIAL DRIVE */}
       <div class="space-y-3">
@@ -399,7 +425,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
           <li>Servos controlled on Raspberry Pi via <code>pigpiod</code></li>
-          <li>PWM range: 500–2500 μs</li>
           <li>1 continuous servo (rack & pinion extension)</li>
           <li>2 positional servos (opening + lifting)</li>
         </ul>

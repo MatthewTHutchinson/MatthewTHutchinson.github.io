@@ -16,13 +16,13 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
         <ul class="flex flex-wrap gap-3 mt-5">
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">ROS 2</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Ubuntu 20.04</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">OpenCV + cv_bridge</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">OpenCV</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">SolidWorks</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Python</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">C++</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Controls (PID)</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Raspberry Pi</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Arduino</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">SolidWorks</li>
         </ul>
       </div>
 
@@ -107,7 +107,45 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-6">Mechanical Design</h2>
 
-     <!-- Your existing 3 mechanical cards below -->
+    {/* KEY SPECS */}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Dimensions (L×W×H)</div>
+        <div class="text-lg font-semibold text-gray-800">29.972 × 24.143 × 16.417 cm</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Total mass</div>
+        <div class="text-lg font-semibold text-gray-800">2902.22 g (2.90 kg)</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Max ramp</div>
+        <div class="text-lg font-semibold text-gray-800">15° with 3 disks</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Speed targets</div>
+        <div class="text-lg font-semibold text-gray-800">5–15 cm/s</div>
+        <div class="text-xs text-gray-500 mt-1">~10 cm/s straight, ~8 cm/s turns</div>
+      </div>
+    </div>  
+
+    {/* WEIGHT BREAKDOWN */}
+    <div class="grid md:grid-cols-2 gap-8 items-start mt-10">
+      <div class="text-gray-700 space-y-3">
+        <h3 class="text-lg font-semibold">Weight Breakdown</h3>
+        <p class="text-gray-600">
+          We tracked component mass to stay within constraints and keep the center of mass low.
+          Final total mass was <span class="font-medium">2902.22 g</span>.
+        </p>
+      </div>
+
+      <img
+        src="/images/autonomous-rover/weight.png"
+        alt="Component weight breakdown table"
+        class="rounded-lg shadow-sm w-full border bg-white"
+      />
+    </div>
+
+    <!-- Your existing 3 mechanical cards below -->
     <div class="grid md:grid-cols-3 gap-6">
       <div class="rounded-lg border bg-white p-5 shadow-sm">
         <h3 class="font-semibold text-lg mb-2">Chassis</h3>
@@ -134,7 +172,50 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
       </div>
     </div>
 
-    <!-- Key Specs -->
+    {/* MOTOR SIZING (OVERVIEW) */}
+    <div class="mt-10 rounded-lg border bg-white p-6 shadow-sm">
+      <h3 class="text-lg font-semibold mb-3">Drive Motor Sizing (High-Level)</h3>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="text-gray-700 space-y-3">
+          <p class="text-gray-600">
+            We sized the drive system to reliably climb a <span class="font-medium">15° ramp</span> using
+            front-wheel drive, with friction and rolling resistance modeled against the plywood track.
+          </p>
+
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>Wheel–plywood friction coefficient: <span class="font-medium">μ = 0.705</span> (FWD minimum)</li>
+            <li>Rolling resistance coefficient: <span class="font-medium">C<sub>rr</sub> = 0.003</span></li>
+            <li>Mass: <span class="font-medium">m = 2.90 kg</span></li>
+            <li>Ramp: <span class="font-medium">θ = 15°</span></li>
+          </ul>
+        </div>
+
+        <div class="text-gray-700 space-y-3">
+          <p class="text-gray-600">
+            Tractive force required on an incline (ignoring acceleration) is:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    F_required ≈ m g ( sinθ + C_rr cosθ )
+          </pre>
+
+          <p class="text-gray-600">
+            With two driven wheels, torque per wheel is approximated by:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    τ_wheel ≈ (F_required · r_wheel) / 2
+          </pre>
+
+          <p class="text-xs text-gray-500">
+            (In practice we add margin for acceleration, losses, and non-ideal contact.)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELETE Key Specs -->
     <div class="grid md:grid-cols-2 gap-8 items-start mb-8">
       <div class="rounded-lg border bg-white p-5 shadow-sm">
         <h3 class="font-semibold text-lg mb-3">Key Specs (from report)</h3>
@@ -181,6 +262,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         This lets you sanity-check whether the N20 gearmotor torque is in the right ballpark and how sensitive performance is to mass/friction.
       </p>
     </div>
+
   </section>
 
   {/* CONTROLS */}

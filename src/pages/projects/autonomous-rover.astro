@@ -410,7 +410,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           <li>Encoder resolution: ~1975 counts per revolution</li>
           <li>Control loop frequency: 30 Hz</li>
           <li>Baseline command: PWM ≈ 70 (0–255) → ~1 rev/s</li>
-          <li>PID gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50</li>
+          <li>PID gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50 (scaling)</li>
         </ul>
 
         <p class="text-gray-600">
@@ -501,6 +501,78 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     </div>
   </section>
 
+  {/* RESULTS V2*/}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Results & Performance</h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="text-gray-700 space-y-4">
+
+        <h3 class="font-semibold">System Performance</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Completed full course (line + ramp + pickup + drop-off) in <span class="font-medium">&lt; 5 minutes</span> when camera operated smoothly.</li>
+          <li>Ramp traversal + curved segment: <span class="font-medium">14–16 seconds</span>.</li>
+          <li>Single disk pickup cycle: <span class="font-medium">3–4 seconds</span>.</li>
+          <li>Single disk unload cycle: <span class="font-medium">5–6 seconds</span>.</li>
+          <li>Pick-up phase: <span class="font-medium">1:30–2:30</span> depending on camera processing speed.</li>
+          <li>Drop-off phase: <span class="font-medium">30 seconds–2 minutes</span> depending on station order.</li>
+        </ul>
+
+        <h3 class="font-semibold mt-6">What Worked Well</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Reliable mechanical pickup and transport when perception loop was stable.</li>
+          <li>Consistent wheel velocity tracking using encoder-based PID at 30 Hz.</li>
+          <li>Successfully navigated a <span class="font-medium">15° incline</span> with 3 disks at lowest motor speed.</li>
+          <li>With stable camera input, line tracking was nearly perfect.</li>
+        </ul>
+
+        <h3 class="font-semibold mt-6">Observed Challenges</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Camera required ~<span class="font-medium">15-minute warm-up</span> after reboot for smooth performance.</li>
+          <li>Image lag introduced delayed corrections and overshoot.</li>
+          <li>Autonomy performance was highly dependent on Raspberry Pi processing state.</li>
+          <li>Integration across subsystems (vision + state logic + actuation) was significantly harder than individual module testing.</li>
+          <li>Platform height inconsistencies (~1 cm variance) required mechanical rework (shortened standoffs, basket sanding).</li>
+        </ul>
+
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <video
+            class="w-full h-auto"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            <source src="/images/autonomous-rover/demo-pickup.mp4" type="video/mp4" />
+          </video>
+          <figcaption class="px-3 py-2 text-sm text-gray-600">
+            Disk pickup sequence (3–4 s cycle)
+          </figcaption>
+        </figure>
+
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <video
+            class="w-full h-auto"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            <source src="/images/autonomous-rover/demo-dropoff.mp4" type="video/mp4" />
+          </video>
+          <figcaption class="px-3 py-2 text-sm text-gray-600">
+            Drop-off sequence (5–6 s unload cycle)
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   {/* LESSONS */}
   <section class="mb-4">
     <h2 class="text-2xl font-bold mb-4">Lessons Learned & Next Steps</h2>
@@ -510,4 +582,51 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
       <li>Harden the autonomy pipeline for latency and reboot variability.</li>
     </ul>
   </section>
+
+  {/* LESSONS V2*/}
+  <section class="mb-4">
+    <h2 class="text-2xl font-bold mb-4">Lessons Learned & Next Steps</h2>
+
+    <ul class="list-disc pl-5 space-y-3 text-gray-600">
+
+      <li>
+        <span class="font-medium">Camera dependency was the dominant system risk.</span>
+        The rover’s autonomy was tightly coupled to Raspberry Pi camera performance.
+        When processing was smooth, performance was excellent; when lag occurred,
+        corrections were delayed and instability emerged.
+      </li>
+
+      <li>
+        <span class="font-medium">Add sensor redundancy.</span>
+        Future versions would integrate IR or ultrasonic sensors for edge detection,
+        obstacle confirmation, and incline transitions to reduce reliance on vision alone.
+      </li>
+
+      <li>
+        <span class="font-medium">Decouple mechanical performance from platform tolerances.</span>
+        Height inconsistencies revealed over-reliance on fixed geometry.
+        A small additional lift DOF or compliant mechanism would increase robustness.
+      </li>
+
+      <li>
+        <span class="font-medium">Improve autonomy robustness.</span>
+        Harden ROS startup sequence, automate code re-deployment,
+        and reduce reboot sensitivity to eliminate 15-minute warm-up variability.
+      </li>
+
+      <li>
+        <span class="font-medium">System integration should begin earlier.</span>
+        Individual subsystems performed well, but integration revealed timing and coordination issues.
+        Earlier full-stack testing would have reduced debugging overhead.
+      </li>
+
+      <li>
+        <span class="font-medium">Electrical integration is part of mechanical design.</span>
+        Cable routing and serviceability should be designed in CAD from the start
+        to improve reliability and aesthetics.
+      </li>
+
+    </ul>
+  </section>
+
 </ProjectLayout>

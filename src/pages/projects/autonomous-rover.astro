@@ -74,7 +74,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     </div>
   </section>
 
-  {/* SYSTEM OVERVIEW */}
+  {/* SYSTEM OVERVIEW DELETE*/}
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">System Overview</h2>
     <div class="grid md:grid-cols-2 gap-8 items-start">
@@ -97,6 +97,73 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <img
           src="/images/autonomous-rover/electronics-schematic.png"
           alt="Electronics schematic and wiring overview"
+          class="rounded-lg shadow-sm w-full"
+        />
+      </div>
+    </div>
+  </section>
+
+  {/* SYSTEM OVERVIEW 2 */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">System Overview</h2>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-4">
+
+        <p class="text-gray-600">
+          The rover was built around a layered hardware and compute architecture,
+          separating high-level autonomy from low-level motor control for robustness
+          and modularity.
+        </p>
+
+        <ul class="list-disc pl-5 space-y-3 text-gray-600">
+          <li>
+            <span class="font-medium">Raspberry Pi (robot_ws):</span>
+            Ubuntu 20.04 + ROS 2 Humble.
+            Handles perception, behavior logic, and high-level velocity commands.
+          </li>
+
+          <li>
+            <span class="font-medium">Arduino Nano:</span>
+            Executes low-level motor and encoder control.
+            Closes the wheel velocity loop using PID.
+          </li>
+
+          <li>
+            <span class="font-medium">L298N Motor Driver:</span>
+            Drives two 12V DC motors with encoder feedback.
+          </li>
+
+          <li>
+            <span class="font-medium">12V Battery + Buck Converter:</span>
+            Distributes regulated 12V and 5V to motors, logic, and servos.
+          </li>
+
+          <li>
+            <span class="font-medium">Development Workspace (dev_ws):</span>
+            Laptop connected via SSH for monitoring, logging, and ROS debugging tools
+            (e.g., rqt_image_view).
+          </li>
+        </ul>
+
+        <p class="text-gray-600">
+          This separation ensured computational tasks (vision + autonomy)
+          remained independent from time-critical motor control,
+          improving stability and simplifying debugging.
+        </p>
+
+      </div>
+
+      <div class="space-y-6">
+        <img
+          src="/images/autonomous-rover/ros-network-architecture.png"
+          alt="ROS 2 communication architecture between robot_ws and dev_ws"
+          class="rounded-lg shadow-sm w-full"
+        />
+
+        <img
+          src="/images/autonomous-rover/electronics-schematic.png"
+          alt="Electronics and wiring layout of rover components"
           class="rounded-lg shadow-sm w-full"
         />
       </div>
@@ -249,7 +316,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
       </div>
     </div>
   </section>
-
 
   {/* CONTROLS V2}
   <section class="mb-12">

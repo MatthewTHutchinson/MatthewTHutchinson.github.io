@@ -251,49 +251,53 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
   </section>
 
   {/* CONTROLS */}
-  <div class="text-gray-700 space-y-4">
-    <p class="text-gray-600">
-      The autonomy stack combined camera-based perception with closed-loop drive control.
-      High-level behavior sequencing was handled in software (including ROS 2 integration),
-      while low-level actuation ran on the Arduino + motor driver stack.
-    </p>
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>
 
-    <div class="space-y-3">
-      <h3 class="font-semibold">Drive control (encoders + PID)</h3>
-      <ul class="list-disc pl-5 space-y-2 text-gray-600">
-        <li>Motor encoders: <span class="font-medium">~1975 counts / revolution</span></li>
-        <li>Control loop rate: <span class="font-medium">30 Hz</span></li>
-        <li>Baseline command: <span class="font-medium">PWM ≈ 70</span> (0–255) → ~<span class="font-medium">1 rev/s</span></li>
-        <li>Encoder PID (reported): <span class="font-medium">Kp = 20</span>, <span class="font-medium">Kd = 12</span>, <span class="font-medium">Ki = 0</span>, <span class="font-medium">Ko = 50</span> (scaling)</li>
-      </ul>
-    </div>
+    <div class="text-gray-700 space-y-4">
+      <p class="text-gray-600">
+        The autonomy stack combined camera-based perception with closed-loop drive control.
+        High-level behavior sequencing was handled in software (including ROS 2 integration),
+        while low-level actuation ran on the Arduino + motor driver stack.
+      </p>
 
-    <div class="space-y-3">
-      <h3 class="font-semibold">Perception (OpenCV line tracking)</h3>
-      <ul class="list-disc pl-5 space-y-2 text-gray-600">
-        <li>Image segmented into <span class="font-medium">3 regions</span> (white–black–white) to estimate line position</li>
-        <li>Extract x-coordinate of black pixels → lateral error from image center</li>
-        <li>Steering correction used a tuned proportional rate: <span class="font-medium">K ≈ 0.005</span></li>
-      </ul>
-    </div>
+      <div class="space-y-3">
+        <h3 class="font-semibold">Drive control (encoders + PID)</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Motor encoders: <span class="font-medium">~1975 counts / revolution</span></li>
+          <li>Control loop rate: <span class="font-medium">30 Hz</span></li>
+          <li>Baseline command: <span class="font-medium">PWM ≈ 70</span> (0–255) → ~<span class="font-medium">1 rev/s</span></li>
+          <li>Encoder PID (reported): <span class="font-medium">Kp = 20</span>, <span class="font-medium">Kd = 12</span>, <span class="font-medium">Ki = 0</span>, <span class="font-medium">Ko = 50</span> (scaling)</li>
+        </ul>
+      </div>
 
-    <div class="space-y-3">
-      <h3 class="font-semibold">Actuation (arm + lift)</h3>
-      <ul class="list-disc pl-5 space-y-2 text-gray-600">
-        <li>Servos controlled on Raspberry Pi via a bash script using <span class="font-medium">pigpiod</span></li>
-        <li>1 continuous servo for rack/pinion extension (timed linear motion)</li>
-        <li>2 positional servos for opening + lifting (angle-based positioning)</li>
-      </ul>
-    </div>
+      <div class="space-y-3">
+        <h3 class="font-semibold">Perception (OpenCV line tracking)</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Image segmented into <span class="font-medium">3 regions</span> (white–black–white) to estimate line position</li>
+          <li>Extract x-coordinate of black pixels → lateral error from image center</li>
+          <li>Steering correction used a tuned proportional rate: <span class="font-medium">K ≈ 0.005</span></li>
+        </ul>
+      </div>
 
-    <div class="space-y-3">
-      <h3 class="font-semibold">Reliability constraint observed in testing</h3>
-      <ul class="list-disc pl-5 space-y-2 text-gray-600">
-        <li>After reboot, the Pi required ~<span class="font-medium">15 minutes warm-up</span> for smooth camera operation</li>
-        <li>When the camera ran smoothly, line tracking was nearly perfect; lag introduced delayed corrections and failures</li>
-      </ul>
+      <div class="space-y-3">
+        <h3 class="font-semibold">Actuation (arm + lift)</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Servos controlled on Raspberry Pi via a bash script using <span class="font-medium">pigpiod</span></li>
+          <li>1 continuous servo for rack/pinion extension (timed linear motion)</li>
+          <li>2 positional servos for opening + lifting (angle-based positioning)</li>
+        </ul>
+      </div>
+
+      <div class="space-y-3">
+        <h3 class="font-semibold">Reliability constraint observed in testing</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>After reboot, the Pi required ~<span class="font-medium">15 minutes warm-up</span> for smooth camera operation</li>
+          <li>When the camera ran smoothly, line tracking was nearly perfect; lag introduced delayed corrections and failures</li>
+        </ul>
+      </div>
     </div>
-  </div>
+  </section>
 
 
   {/* CONTROLS DELETE*/}

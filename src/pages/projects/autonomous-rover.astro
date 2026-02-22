@@ -111,11 +111,11 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <div class="rounded-lg border bg-white p-4 shadow-sm">
         <div class="text-sm text-gray-500">Dimensions (L×W×H)</div>
-        <div class="text-lg font-semibold text-gray-800">29.972 × 24.143 × 16.417 cm</div>
+        <div class="text-lg font-semibold text-gray-800">29.9 × 24.1 × 16.4 cm</div>
       </div>
       <div class="rounded-lg border bg-white p-4 shadow-sm">
         <div class="text-sm text-gray-500">Total mass</div>
-        <div class="text-lg font-semibold text-gray-800">2902.22 g (2.90 kg)</div>
+        <div class="text-lg font-semibold text-gray-800">2.902 kg</div>
       </div>
       <div class="rounded-lg border bg-white p-4 shadow-sm">
         <div class="text-sm text-gray-500">Max ramp</div>
@@ -127,23 +127,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <div class="text-xs text-gray-500 mt-1">~10 cm/s straight, ~8 cm/s turns</div>
       </div>
     </div>  
-
-    {/* WEIGHT BREAKDOWN */}
-    <div class="grid md:grid-cols-2 gap-8 items-start mt-10">
-      <div class="text-gray-700 space-y-3">
-        <h3 class="text-lg font-semibold">Weight Breakdown</h3>
-        <p class="text-gray-600">
-          We tracked component mass to stay within constraints and keep the center of mass low.
-          Final total mass was <span class="font-medium">2902.22 g</span>.
-        </p>
-      </div>
-
-      <img
-        src="/images/autonomous-rover/weight.png"
-        alt="Component weight breakdown table"
-        class="rounded-lg shadow-sm w-full border bg-white"
-      />
-    </div>
 
     <!-- Your existing 3 mechanical cards below -->
     <div class="grid md:grid-cols-3 gap-6">

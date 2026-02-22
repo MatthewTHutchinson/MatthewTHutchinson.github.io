@@ -410,7 +410,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           <li>Encoder resolution: ~1975 counts per revolution</li>
           <li>Control loop frequency: 30 Hz</li>
           <li>Baseline command: PWM ≈ 70 (0–255) → ~1 rev/s</li>
-          <li>PID gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50 (scaling)</li>
+          <li>PID gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50 (scaling factor)</li>
         </ul>
 
         <p class="text-gray-600">
@@ -444,64 +444,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     </div>
   </section>
 
-  {/* RESULTS */}
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">Results</h2>
-    <div class="grid md:grid-cols-2 gap-8">
-      <div class="text-gray-700 space-y-3">
-        <h3 class="font-semibold">What worked</h3>
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Reliable mechanical pickup and transport when perception loop was stable.</li>
-          <li>Consistent drive behavior with encoder feedback.</li>
-        </ul>
-
-        <h3 class="font-semibold mt-6">Challenges</h3>
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Camera lag / warm-up time created inconsistent autonomy performance.</li>
-          <li>Integration across tasks was harder than individual task testing.</li>
-        </ul>
-      </div>
-
-      <div class="flex flex-col gap-4">
-        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-          <video
-            class="w-full h-auto"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster="/images/autonomous-rover/demo-pickup-poster.jpg"
-          >
-            <source src="/images/autonomous-rover/demo-pickup.mp4" type="video/mp4" />
-          </video>
-          <figcaption class="px-3 py-2 text-sm text-gray-600">
-            Pickup demo
-          </figcaption>
-        </figure>
-
-        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-          <video
-            class="w-full h-auto"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster="/images/autonomous-rover/demo-dropoff-poster.jpg"
-          >
-            <source src="/images/autonomous-rover/demo-dropoff.mp4" type="video/mp4" />
-          </video>
-          <figcaption class="px-3 py-2 text-sm text-gray-600">
-            Drop-off demo
-          </figcaption>
-        </figure>
-      </div>
-
-    </div>
-  </section>
-
-  {/* RESULTS V2*/}
+  {/* RESULTS*/}
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Results & Performance</h2>
 
@@ -511,11 +454,11 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <h3 class="font-semibold">System Performance</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
           <li>Completed full course (line + ramp + pickup + drop-off) in <span class="font-medium">&lt; 5 minutes</span> when camera operated smoothly.</li>
-          <li>Ramp traversal + curved segment: <span class="font-medium">14–16 seconds</span>.</li>
+          <li>Ramp traversal + curved segment: <span class="font-medium">28–32 seconds</span>.</li>
           <li>Single disk pickup cycle: <span class="font-medium">3–4 seconds</span>.</li>
           <li>Single disk unload cycle: <span class="font-medium">5–6 seconds</span>.</li>
-          <li>Pick-up phase: <span class="font-medium">1:30–2:30</span> depending on camera processing speed.</li>
-          <li>Drop-off phase: <span class="font-medium">30 seconds–2 minutes</span> depending on station order.</li>
+          <li>Pick-up phase: <span class="font-medium">1:30–2:30</span> depending on pick-up order.</li>
+          <li>Drop-off phase: <span class="font-medium">30 seconds–2 minutes</span> depending on drop-off order.</li>
         </ul>
 
         <h3 class="font-semibold mt-6">What Worked Well</h3>
@@ -573,17 +516,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     </div>
   </section>
 
-  {/* LESSONS */}
-  <section class="mb-4">
-    <h2 class="text-2xl font-bold mb-4">Lessons Learned & Next Steps</h2>
-    <ul class="list-disc pl-5 space-y-2 text-gray-600">
-      <li>Add sensor redundancy (e.g., IR/ultrasonic) to reduce reliance on camera performance.</li>
-      <li>Reduce dependence on platform height by adding a small lift DOF.</li>
-      <li>Harden the autonomy pipeline for latency and reboot variability.</li>
-    </ul>
-  </section>
-
-  {/* LESSONS V2*/}
+  {/* LESSONS*/}
   <section class="mb-4">
     <h2 class="text-2xl font-bold mb-4">Lessons Learned & Next Steps</h2>
 

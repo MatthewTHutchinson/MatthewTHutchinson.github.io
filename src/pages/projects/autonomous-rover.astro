@@ -317,6 +317,138 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     </div>
   </section>
 
+  {/* CONTROLS V3}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>
+
+    <div class="text-gray-700 space-y-10">
+
+      {/* HIGH-LEVEL STACK */}
+      <div>
+        <p class="text-gray-600">
+          The autonomy stack was structured as:
+          <span class="font-medium">perception → behavior → motion mapping → closed-loop control → actuation</span>.
+          ROS 2 handled inter-node communication and behavior sequencing,
+          while the Arduino maintained deterministic wheel velocity control.
+        </p>
+      </div>
+
+      {/* ROS ARCHITECTURE */}
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">ROS 2 Architecture</h3>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>
+            <span class="font-medium">LineDetector node:</span>
+            subscribes <code>/image_in</code>,
+            publishes processed image and outputs <code>/line_position</code>.
+          </li>
+
+          <li>
+            <span class="font-medium">FollowLine node:</span>
+            subscribes <code>/line_position</code>,
+            publishes velocity commands to <code>/cmd_vel</code>
+            (<code>geometry_msgs/Twist</code>).
+          </li>
+
+          <li>
+            <span class="font-medium">Diff-drive controller:</span>
+            converts <code>/cmd_vel</code> into individual wheel targets and
+            closes the loop using encoder feedback via ROS-to-Arduino read/write.
+          </li>
+        </ul>
+      </div>
+
+      {/* PERCEPTION */}
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Computer Vision Pipeline</h3>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>ROS image → OpenCV via <code>cv_bridge</code></li>
+          <li>Grayscale → crop → threshold segmentation to isolate the black line</li>
+          <li>Morphological cleanup → contour detection → select largest contour</li>
+          <li>Bounding box center → publish x-coordinate as <code>/line_position</code></li>
+        </ul>
+
+        <p class="text-gray-600">
+          Lateral error was computed relative to image center and converted into
+          steering correction using a proportional gain of approximately
+          <span class="font-medium">K ≈ 0.005</span>.
+        </p>
+
+        <h4 class="font-semibold mt-4">Special Case Handling</h4>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li><span class="font-mono">x ≥ 0</span> → normal tracking</li>
+          <li><span class="font-mono">x = -3 / -4</span> → sharp turn detected</li>
+          <li><span class="font-mono">x = -2</span> → intersection detected → behavior handoff</li>
+          <li><span class="font-mono">x = -1</span> → line lost → recovery search</li>
+        </ul>
+      </div>
+
+      {/* DIFFERENTIAL DRIVE */}
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Differential Drive Mapping</h3>
+
+        <p class="text-gray-600">
+          ROS velocity commands use <code>linear.x</code> (forward) and
+          <code>angular.z</code> (turn). These were mapped to wheel velocities using:
+        </p>
+
+        <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+  v_left  = v_linear + (ω · L) / (2 · r)
+  v_right = v_linear - (ω · L) / (2 · r)
+        </pre>
+
+        <p class="text-gray-600 text-sm">
+          where L is wheel separation and r is wheel radius.
+          This transformation converts high-level motion commands into physical wheel motion.
+        </p>
+      </div>
+
+      {/* CLOSED LOOP CONTROL */}
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Closed-Loop Wheel Control</h3>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Encoder resolution: ~1975 counts per revolution</li>
+          <li>Control loop frequency: 30 Hz</li>
+          <li>Baseline command: PWM ≈ 70 (0–255) → ~1 rev/s</li>
+          <li>PID gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50</li>
+        </ul>
+
+        <p class="text-gray-600">
+          Closing the loop at the wheel level ensured velocity tracking remained
+          stable under battery voltage variation and ramp loading.
+        </p>
+      </div>
+
+      {/* ACTUATION */}
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Arm & Lift Actuation</h3>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Servos controlled on Raspberry Pi via <code>pigpiod</code></li>
+          <li>PWM range: 500–2500 μs</li>
+          <li>1 continuous servo (rack & pinion extension)</li>
+          <li>2 positional servos (opening + lifting)</li>
+        </ul>
+      </div>
+
+      {/* RELIABILITY */}
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Reliability Observations</h3>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Camera required ~15 minute warm-up after reboot</li>
+          <li>Autonomy performance strongly correlated with image processing latency</li>
+          <li>When latency was low, full-course navigation was nearly flawless</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
   {/* CONTROLS V2}
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>

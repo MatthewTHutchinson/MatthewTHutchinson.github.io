@@ -107,6 +107,33 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-6">Mechanical Design</h2>
 
+     <!-- Your existing 3 mechanical cards below -->
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Chassis</h3>
+        <img class="rounded-md mb-3" src="/images/autonomous-rover/cad-overview.png" alt="Assembled rover CAD overview" />
+        <p class="text-gray-600 text-sm">
+          Modular layered chassis designed for stability, rapid iteration, and serviceability.
+        </p>
+      </div>
+
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Basket Lift</h3>
+        <img class="rounded-md mb-3" src="/images/autonomous-rover/basket-lift.png" alt="Basket lift crank-slider mechanism" />
+        <p class="text-gray-600 text-sm">
+          Crank-slider lift raises the basket for controlled placement at the drop-off platform.
+        </p>
+      </div>
+
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Scoop Arm</h3>
+        <img class="rounded-md mb-3" src="/images/autonomous-rover/arm-rack-pinion.png" alt="Rack and pinion scoop arm mechanism" />
+        <p class="text-gray-600 text-sm">
+          Rack-and-pinion style extension with servo control for disk pickup and unloading.
+        </p>
+      </div>
+    </div>
+
     <!-- Key Specs -->
     <div class="grid md:grid-cols-2 gap-8 items-start mb-8">
       <div class="rounded-lg border bg-white p-5 shadow-sm">
@@ -154,62 +181,9 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         This lets you sanity-check whether the N20 gearmotor torque is in the right ballpark and how sensitive performance is to mass/friction.
       </p>
     </div>
-
-    <!-- Your existing 3 mechanical cards below -->
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="rounded-lg border bg-white p-5 shadow-sm">
-        <h3 class="font-semibold text-lg mb-2">Chassis</h3>
-        <img class="rounded-md mb-3" src="/images/autonomous-rover/cad-overview.png" alt="Assembled rover CAD overview" />
-        <p class="text-gray-600 text-sm">
-          Modular layered chassis designed for stability, rapid iteration, and serviceability.
-        </p>
-      </div>
-
-      <div class="rounded-lg border bg-white p-5 shadow-sm">
-        <h3 class="font-semibold text-lg mb-2">Basket Lift</h3>
-        <img class="rounded-md mb-3" src="/images/autonomous-rover/basket-lift.png" alt="Basket lift crank-slider mechanism" />
-        <p class="text-gray-600 text-sm">
-          Crank-slider lift raises the basket for controlled placement at the drop-off platform.
-        </p>
-      </div>
-
-      <div class="rounded-lg border bg-white p-5 shadow-sm">
-        <h3 class="font-semibold text-lg mb-2">Scoop Arm</h3>
-        <img class="rounded-md mb-3" src="/images/autonomous-rover/arm-rack-pinion.png" alt="Rack and pinion scoop arm mechanism" />
-        <p class="text-gray-600 text-sm">
-          Rack-and-pinion style extension with servo control for disk pickup and unloading.
-        </p>
-      </div>
-    </div>
   </section>
 
   {/* CONTROLS */}
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>
-    <div class="grid md:grid-cols-2 gap-8 items-start">
-      <div class="text-gray-700 space-y-3">
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>OpenCV line segmentation → lateral error estimate → steering correction.</li>
-          <li>PID-based line following and encoder feedback for consistent speed.</li>
-          <li>State machine orchestrates: follow line → pickup → incline → drop-off.</li>
-        </ul>
-      </div>
-
-      <div class="space-y-6">
-        <img
-          src="/images/autonomous-rover/cv-steering-diagram.jpg"
-          alt="Computer vision steering control diagram"
-          class="rounded-lg shadow-sm w-full"
-        />
-        <img
-          src="/images/autonomous-rover/state-machine.png"
-          alt="State machine diagram for rover behaviors"
-          class="rounded-lg shadow-sm w-full"
-        />
-      </div>
-    </div>
-  </section>
-
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>
 

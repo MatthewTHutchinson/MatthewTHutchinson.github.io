@@ -45,14 +45,14 @@ link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchi
 skills: ["Python", "Control Systems", "Simulation", "Robotics"],
 },
 {
-name: "Motorcycle Maintenance & Modding",
+name: "Motorcycle Maintenance & Modifications",
 description:
 "Hands-on work on my Suzuki SV650: performed valve inspections, coolant flush, exhaust upgrade, oil changes.",
 link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
 skills: ["Mechanical Systems", "Diagnostics", "Tools"],
 },
 {
-name: "Laser-Cut Japanese Lantern",
+name: "Laser-Cut Japanese Pagoda",
 description:
 "Designed and fabricated a multi-material lantern featuring wood joinery, acrylic panels, and engraving, blending precision design with physical craft.",
 link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",

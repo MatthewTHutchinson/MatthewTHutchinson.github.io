@@ -80,16 +80,6 @@ bullets: [
 "Co-led final review with NASA engineers and placed 1st out of 16 teams"
 ],
 },
-{
-company: "UCLA DevX / MAE Capstone",
-title: "Robotics Developer",
-dateRange: "Jan 2024 – Jun 2024",
-bullets: [
-"Built autonomous rover with mechanical arm & vision tracking for disk transport",
-"Implemented OpenCV and PID motor control on Raspberry Pi/Arduino stack",
-"Designed chassis using laser cutting and 3D printing"
-],
-},
 ],
 education: [
 {

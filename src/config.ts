@@ -41,7 +41,7 @@ skills: ["ROS 2", "OpenCV", "SolidWorks", "Controls (PID)", "Raspberry Pi", "Ard
 name: "Robotic Arm for Fiber Placement",
 description:
 "Developed an impedance controller in PyDrake for automated composite fiber placement, focusing on accurate force control and dynamic interaction with mold surfaces.",
-link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
+link: "/projects/robotic-arm-afp.astro",
 skills: ["Python", "Control Systems", "Simulation", "Robotics"],
 },
 {

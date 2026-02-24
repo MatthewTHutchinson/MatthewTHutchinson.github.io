@@ -38,7 +38,7 @@ link: "/projects/autonomous-rover",
 skills: ["ROS 2", "OpenCV", "SolidWorks", "Controls (PID)", "Raspberry Pi", "Arduino"],
 },
 {
-name: "Robotic Arm for Fiber Placement",
+name: "Robotic Arm for Automated Fiber Placement",
 description:
 "Developed an impedance controller in PyDrake for automated composite fiber placement, focusing on accurate force control and dynamic interaction with mold surfaces.",
 link: "/projects/robotic-arm-afp.astro",

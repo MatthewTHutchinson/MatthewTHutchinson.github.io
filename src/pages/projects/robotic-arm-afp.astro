@@ -49,6 +49,17 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     </div>
   </section>
 
+  {/* REAL-WORLD AFP CONTEXT IMAGE */}
+  <section class="mb-12">
+    <div class="rounded-lg shadow-md overflow-hidden">
+      <img
+        src="/images/afp/afp-example.jpg"
+        alt="Industrial automated fiber placement system example"
+        class="w-full h-auto"
+      />
+    </div>
+  </section>
+
   {/* PROBLEM + MOTIVATION */}
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Problem & Motivation</h2>
@@ -292,26 +303,26 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </ul>
       </div>
 
-      <div class="space-y-6">
+      <div class="space-y-8">
         <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
           <img
-            src="/images/afp/push-test.png"
-            alt="Push test visualization showing disturbance and recovery"
+            src="/images/afp/afp-push-test-force-plot.png"
+            alt="Single pass end-effector force response during push test"
             class="w-full h-auto"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            Push test: disturbance rejection under impedance control
+            Single-pass push test: detailed force response showing disturbance rejection and damped recovery.
           </figcaption>
         </figure>
 
         <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
           <img
-            src="/images/afp/force-plot.png"
-            alt="Force plot over time during contact interaction"
+            src="/images/afp/afp-push-test-force-plot_2.png"
+            alt="Full trajectory end-effector force profile"
             class="w-full h-auto"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            Contact force response during interaction
+            Full trajectory execution: periodic force regulation during repeated surface contact.
           </figcaption>
         </figure>
       </div>

@@ -36,12 +36,12 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           loop
           playsinline
           preload="metadata"
-          poster="/images/afp/hero-poster.jpg"
+          poster="/images/afp/example.jpg"
         >
           <source src="/images/afp/hero.mp4" type="video/mp4" />
           <img
-            src="/images/afp/hero-fallback.jpg"
-            alt="UR5e simulated AFP roller contact demo"
+            src="/images/afp/example.jpg"
+            alt="Automated fiber placement (AFP) example"
             class="w-full h-auto"
           />
         </video>
@@ -74,11 +74,20 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </ul>
       </div>
 
-      <img
-        src="/images/afp/example.jpg"
-        alt="Automated fiber placement concept diagram"
-        class="rounded-lg shadow-sm w-full"
-      />
+      <div class="space-y-6">
+        <img
+          src="/images/afp/example.jpg"
+          alt="AFP example showing robot and layup concept"
+          class="rounded-lg shadow-sm w-full"
+        />
+
+        <img
+          src="/images/afp/roller-schematic.png"
+          alt="AFP head schematic showing roller and material placement"
+          class="rounded-lg shadow-sm w-full"
+          loading="lazy"
+        />
+      </div>
     </div>
   </section>
 
@@ -95,18 +104,10 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </p>
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>
-            <span class="font-medium">Robot:</span> UR5e model running in Drake’s simulation environment
-          </li>
-          <li>
-            <span class="font-medium">End effector:</span> roller designed to impose and regulate contact
-          </li>
-          <li>
-            <span class="font-medium">Environment:</span> compliant mold surface represented as a mesh/contact geometry
-          </li>
-          <li>
-            <span class="font-medium">Control goal:</span> trajectory tracking + stable force interaction via impedance control
-          </li>
+          <li><span class="font-medium">Robot:</span> UR5e model running in Drake’s simulation environment</li>
+          <li><span class="font-medium">End effector:</span> roller designed to impose and regulate contact</li>
+          <li><span class="font-medium">Environment:</span> compliant mold surface represented as contact geometry</li>
+          <li><span class="font-medium">Control goal:</span> trajectory tracking + stable force interaction via impedance control</li>
         </ul>
 
         <p class="text-gray-600">
@@ -116,16 +117,20 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </p>
       </div>
 
-      <img
-        src="/images/afp/simulation-environment.png"
-        alt="System overview diagram: UR5e, roller, mold surface, control loop"
-        class="rounded-lg shadow-sm w-full"
-      />
-      <img
-          src="/images/afp/trajectory-orientation.png"
-          alt="Curved mold trajectory generation visualization"
+      {/* IMPORTANT: wrap the right column so images don't wrap into the left column */}
+      <div class="space-y-6">
+        <img
+          src="/images/afp/simulation-environment.png"
+          alt="Simulation environment showing UR5e, roller end-effector, and mold surface"
           class="rounded-lg shadow-sm w-full"
-      />
+        />
+        <img
+          src="/images/afp/reference-model.png"
+          alt="Reference model / desired surface trajectory representation"
+          class="rounded-lg shadow-sm w-full"
+          loading="lazy"
+        />
+      </div>
     </div>
   </section>
 
@@ -260,12 +265,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           the end effector and observing stable recovery and bounded interaction forces.
         </p>
       </div>
-
-      <img
-        src="/images/afp/sim-screenshot.png"
-        alt="Drake simulation screenshot of UR5e, roller, and mold"
-        class="rounded-lg shadow-sm w-full"
-      />
     </div>
   </section>
 

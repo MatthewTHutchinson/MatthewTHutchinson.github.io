@@ -19,10 +19,9 @@ skills: [
 "SolidWorks",
 "GD&T",
 "FEA",
-"Data Science",
 "OpenCV",
 "Reinforcement Learning",
-"Nueral Networks",
+"Neural Networks",
 "Additive Manufacturing",
 "Laser Cutting",
 "Control Systems",
@@ -85,7 +84,7 @@ education: [
 {
 school: "University of California, Los Angeles",
 degree: "M.S. Mechanical Engineering",
-dateRange: "2025 – 2026",
+dateRange: "2025",
 achievements: [
 "Specialization in Design, Robotics & Manufacturing",
 "Graduate coursework in reinforcement learning, soft robotics, bionic systems, data science, compliant mechanisms, smart grids",

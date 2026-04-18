@@ -49,16 +49,24 @@ category: "engineering",
 name: "Motorcycle Maintenance & Modifications",
 description:
 "Hands-on work on my Suzuki SV650: performed valve inspections, coolant flush, exhaust upgrade, oil changes.",
-link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
+link: "/projects/motorcycle",
 skills: ["Mechanical Systems", "Diagnostics", "Tools"],
 category: "fabrication",
 },
 {
 name: "Laser-Cut Japanese Pagoda",
 description:
-"Designed and fabricated a multi-material lantern featuring wood joinery, acrylic panels, and engraving, blending precision design with physical craft.",
-link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
-skills: ["Laser Cutting", "Design for Fabrication", "Art & Engineering"],
+"Designed and fabricated a multi-story lantern featuring precision laser-cut wood joinery, acrylic light panels, and surface engraving.",
+link: "/projects/japanese-pagoda",
+skills: ["Laser Cutting", "Design for Fabrication", "Wood Joinery", "Acrylic"],
+category: "fabrication",
+},
+{
+name: "Laser-Cut Maps",
+description:
+"Topographic and city maps fabricated using laser-cut wood and acrylic — translating geographic data into layered physical form.",
+link: "/projects/laser-cut-maps",
+skills: ["Laser Cutting", "Vector Design", "Design for Fabrication"],
 category: "fabrication",
 },
 ],

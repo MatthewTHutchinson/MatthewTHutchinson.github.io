@@ -16,10 +16,21 @@ const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
               class="w-[75px] h-[5px] mt-2 rounded-full"
               style={`background-color: ${siteConfig.accentColor}`}
             />
+
+            <div class="flex gap-2 mt-6 flex-wrap">
+              {["all", "engineering", "fabrication"].map((cat) => (
+                <button
+                  data-filter={cat}
+                  class="filter-btn px-3 py-1.5 rounded-lg text-sm font-mono border transition-all duration-200 border-gray-300 text-gray-500 hover:border-gray-500 hover:text-gray-900"
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div class="lg:col-span-8">
-            <div class="space-y-8">
+            <div class="space-y-8" id="projects-list">
               {siteConfig.projects.map((project, index) => {
                 const Component = project.link ? "a" : "div";
                 const linkProps = project.link
@@ -31,7 +42,7 @@ const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
                   : {};
 
                 return (
-                  <div class="group relative">
+                  <div class="group relative" data-category={project.category ?? "engineering"}>
                     <Component
                       {...linkProps}
                       class={`block relative p-4 sm:p-6 md:p-8 bg-gray-50 rounded-xl sm:rounded-2xl border border-gray-200 transition-all duration-300 ${
@@ -102,3 +113,38 @@ const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
     </section>
   )
 }
+
+<script define:vars={{ accentColor: siteConfig.accentColor }}>
+  const buttons = document.querySelectorAll(".filter-btn");
+  const cards = document.querySelectorAll("#projects-list [data-category]");
+
+  function setActive(btn) {
+    buttons.forEach((b) => {
+      b.style.backgroundColor = "";
+      b.style.color = "";
+      b.style.borderColor = "";
+      b.classList.remove("active-filter");
+    });
+    btn.style.backgroundColor = accentColor;
+    btn.style.color = "white";
+    btn.style.borderColor = accentColor;
+    btn.classList.add("active-filter");
+  }
+
+  // Set "all" active by default
+  setActive(buttons[0]);
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter;
+      setActive(btn);
+      cards.forEach((card) => {
+        if (filter === "all" || card.dataset.category === filter) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+</script>

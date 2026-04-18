@@ -35,6 +35,7 @@ description:
 "Designed and built a autonomous rover to transport disks across ramps and platforms using camera-based path detection, PID control, and mechanical arm mechanisms.",
 link: "/projects/autonomous-rover",
 skills: ["ROS 2", "OpenCV", "SolidWorks", "Controls (PID)", "Raspberry Pi", "Arduino"],
+category: "engineering",
 },
 {
 name: "Robotic Arm for Automated Fiber Placement",
@@ -42,6 +43,7 @@ description:
 "Developed an impedance controller in PyDrake for automated composite fiber placement, focusing on accurate force control and dynamic interaction with mold surfaces.",
 link: "/projects/robotic-arm-afp",
 skills: ["Python", "PyDrake", "Impedance Control", "Contact Modeling", "UR5e"],
+category: "engineering",
 },
 {
 name: "Motorcycle Maintenance & Modifications",
@@ -49,6 +51,7 @@ description:
 "Hands-on work on my Suzuki SV650: performed valve inspections, coolant flush, exhaust upgrade, oil changes.",
 link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
 skills: ["Mechanical Systems", "Diagnostics", "Tools"],
+category: "fabrication",
 },
 {
 name: "Laser-Cut Japanese Pagoda",
@@ -56,6 +59,7 @@ description:
 "Designed and fabricated a multi-material lantern featuring wood joinery, acrylic panels, and engraving, blending precision design with physical craft.",
 link: "[https://github.com/MatthewTHutchinson](https://github.com/MatthewTHutchinson)",
 skills: ["Laser Cutting", "Design for Fabrication", "Art & Engineering"],
+category: "fabrication",
 },
 ],
 experience: [

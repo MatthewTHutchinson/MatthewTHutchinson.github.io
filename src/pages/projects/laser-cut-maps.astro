@@ -8,14 +8,12 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
       <div>
         <h1 class="text-4xl sm:text-5xl font-bold mb-4">Laser-Cut Maps</h1>
         <p class="text-lg text-gray-700 max-w-3xl">
-          Topographic and city maps fabricated using laser-cut wood and acrylic.
-          Each piece translates geographic data into layered physical form — designed in vector software
-          and cut with precision at the UCLA Makerspace.
+          City and campus maps designed in Illustrator and laser-cut from wood at the UCLA Makerspace.
         </p>
         <ul class="flex flex-wrap gap-3 mt-5">
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Laser Cutting</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Vector Design</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Wood & Acrylic</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Illustrator</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Wood</li>
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Design for Fabrication</li>
         </ul>
       </div>
@@ -24,7 +22,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <img
           src="/images/makerspace work/sf-map-1.jpeg"
           alt="Laser-cut San Francisco map"
-          class="w-full h-auto object-cover"
+          class="w-full h-auto"
         />
         <figcaption class="px-3 py-1.5 text-xs text-gray-400 font-mono">sf-map-1.jpeg</figcaption>
       </figure>
@@ -46,7 +44,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           <img
             src={`/images/makerspace work/${filename}`}
             alt={filename}
-            class="w-full h-48 object-cover"
+            class="w-full h-auto"
             loading="lazy"
           />
           <figcaption class="px-2 py-1 text-xs text-gray-400 font-mono">{filename}</figcaption>
@@ -70,7 +68,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           <img
             src={`/images/makerspace work/${filename}`}
             alt={filename}
-            class="w-full h-48 object-cover"
+            class="w-full h-auto"
             loading="lazy"
           />
           <figcaption class="px-2 py-1 text-xs text-gray-400 font-mono">{filename}</figcaption>

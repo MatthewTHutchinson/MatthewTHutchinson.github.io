@@ -66,7 +66,7 @@ name: "Laser-Cut Maps",
 description:
 "Topographic and city maps fabricated using laser-cut wood and acrylic — translating geographic data into layered physical form.",
 link: "/projects/laser-cut-maps",
-skills: ["Laser Cutting", "Vector Design", "Design for Fabrication"],
+skills: ["Laser Cutting", "Illustrator", "Design for Fabrication"],
 category: "fabrication",
 },
 ],

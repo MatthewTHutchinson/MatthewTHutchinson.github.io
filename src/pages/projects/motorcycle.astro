@@ -8,9 +8,8 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
       <div>
         <h1 class="text-4xl sm:text-5xl font-bold mb-4">Motorcycle Maintenance & Modifications</h1>
         <p class="text-lg text-gray-700 max-w-3xl">
-          Hands-on maintenance and mechanical work on my Suzuki SV650 — including valve clearance
-          inspections, coolant flush, exhaust upgrade, and routine oil changes. All work performed
-          independently using factory service manual specs.
+          Ongoing maintenance on my Suzuki SV650. Work includes valve clearance inspections, oil changes,
+          coolant flush, brake fluid flush, and exhaust swap. Done from the service manual.
         </p>
         <ul class="flex flex-wrap gap-3 mt-5">
           <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Mechanical Systems</li>
@@ -22,11 +21,11 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
       <figure class="rounded-lg overflow-hidden shadow-md border border-gray-200">
         <img
-          src="/images/mtc/mtc-valves-1.JPG"
-          alt="Motorcycle valve inspection"
-          class="w-full h-auto object-cover"
+          src="/images/mtc/IMG_0533.JPG"
+          alt="Suzuki SV650"
+          class="w-full h-auto"
         />
-        <figcaption class="px-3 py-1.5 text-xs text-gray-400 font-mono">mtc-valves-1.JPG</figcaption>
+        <figcaption class="px-3 py-1.5 text-xs text-gray-400 font-mono">IMG_0533.JPG</figcaption>
       </figure>
     </div>
   </section>
@@ -35,13 +34,13 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     <h2 class="text-2xl font-bold mb-6">Photos</h2>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
       {[
+        "mtc-valves-1.JPG",
         "mtc-valves-2.JPG",
         "mtc-valves-3.JPG",
         "mtc-oil-change.JPG",
         "IMG_0031.JPG",
         "IMG_0529.JPG",
         "IMG_0531.JPG",
-        "IMG_0533.JPG",
         "IMG_0534.JPG",
         "IMG_1487.JPG",
         "IMG_1488.JPG",
@@ -53,7 +52,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           <img
             src={`/images/mtc/${filename}`}
             alt={filename}
-            class="w-full h-48 object-cover"
+            class="w-full h-auto"
             loading="lazy"
           />
           <figcaption class="px-2 py-1 text-xs text-gray-400 font-mono">{filename}</figcaption>

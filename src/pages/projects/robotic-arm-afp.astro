@@ -204,81 +204,78 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
           <img
             src="/images/afp/push-test-force-plot.png"
-            alt="Single pass end-effector force response during push test"
+            alt="End-effector force response (single pass)"
             class="w-full h-auto"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            Single-pass push test: force response showing disturbance rejection and damped recovery.
+            End-effector force (single pass): disturbance rejection and damped recovery.
           </figcaption>
         </figure>
 
         <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
           <img
-            src="/images/afp/push-test-force-plot_2.png"
-            alt="Full trajectory end-effector force profile"
+            src="/images/afp/ee-spatial-error-singlepass.png"
+            alt="End-effector spatial error (single pass)"
             class="w-full h-auto"
+            loading="lazy"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            Full trajectory: force regulated during rolling, spikes at some transitions.
+            End-effector spatial error (single pass).
           </figcaption>
         </figure>
 
-        <div class="space-y-4">
-          <h3 class="font-semibold text-lg">End-Effector Tracking Error</h3>
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <img
+            src="/images/afp/ee-orientation-error-singlepass.png"
+            alt="End-effector orientation error (single pass)"
+            class="w-full h-auto"
+            loading="lazy"
+          />
+          <figcaption class="px-3 py-2 text-sm text-gray-600">
+            End-effector orientation error (single pass).
+          </figcaption>
+        </figure>
 
-          <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-            <img
-              src="/images/afp/ee-spatial-error-singlepass.png"
-              alt="End-effector spatial error (single pass)"
-              class="w-full h-auto"
-              loading="lazy"
-            />
-            <figcaption class="px-3 py-2 text-sm text-gray-600">
-              Spatial error (single pass).
-            </figcaption>
-          </figure>
+        <details class="rounded-lg border bg-white p-4 shadow-sm">
+          <summary class="cursor-pointer font-medium text-gray-800">Show full-trajectory plots</summary>
+          <div class="mt-4 space-y-6">
+            <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+              <img
+                src="/images/afp/push-test-force-plot_2.png"
+                alt="End-effector force (full trajectory)"
+                class="w-full h-auto"
+                loading="lazy"
+              />
+              <figcaption class="px-3 py-2 text-sm text-gray-600">
+                Force at end-effector (full trajectory): regulated during rolling, spikes at some transitions.
+              </figcaption>
+            </figure>
 
-          <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-            <img
-              src="/images/afp/ee-orientation-error-singlepass.png"
-              alt="End-effector orientation error (single pass)"
-              class="w-full h-auto"
-              loading="lazy"
-            />
-            <figcaption class="px-3 py-2 text-sm text-gray-600">
-              Orientation error (single pass).
-            </figcaption>
-          </figure>
+            <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+              <img
+                src="/images/afp/ee-spatial-error-fulltraj.png"
+                alt="End-effector spatial error (full trajectory)"
+                class="w-full h-auto"
+                loading="lazy"
+              />
+              <figcaption class="px-3 py-2 text-sm text-gray-600">
+                Spatial error (full trajectory).
+              </figcaption>
+            </figure>
 
-          <details class="rounded-lg border bg-white p-4 shadow-sm">
-            <summary class="cursor-pointer font-medium text-gray-800">Show full-trajectory error plots</summary>
-            <div class="mt-4 space-y-6">
-              <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-                <img
-                  src="/images/afp/ee-spatial-error-fulltraj.png"
-                  alt="End-effector spatial error (full trajectory)"
-                  class="w-full h-auto"
-                  loading="lazy"
-                />
-                <figcaption class="px-3 py-2 text-sm text-gray-600">
-                  Spatial error (full trajectory).
-                </figcaption>
-              </figure>
-
-              <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-                <img
-                  src="/images/afp/ee-orientation-error-fulltraj.png"
-                  alt="End-effector orientation error (full trajectory)"
-                  class="w-full h-auto"
-                  loading="lazy"
-                />
-                <figcaption class="px-3 py-2 text-sm text-gray-600">
-                  Orientation error (full trajectory).
-                </figcaption>
-              </figure>
-            </div>
-          </details>
-        </div>
+            <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+              <img
+                src="/images/afp/ee-orientation-error-fulltraj.png"
+                alt="End-effector orientation error (full trajectory)"
+                class="w-full h-auto"
+                loading="lazy"
+              />
+              <figcaption class="px-3 py-2 text-sm text-gray-600">
+                Orientation error (full trajectory).
+              </figcaption>
+            </figure>
+          </div>
+        </details>
       </div>
     </div>
   </section>

@@ -12,7 +12,7 @@ twitter: "",
 github: "https://github.com/MatthewTHutchinson",
 },
 aboutMe:
-"M.S. Mechanical Engineering at UCLA, specializing in Design, Robotics & Manufacturing. I'm genuinely interested in where AI is heading — NLP, deep learning, and how these tools get applied to real physical systems. I also do digital fabrication on the side.",
+"M.S. Mechanical Engineering at UCLA. I'm interested in how AI and machine learning tools — NLP, deep learning, reinforcement learning — are starting to change what's possible in robotics and physical systems. Most of my work sits at that intersection.",
 skills: [
 "Python",
 "MATLAB",

@@ -12,7 +12,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </h1>
 
         <p class="text-lg text-gray-700 max-w-3xl">
-          Simulated an Automated Fiber Placement (AFP) task with a UR5e in PyDrake: a roller end-effector follows a surface trajectory while regulating contact forces via operational-space impedance control. Emphasis was on contact stability (bounded forces + damped recovery) rather than pure position tracking.
+          Simulated an AFP task with a UR5e in PyDrake: a roller end-effector follows a surface trajectory while regulating contact forces via operational-space impedance control. The focus was contact stability — bounded forces and damped recovery — rather than pure position tracking.
         </p>
 
         <ul class="flex flex-wrap gap-3 mt-5">
@@ -24,7 +24,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </ul>
       </div>
 
-      {/* HERO MEDIA */}
       <div class="rounded-lg shadow-md overflow-hidden w-full">
         <video
           class="w-full h-auto"
@@ -46,65 +45,10 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     </div>
   </section>
 
-  {/* PROBLEM + MOTIVATION */}
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">Problem & Motivation</h2>
-
-    <div class="grid md:grid-cols-2 gap-8 items-start">
-      <div class="text-gray-700 space-y-4">
-        <p class="text-gray-600">
-          AFP lays composite tow along a prescribed path while a roller compacts material against a mold. The control challenge is contact-rich trajectory tracking: maintain consistent normal force and alignment while following a surface path under compliance, geometry mismatch, and disturbances.
-        </p>
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Track a path on (planar or curved) mold geometry</li>
-          <li>Maintain controlled contact during compaction (roller-on-surface)</li>
-          <li>Achieve compliant behavior while resisting disturbances</li>
-        </ul>
-      </div>
-
-      <div class="space-y-6">
-        <img
-          src="/images/afp/example.jpg"
-          alt="AFP example showing robot and layup concept"
-          class="rounded-lg shadow-sm w-full"
-        />
-
-        <img
-          src="/images/afp/roller-schematic.png"
-          alt="AFP head schematic showing roller and material placement"
-          class="rounded-lg shadow-sm w-full"
-          loading="lazy"
-        />
-      </div>
-    </div>
-  </section>
-
-  {/* SYSTEM OVERVIEW */}
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">System Overview</h2>
-
-    <div class="grid md:grid-cols-2 gap-8 items-start">
-      <div class="text-gray-700 space-y-4">
-        <p class="text-gray-600">
-          The system was implemented and validated in simulation using PyDrake. A UR5e arm was tasked
-          with moving a roller end effector along a generated trajectory while interacting with a
-          compliant mold surface using Drake’s contact modeling capabilities.
-        </p>
-
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li><span class="font-medium">Robot:</span> UR5e model running in Drake’s simulation environment</li>
-          <li><span class="font-medium">End effector:</span> roller designed to impose and regulate contact</li>
-          <li><span class="font-medium">Environment:</span> compliant mold surface represented as contact geometry</li>
-          <li><span class="font-medium">Control goal:</span> trajectory tracking + stable force interaction via impedance control</li>
-        </ul>
-
-        <p class="text-gray-600">
-          Design choice: optimize for stable interaction (force regulation + disturbance rejection), since AFP quality depends on consistent compaction during contact.
-        </p>
   {/* AT A GLANCE */}
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">At a Glance</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="rounded-lg border bg-white p-4 shadow-sm">
         <div class="text-sm text-gray-500">Robot + Sim</div>
         <div class="text-base font-semibold text-gray-800">UR5e + PyDrake</div>
@@ -127,18 +71,34 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
       </div>
     </div>
   </section>
+
+  {/* OVERVIEW */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Overview</h2>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-4">
+        <p class="text-gray-600">
+          AFP lays composite tow along a prescribed path while a roller compacts material against a mold. The control challenge is maintaining consistent normal force and alignment while following a surface path under compliance, geometry mismatch, and disturbances.
+        </p>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li><span class="font-medium">Robot:</span> UR5e in Drake's multibody simulation</li>
+          <li><span class="font-medium">End effector:</span> roller modeled as a rigid body attached to the wrist</li>
+          <li><span class="font-medium">Environment:</span> compliant mold surface as contact geometry</li>
+          <li><span class="font-medium">Control goal:</span> stable force interaction + trajectory tracking via impedance control</li>
+        </ul>
       </div>
 
-      {/* IMPORTANT: wrap the right column so images don't wrap into the left column */}
       <div class="space-y-6">
         <img
-          src="/images/afp/simulation-environment.png"
-          alt="Simulation environment showing UR5e, roller end-effector, and mold surface"
+          src="/images/afp/example.jpg"
+          alt="AFP example showing robot and layup concept"
           class="rounded-lg shadow-sm w-full"
         />
         <img
-          src="/images/afp/reference-model.png"
-          alt="Reference model / desired surface trajectory representation"
+          src="/images/afp/roller-schematic.png"
+          alt="AFP head schematic showing roller and material placement"
           class="rounded-lg shadow-sm w-full"
           loading="lazy"
         />
@@ -152,27 +112,14 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="text-gray-700 space-y-4">
-        <p class="text-gray-600">
-          A key part of AFP is defining a trajectory on the mold surface and maintaining a roller
-          orientation consistent with compaction. The approach used here generated feasible paths by
-          leveraging geometric constraints and a mold representation suitable for simulation.
-        </p>
-
-        <p class="text-gray-600">
-          For the planar trajectory case, the path was generated by intersecting a plane with the mold
-          surface and sampling along the resulting curve. For curved molds, the same idea extends by
-          describing the mold surface parametrically and producing a surface-following reference curve.
-        </p>
-
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Represent mold surface (e.g., Bezier surface or mesh)</li>
-          <li>Generate reference curve (surface intersection / parametric sampling)</li>
-          <li>Compute desired pose along the curve (position + surface-consistent orientation)</li>
+          <li>Represent mold surface (Bezier surface or mesh)</li>
+          <li>Generate reference curve via surface intersection or parametric sampling</li>
+          <li>Compute desired pose along the curve — position + surface-consistent orientation</li>
         </ul>
 
         <p class="text-gray-600">
-          The output of this stage is a time-parameterized reference for the end-effector pose that can
-          be tracked by the controller while maintaining surface contact constraints.
+          For planar molds, the path is generated by intersecting a plane with the surface and sampling along the result. For curved molds, the same approach extends parametrically. The output is a time-parameterized end-effector pose reference for the controller.
         </p>
       </div>
 
@@ -198,38 +145,24 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="text-gray-700 space-y-4">
         <p class="text-gray-600">
-          Because AFP is contact-rich, purely position-based control can produce unstable interaction
-          forces when the robot encounters surface variation or compliance. Instead, the controller was
-          designed around impedance control, which enforces a virtual mass–spring–damper relationship
-          between the actual end-effector motion and the desired trajectory.
+          Purely position-based control produces unstable interaction forces when the robot encounters surface variation. Impedance control instead enforces a virtual mass–spring–damper relationship between the actual end-effector motion and the desired trajectory, allowing the robot to comply with the surface rather than fight it.
         </p>
 
-
         <div class="rounded-md border bg-gray-50 p-4 text-sm text-gray-700 overflow-auto">
-          <div class="font-semibold mb-2">Impedance model (conceptual)</div>
+          <div class="font-semibold mb-2">Impedance model</div>
           <div>
-            F = M (ẍ − ẍ<sub>d</sub>) + B (ẋ − ẋ<sub>d</sub>) + K (x − x<sub>d</sub>)
+            F = M (ẍ − ẍ<sub>d</sub>) + B (ẋ − ẋ<sub>d</sub>) + K (x − x<sub>d</sub>)
           </div>
           <div class="mt-2 text-gray-600">
-            where x is the end-effector position (or task-space coordinates) and x<sub>d</sub> is the desired trajectory.
+            where x is the end-effector position and x<sub>d</sub> is the desired trajectory.
           </div>
         </div>
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>
-            <span class="font-medium">Goal:</span> maintain stable contact forces during compaction while tracking the path
-          </li>
-          <li>
-            <span class="font-medium">Behavior:</span> compliance under disturbances instead of rigid position enforcement
-          </li>
-          <li>
-            <span class="font-medium">Output:</span> desired task-space accelerations → inverse dynamics torques
-          </li>
+          <li><span class="font-medium">Goal:</span> stable contact forces during compaction while tracking the path</li>
+          <li><span class="font-medium">Behavior:</span> compliance under disturbances instead of rigid position enforcement</li>
+          <li><span class="font-medium">Output:</span> desired task-space accelerations → inverse dynamics torques</li>
         </ul>
-
-        <p class="text-gray-600">
-          Why it fits AFP: it tolerates small surface/model errors by trading perfect tracking for stable contact and predictable force response.
-        </p>
       </div>
 
       <div class="space-y-6">
@@ -237,46 +170,6 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           src="/images/afp/impedance-block-diagram.png"
           alt="Impedance control block diagram"
           class="rounded-lg shadow-sm w-full"
-        />
-        <img
-          src="/images/afp/contact-force-plot.png"
-          alt="Example contact force plot from simulation"
-          class="rounded-lg shadow-sm w-full"
-        />
-      </div>
-    </div>
-  </section>
-
-  {/* SIMULATION SETUP */}
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">Simulation Setup (PyDrake)</h2>
-
-    <div class="grid md:grid-cols-2 gap-8 items-start">
-      <div class="text-gray-700 space-y-4">
-        <p class="text-gray-600">
-          The simulation environment was built in Drake to evaluate interaction stability and trajectory
-          tracking without requiring hardware access. The UR5e model, roller end effector, and mold
-          surface were integrated into a single simulation diagram with contact enabled.
-        </p>
-
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>UR5e robot model integrated into Drake’s multibody simulation</li>
-          <li>Roller end effector modeled as a rigid body attached to the wrist</li>
-          <li>Mold surface represented as compliant contact geometry (mesh-based)</li>
-          <li>Controller integrated as part of the Drake Diagram for closed-loop simulation</li>
-        </ul>
-
-        <p class="text-gray-600">
-          A dedicated push test was used to validate basic impedance behavior: applying a disturbance to
-          the end effector and observing stable recovery and bounded interaction forces.
-        </p>
-      </div>
-      <div class="space-y-6">
-        <img
-          src="/images/afp/impedance-block-diagram.png"
-          alt="High-level impedance control diagram"
-          class="rounded-lg shadow-sm w-full"
-          loading="lazy"
         />
       </div>
     </div>
@@ -289,7 +182,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="text-gray-700 space-y-4">
         <p class="text-gray-600">
-          Validation focused on two things: (1) stable interaction under disturbance (push test), and (2) tracking quality along a generated surface pass. Single-pass tuning achieved tight tracking and bounded forces; full-trajectory runs exposed force spikes at specific transitions, highlighting where model/contact assumptions break down.
+          Validation focused on two things: stable interaction under disturbance (push test) and tracking quality along a generated surface pass. Single-pass tuning achieved tight tracking and bounded forces; full-trajectory runs showed force spikes at some transitions, where contact model assumptions break down.
         </p>
 
         <h3 class="font-semibold">Key outcomes</h3>
@@ -299,10 +192,10 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           <li><span class="font-medium">Force regulation:</span> normal-force behavior remained controlled during nominal rolling.</li>
         </ul>
 
-        <h3 class="font-semibold mt-6">Limitations (honest)</h3>
+        <h3 class="font-semibold mt-6">Limitations</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li><span class="font-medium">Full-trajectory edge cases:</span> force spikes appear at some transitions in the longer run.</li>
-          <li><span class="font-medium">Planar assumptions:</span> orientation/ω targets were simplified; a curved mold requires surface-normal alignment and nonzero desired angular rates.</li>
+          <li><span class="font-medium">Full-trajectory edge cases:</span> force spikes at some transitions in the longer run.</li>
+          <li><span class="font-medium">Planar assumptions:</span> orientation targets were simplified; a curved mold requires surface-normal alignment and nonzero desired angular rates.</li>
           <li><span class="font-medium">Simulation-only:</span> real sensing, friction variability, and calibration will change behavior.</li>
         </ul>
       </div>
@@ -315,7 +208,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
             class="w-full h-auto"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            Single-pass push test: detailed force response showing disturbance rejection and damped recovery.
+            Single-pass push test: force response showing disturbance rejection and damped recovery.
           </figcaption>
         </figure>
 
@@ -326,15 +219,12 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
             class="w-full h-auto"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            Full trajectory run: force is regulated during rolling but shows spikes at some transition phases (target for future tuning/model refinement).
+            Full trajectory: force regulated during rolling, spikes at some transitions.
           </figcaption>
         </figure>
 
         <div class="space-y-4">
           <h3 class="font-semibold text-lg">End-Effector Tracking Error</h3>
-          <p class="text-sm text-gray-600">
-            Single-pass plots are the cleanest view of controller tuning; full-trajectory plots show long-run behavior and where transition phases introduce error.
-          </p>
 
           <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
             <img
@@ -344,7 +234,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
               loading="lazy"
             />
             <figcaption class="px-3 py-2 text-sm text-gray-600">
-              Spatial error (single pass): position tracking during a tuned rolling segment.
+              Spatial error (single pass).
             </figcaption>
           </figure>
 
@@ -356,7 +246,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
               loading="lazy"
             />
             <figcaption class="px-3 py-2 text-sm text-gray-600">
-              Orientation error (single pass): roll/pitch/yaw tracking during the tuned segment.
+              Orientation error (single pass).
             </figcaption>
           </figure>
 
@@ -371,7 +261,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
                   loading="lazy"
                 />
                 <figcaption class="px-3 py-2 text-sm text-gray-600">
-                  Spatial error (full trajectory): long-run behavior across repeated passes and transitions.
+                  Spatial error (full trajectory).
                 </figcaption>
               </figure>
 
@@ -383,7 +273,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
                   loading="lazy"
                 />
                 <figcaption class="px-3 py-2 text-sm text-gray-600">
-                  Orientation error (full trajectory): long-run behavior; highlights transition-induced deviations.
+                  Orientation error (full trajectory).
                 </figcaption>
               </figure>
             </div>
@@ -395,19 +285,13 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
   {/* LESSONS + NEXT STEPS */}
   <section class="mb-4">
-    <h2 class="text-2xl font-bold mb-4">Lessons Learned & Next Steps</h2>
+    <h2 class="text-2xl font-bold mb-4">Lessons & Next Steps</h2>
 
-    <div class="text-gray-700 space-y-4">
-      <p class="text-gray-600">
-        The primary takeaway: interaction stability is the key to contact-rich manipulation. Impedance control shaped robust, predictable robot–environment behavior in simulation.
-      </p>
-      <ul class="list-disc pl-5 space-y-2 text-gray-600">
-        <li><span class="font-medium">Close the loop on full trajectories:</span> retune gains or schedule gains across phases (approach → contact → roll → lift) to eliminate transition spikes.</li>
-        <li><span class="font-medium">Curved molds:</span> generate desired pose from surface normals and include nonzero desired angular rates for stable alignment.</li>
-        <li><span class="font-medium">Model realism:</span> add sensing assumptions (noise + filtering + delay) and friction variability to test robustness.</li>
-        <li><span class="font-medium">Compare controllers:</span> benchmark against hybrid force–motion control to quantify tradeoffs vs impedance.</li>
-        <li><span class="font-medium">Hardware path:</span> define frames + calibration steps and enforce safety limits for a UR5e execution plan.</li>
-      </ul>
-    </div>
+    <ul class="list-disc pl-5 space-y-3 text-gray-600">
+      <li><span class="font-medium">Gain scheduling across phases:</span> retune or schedule gains for approach → contact → roll → lift to eliminate transition spikes.</li>
+      <li><span class="font-medium">Curved molds:</span> generate desired pose from surface normals and add nonzero desired angular rates for stable alignment.</li>
+      <li><span class="font-medium">Model realism:</span> add sensor noise, filtering delay, and friction variability to stress-test the controller.</li>
+      <li><span class="font-medium">Compare controllers:</span> benchmark against hybrid force–motion control to quantify tradeoffs.</li>
+    </ul>
   </section>
 </ProjectLayout>

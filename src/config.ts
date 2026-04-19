@@ -12,7 +12,7 @@ twitter: "",
 github: "https://github.com/MatthewTHutchinson",
 },
 aboutMe:
-"M.S. Mechanical Engineering at UCLA, specializing in Design, Robotics & Manufacturing. I work on robotics, autonomous systems, and digital fabrication.",
+"M.S. Mechanical Engineering at UCLA, specializing in Design, Robotics & Manufacturing. I'm genuinely interested in where AI is heading — NLP, deep learning, and how these tools get applied to real physical systems. I also do digital fabrication on the side.",
 skills: [
 "Python",
 "MATLAB",

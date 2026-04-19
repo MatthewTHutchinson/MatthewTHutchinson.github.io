@@ -3,7 +3,7 @@ base: "MatthewTHutchinson.github.io",
 name: "Matthew Hutchinson",
 title: "Mechanical Engineering Graduate Student",
 description:
-"Portfolio of Matthew Hutchinson, a UCLA-trained mechanical engineer passionate about robotics, design, and building advanced autonomous systems.",
+"Portfolio of Matthew Hutchinson, a UCLA mechanical engineer focused on robotics, autonomous systems, and fabrication.",
 accentColor: "#1d4ed8",
 social: {
 email: "mahutchinson@ucla.edu",
@@ -12,7 +12,7 @@ twitter: "",
 github: "https://github.com/MatthewTHutchinson",
 },
 aboutMe:
-"I'm a mechanical engineer and digital fabricator passionate about robotics, additive manufacturing, and emerging technologies. I enjoy combining creative design with engineering to solve complex real-world problems. Currently pursuing my M.S. in Mechanical Engineering at UCLA (Design, Robotics & Manufacturing).",
+"M.S. Mechanical Engineering at UCLA, specializing in Design, Robotics & Manufacturing. I work on robotics, autonomous systems, and digital fabrication.",
 skills: [
 "Python",
 "MATLAB",
@@ -21,7 +21,8 @@ skills: [
 "FEA",
 "OpenCV",
 "Reinforcement Learning",
-"Neural Networks",
+"Deep Learning",
+"Natural Language Processing",
 "Additive Manufacturing",
 "Laser Cutting",
 "Control Systems",
@@ -32,7 +33,7 @@ projects: [
 {
 name: "Autonomous Rover for Disk Transport",
 description:
-"Designed and built a autonomous rover to transport disks across ramps and platforms using camera-based path detection, PID control, and mechanical arm mechanisms.",
+"Built an autonomous rover to transport disks across ramps using camera-based line detection, PID control, and a mechanical arm.",
 link: "/projects/autonomous-rover",
 skills: ["ROS 2", "OpenCV", "SolidWorks", "Controls (PID)", "Raspberry Pi", "Arduino"],
 category: "engineering",
@@ -99,7 +100,7 @@ degree: "M.S. Mechanical Engineering",
 dateRange: "2025",
 achievements: [
 "Specialization in Design, Robotics & Manufacturing",
-"Graduate coursework in reinforcement learning, soft robotics, bionic systems, data science, compliant mechanisms, smart grids",
+"Graduate coursework in reinforcement learning, deep learning, natural language processing, optimal control, soft robotics, bionic systems, data science",
 "Focus: Robotics, Autonomous Systems, Fabrication"
 ],
 },
@@ -110,7 +111,7 @@ dateRange: "2022 – 2024",
 achievements: [
 "Graduated with 3.54 GPA",
 "Graduate-level coursework in robotics (Kinematics, Dynamics, & Control), Rapid Prototyping, data structures & algorithms",
-"Designed, simulated, & built multiple robotic and mechanical systems"
+"Capstone and lab projects spanning robotics, mechanism design, and fabrication"
 ],
 },
 ],

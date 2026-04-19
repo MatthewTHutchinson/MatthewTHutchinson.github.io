@@ -100,8 +100,8 @@ degree: "M.S. Mechanical Engineering",
 dateRange: "2025",
 achievements: [
 "Specialization in Design, Robotics & Manufacturing",
-"Graduate coursework in reinforcement learning, deep learning, natural language processing, optimal control, soft robotics, bionic systems, data science",
-"Focus: Robotics, Autonomous Systems, Fabrication"
+"Graduate coursework in Reinforcement Learning, Deep Learning, Natural Language Processing, Optimal Control, Soft Robotics, Bionic Systems, Data Science",
+"Focus: Robotics, Machine Learning, Autonomous Systems"
 ],
 },
 {
@@ -110,7 +110,7 @@ degree: "B.S. Mechanical Engineering",
 dateRange: "2022 – 2024",
 achievements: [
 "Graduated with 3.54 GPA",
-"Graduate-level coursework in robotics (Kinematics, Dynamics, & Control), Rapid Prototyping, data structures & algorithms",
+"Graduate-level coursework in Robotics (Kinematics, Dynamics, & Control), Rapid Prototyping, Data Structures & Algorithms",
 "Capstone and lab projects spanning robotics, mechanism design, and fabrication"
 ],
 },

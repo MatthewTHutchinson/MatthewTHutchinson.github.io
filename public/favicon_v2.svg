@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Blue rounded square background -->
+  <rect width="32" height="32" rx="6" fill="#1d4ed8"/>
+  <!-- Top face (white – lit from above) -->
+  <polygon points="16,8 25,13 16,18 7,13" fill="#ffffff"/>
+  <!-- Left face (blue-200 – lightly shadowed) -->
+  <polygon points="7,13 16,18 16,26 7,21" fill="#bfdbfe"/>
+  <!-- Right face (blue-400 – more shadowed) -->
+  <polygon points="25,13 25,21 16,26 16,18" fill="#60a5fa"/>
+</svg>

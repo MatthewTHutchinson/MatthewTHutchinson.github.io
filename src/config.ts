@@ -56,15 +56,15 @@ category: "fabrication",
 {
 name: "Laser-Cut Japanese Pagoda",
 description:
-"Designed and fabricated a multi-story lantern featuring precision laser-cut wood joinery, acrylic light panels, and surface engraving.",
+"A lantern inspired by Japanese pagoda architecture, made from laser-cut wood joinery and surface engraving.",
 link: "/projects/japanese-pagoda",
-skills: ["Laser Cutting", "Design for Fabrication", "Wood Joinery", "Acrylic"],
+skills: ["Laser Cutting", "Design for Fabrication", "Wood Joinery"],
 category: "fabrication",
 },
 {
 name: "Laser-Cut Maps",
 description:
-"Topographic and city maps fabricated using laser-cut wood and acrylic — translating geographic data into layered physical form.",
+"City and campus maps designed in Illustrator and laser-cut from wood at the UCLA Makerspace.",
 link: "/projects/laser-cut-maps",
 skills: ["Laser Cutting", "Illustrator", "Design for Fabrication"],
 category: "fabrication",

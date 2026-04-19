@@ -110,7 +110,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Trajectory Generation</h2>
 
-    <div class="grid md:grid-cols-2 gap-8 items-start">
+    <div class="space-y-6">
       <div class="text-gray-700 space-y-4">
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
           <li>Represent mold surface (Bezier surface or mesh)</li>
@@ -123,17 +123,23 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </p>
       </div>
 
-      <div class="space-y-6">
-        <img
-          src="/images/afp/trajectory-planar.png"
-          alt="Planar trajectory generation visualization"
-          class="rounded-lg shadow-sm w-full"
-        />
-        <img
-          src="/images/afp/trajectory-mesh.png"
-          alt="Curved mold mesh generation visualization"
-          class="rounded-lg shadow-sm w-full"
-        />
+      <div class="grid grid-cols-2 gap-4">
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <img
+            src="/images/afp/trajectory-planar.png"
+            alt="Planar trajectory generation visualization"
+            class="w-full h-auto"
+          />
+          <figcaption class="px-3 py-2 text-sm text-gray-600">Planar trajectory</figcaption>
+        </figure>
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <img
+            src="/images/afp/trajectory-mesh.png"
+            alt="Curved mold mesh generation visualization"
+            class="w-full h-auto"
+          />
+          <figcaption class="px-3 py-2 text-sm text-gray-600">Curved mold mesh</figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -179,7 +185,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
   <section class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Results</h2>
 
-    <div class="grid md:grid-cols-2 gap-8 items-start">
+    <div class="space-y-8">
       <div class="text-gray-700 space-y-4">
         <p class="text-gray-600">
           Validation focused on two things: stable interaction under disturbance (push test) and tracking quality along a generated surface pass. Single-pass tuning achieved tight tracking and bounded forces; full-trajectory runs showed force spikes at some transitions, where contact model assumptions break down.
@@ -200,7 +206,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </ul>
       </div>
 
-      <div class="space-y-8">
+      <div class="grid grid-cols-3 gap-4">
         <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
           <img
             src="/images/afp/push-test-force-plot.png"
@@ -208,7 +214,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
             class="w-full h-auto"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            End-effector force (single pass): disturbance rejection and damped recovery.
+            Force (single pass)
           </figcaption>
         </figure>
 
@@ -220,7 +226,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
             loading="lazy"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            End-effector spatial error (single pass).
+            Spatial error (single pass)
           </figcaption>
         </figure>
 
@@ -232,51 +238,51 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
             loading="lazy"
           />
           <figcaption class="px-3 py-2 text-sm text-gray-600">
-            End-effector orientation error (single pass).
+            Orientation error (single pass)
           </figcaption>
         </figure>
-
-        <details class="rounded-lg border bg-white p-4 shadow-sm">
-          <summary class="cursor-pointer font-medium text-gray-800">Show full-trajectory plots</summary>
-          <div class="mt-4 space-y-6">
-            <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-              <img
-                src="/images/afp/push-test-force-plot_2.png"
-                alt="End-effector force (full trajectory)"
-                class="w-full h-auto"
-                loading="lazy"
-              />
-              <figcaption class="px-3 py-2 text-sm text-gray-600">
-                Force at end-effector (full trajectory): regulated during rolling, spikes at some transitions.
-              </figcaption>
-            </figure>
-
-            <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-              <img
-                src="/images/afp/ee-spatial-error-fulltraj.png"
-                alt="End-effector spatial error (full trajectory)"
-                class="w-full h-auto"
-                loading="lazy"
-              />
-              <figcaption class="px-3 py-2 text-sm text-gray-600">
-                Spatial error (full trajectory).
-              </figcaption>
-            </figure>
-
-            <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
-              <img
-                src="/images/afp/ee-orientation-error-fulltraj.png"
-                alt="End-effector orientation error (full trajectory)"
-                class="w-full h-auto"
-                loading="lazy"
-              />
-              <figcaption class="px-3 py-2 text-sm text-gray-600">
-                Orientation error (full trajectory).
-              </figcaption>
-            </figure>
-          </div>
-        </details>
       </div>
+
+      <details class="rounded-lg border bg-white p-4 shadow-sm">
+        <summary class="cursor-pointer font-medium text-gray-800">Show full-trajectory plots</summary>
+        <div class="mt-4 grid grid-cols-3 gap-4">
+          <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+            <img
+              src="/images/afp/push-test-force-plot_2.png"
+              alt="End-effector force (full trajectory)"
+              class="w-full h-auto"
+              loading="lazy"
+            />
+            <figcaption class="px-3 py-2 text-sm text-gray-600">
+              Force (full trajectory)
+            </figcaption>
+          </figure>
+
+          <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+            <img
+              src="/images/afp/ee-spatial-error-fulltraj.png"
+              alt="End-effector spatial error (full trajectory)"
+              class="w-full h-auto"
+              loading="lazy"
+            />
+            <figcaption class="px-3 py-2 text-sm text-gray-600">
+              Spatial error (full trajectory)
+            </figcaption>
+          </figure>
+
+          <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+            <img
+              src="/images/afp/ee-orientation-error-fulltraj.png"
+              alt="End-effector orientation error (full trajectory)"
+              class="w-full h-auto"
+              loading="lazy"
+            />
+            <figcaption class="px-3 py-2 text-sm text-gray-600">
+              Orientation error (full trajectory)
+            </figcaption>
+          </figure>
+        </div>
+      </details>
     </div>
   </section>
 

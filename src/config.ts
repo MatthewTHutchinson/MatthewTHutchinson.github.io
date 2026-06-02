@@ -23,6 +23,7 @@ skills: [
 "Reinforcement Learning",
 "Deep Learning",
 "Natural Language Processing",
+"GCP Compute Engine",
 "Additive Manufacturing",
 "Laser Cutting",
 "Control Systems",

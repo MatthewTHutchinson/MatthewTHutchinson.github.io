@@ -22,6 +22,7 @@ skills: [
 "OpenCV",
 "Reinforcement Learning",
 "Neural Networks",
+"GCP Compute Engine",
 "Additive Manufacturing",
 "Laser Cutting",
 "Control Systems",

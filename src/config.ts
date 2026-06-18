@@ -32,6 +32,14 @@ skills: [
 ],
 projects: [
 {
+name: "Knowledge Editing Consistency Benchmark",
+description:
+"Compared ROME, MEMIT, and IKE on factual rewrite accuracy, locality, and downstream logical consistency using GPT-2 XL, EasyEdit, custom probes, and external benchmarks.",
+link: "/projects/knowledge-editing",
+skills: ["Python", "EasyEdit", "GPT-2 XL", "NLP", "RAG", "Evaluation"],
+category: "research",
+},
+{
 name: "Autonomous Rover for Disk Transport",
 description:
 "Built an autonomous rover to transport disks across ramps using camera-based line detection, PID control, and a mechanical arm.",

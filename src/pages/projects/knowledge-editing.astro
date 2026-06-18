@@ -1,0 +1,147 @@
+---
+import ProjectLayout from "../../layouts/ProjectLayout.astro";
+---
+
+<ProjectLayout>
+  <section class="mb-12">
+    <div class="flex flex-col gap-6">
+      <div>
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4">
+          Beyond Rewrite Accuracy: Knowledge Editing Consistency
+        </h1>
+
+        <p class="text-lg text-gray-700 max-w-3xl">
+          CS263 final project comparing ROME, MEMIT, and IKE on GPT-2 XL. The core question was whether successful factual edits also propagate through paraphrases, locality checks, multi-hop questions, ripple effects, and logical-consistency probes.
+        </p>
+
+        <ul class="flex flex-wrap gap-3 mt-5">
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Python</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">EasyEdit</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">GPT-2 XL</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">ROME</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">MEMIT</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">IKE</li>
+          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">RAG</li>
+        </ul>
+      </div>
+
+      <img
+        src="/images/knowledge-editing/results-summary.png"
+        alt="Knowledge editing result summary chart comparing CounterFact and logical-consistency probe scores"
+        class="rounded-lg shadow-md border bg-white w-full"
+      />
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">At a Glance</h2>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Model</div>
+        <div class="text-base font-semibold text-gray-800">GPT-2 XL</div>
+        <div class="text-xs text-gray-500 mt-1">EasyEdit pipeline</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Methods</div>
+        <div class="text-base font-semibold text-gray-800">ROME, MEMIT, IKE</div>
+        <div class="text-xs text-gray-500 mt-1">Weight edits + in-context editing</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Benchmarks</div>
+        <div class="text-base font-semibold text-gray-800">CounterFact, MQuAKE</div>
+        <div class="text-xs text-gray-500 mt-1">RippleEdits + custom probes</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Novel Eval</div>
+        <div class="text-base font-semibold text-gray-800">225 probes</div>
+        <div class="text-xs text-gray-500 mt-1">50 RAG conflict cases</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">What I Built</h2>
+    <div class="text-gray-700 space-y-4">
+      <p class="text-gray-600">
+        I set up and patched the EasyEdit workflow, ran ROME, MEMIT, and IKE experiments on CounterFact and external benchmarks, and built a custom diagnostic probe set to separate direct rewrite success from broader consistency behavior.
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-gray-600">
+        <li>Implemented repeatable experiment scripts for CounterFact, MQuAKE, RippleEdits, MEMIT batch runs, IKE baselines, and probe sweeps.</li>
+        <li>Designed 225 hand-auditable probes covering negation, inverse relations, compositional prompts, contradictions, and chain-of-thought style prompts.</li>
+        <li>Integrated a controlled RAG-vs-ROME conflict extension to test whether a ROME-edited model follows edited weights or contradictory retrieved context.</li>
+        <li>Packaged the repo with final report artifacts, result logs, reproduction commands, and teammate supplemental links.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Results</h2>
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-4">
+        <p class="text-gray-600">
+          The strongest result was also the most useful warning: high rewrite accuracy does not guarantee logically consistent downstream behavior. ROME gave the best CounterFact tradeoff among weight-editing methods, MEMIT preserved locality well but underperformed on single-edit rewrite/rephrase in this setup, and IKE was strong when facts were supplied in context but did not behave like a persistent weight edit.
+        </p>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li><span class="font-medium">ROME:</span> 0.993 rewrite, 0.743 rephrase, 0.840 locality on CounterFact-original.</li>
+          <li><span class="font-medium">MEMIT:</span> 0.983 locality, but weaker single-edit rewrite and rephrase scores in this GPT-2 XL setup.</li>
+          <li><span class="font-medium">IKE:</span> near-perfect direct contextual rewrite behavior, but severe CounterFact locality degradation.</li>
+          <li><span class="font-medium">Probes:</span> all three methods stayed below 0.43 total pass rate on the 225-probe logical-consistency set.</li>
+        </ul>
+      </div>
+
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-3">Takeaway</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Knowledge editing should be evaluated beyond whether the model repeats the new fact. The project showed that paraphrases, inverse questions, multi-hop reasoning, and contradictory retrieval contexts expose failure modes that direct rewrite metrics can hide.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Links</h2>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <a
+        href="https://github.com/MatthewTHutchinson/cs263-knowledge-editing"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-lg border bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
+      >
+        <div class="font-semibold text-gray-900">GitHub Repository</div>
+        <div class="text-sm text-gray-600 mt-2">Code, data adapters, results, final report, and supplemental links.</div>
+      </a>
+
+      <a
+        href="https://github.com/MatthewTHutchinson/cs263-knowledge-editing/blob/main/overleaf_final/Beyond_Rewrite_Accuracy_Testing_Logical_Consistency_in_Knowledge_Editing_Final_Report.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-lg border bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
+      >
+        <div class="font-semibold text-gray-900">Final Report</div>
+        <div class="text-sm text-gray-600 mt-2">Full writeup of methods, benchmarks, results, and limitations.</div>
+      </a>
+
+      <a
+        href="https://docs.google.com/presentation/d/1rs7qWNbdJ5zgTO6m-rAjs7LTYW-BPh0hFjtCIz7SyKQ/edit"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-lg border bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
+      >
+        <div class="font-semibold text-gray-900">Presentation Slides</div>
+        <div class="text-sm text-gray-600 mt-2">Accessible Google Slides version of the final presentation.</div>
+      </a>
+
+      <a
+        href="https://github.com/MatthewTHutchinson/cs263-knowledge-editing/tree/main/supplemental"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-lg border bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
+      >
+        <div class="font-semibold text-gray-900">Supplemental Materials</div>
+        <div class="text-sm text-gray-600 mt-2">Team contribution references, including Nathan Wei's supplemental report.</div>
+      </a>
+    </div>
+  </section>
+</ProjectLayout>

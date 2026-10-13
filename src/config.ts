@@ -12,7 +12,7 @@ twitter: "",
 github: "https://github.com/MatthewTHutchinson",
 },
 aboutMe:
-"M.S. Mechanical Engineering at UCLA. I'm interested in how AI and machine learning tools — NLP, deep learning, reinforcement learning — are starting to change what's possible in robotics and physical systems. Most of my work sits at that intersection.",
+"M.S. Mechanical Engineering at UCLA. I'm interested in how AI and machine learning tools, including NLP, deep learning, and reinforcement learning, are changing what's possible in robotics and physical systems. Most of my work sits at that intersection.",
 skills: [
 "Python",
 "MATLAB",
@@ -32,7 +32,23 @@ skills: [
 ],
 projects: [
 {
-name: "Knowledge Editing Consistency Benchmark",
+name: "movement library",
+description:
+"A personal library for finding and organizing movement ideas, with structured tags and concise training references.",
+link: "/projects/movement-library",
+skills: ["Next.js", "TypeScript", "Movement training", "PWA"],
+category: "engineering",
+},
+{
+name: "cookbook",
+description:
+"A personal recipe library for saving, organizing, scaling, and planning meals.",
+link: "/projects/cookbook",
+skills: ["Next.js", "TypeScript", "Recipe organization", "PWA"],
+category: "engineering",
+},
+{
+name: "knowledge editing comparison",
 description:
 "Compared ROME, MEMIT, and IKE on factual rewrite accuracy, locality, and downstream logical consistency using GPT-2 XL, EasyEdit, custom probes, and external benchmarks.",
 link: "/projects/knowledge-editing",
@@ -40,7 +56,7 @@ skills: ["Python", "EasyEdit", "GPT-2 XL", "NLP", "RAG", "Evaluation"],
 category: "research",
 },
 {
-name: "Autonomous Rover for Disk Transport",
+name: "autonomous rover for disk transport",
 description:
 "Built an autonomous rover to transport disks across ramps using camera-based line detection, PID control, and a mechanical arm.",
 link: "/projects/autonomous-rover",

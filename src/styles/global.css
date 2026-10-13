@@ -69,6 +69,15 @@ body { background-color: var(--site-bg); }
 .stroke-gray-200 { stroke: var(--site-border); }
 
 .site-header-scrolled { background-color: var(--site-header); }
+.portfolio-background-wash {
+  background: radial-gradient(
+    ellipse 800px 1200px at 0% 0%,
+    color-mix(in srgb, var(--background-accent) 25%, transparent) 0%,
+    color-mix(in srgb, var(--background-accent) 15%, transparent) 40%,
+    color-mix(in srgb, var(--site-bg) 30%, transparent) 70%,
+    var(--site-bg) 100%
+  );
+}
 .site-nav-link { color: var(--site-muted); font-weight: 500; transition: color 160ms ease; }
 .site-nav-link:hover { color: var(--site-text); }
 

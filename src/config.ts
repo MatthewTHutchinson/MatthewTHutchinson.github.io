@@ -1,12 +1,12 @@
 export const siteConfig = {
 base: "MatthewTHutchinson.github.io",
 name: "Matthew Hutchinson",
-title: "Mechanical Engineering Graduate Student",
+title: "Mechanical Engineer | Robotics and AI",
 description:
 "Portfolio of Matthew Hutchinson, a UCLA mechanical engineer focused on robotics, autonomous systems, and fabrication.",
 accentColor: "#1d4ed8",
 social: {
-email: "mahutchinson@ucla.edu",
+email: "matthewthutchinson1@gmail.com",
 linkedin: "https://www.linkedin.com/in/matt-hutch/",
 twitter: "",
 github: "https://github.com/MatthewTHutchinson",
@@ -58,7 +58,7 @@ category: "research",
 {
 name: "autonomous rover for disk transport",
 description:
-"Built an autonomous rover to transport disks across ramps using camera-based line detection, PID control, and a mechanical arm.",
+"Developed a rover's control and autonomy stack using camera-based line estimation and wheel feedback with PD gains in a PID implementation. Some course runs succeeded, but completion was inconsistent.",
 link: "/projects/autonomous-rover",
 skills: ["ROS 2", "OpenCV", "SolidWorks", "Controls (PID)", "Raspberry Pi", "Arduino"],
 category: "engineering",
@@ -122,10 +122,10 @@ education: [
 {
 school: "University of California, Los Angeles",
 degree: "M.S. Mechanical Engineering",
-dateRange: "2025",
+dateRange: "2025 – 2026",
 achievements: [
 "Specialization in Design, Robotics & Manufacturing",
-"Graduate coursework in Reinforcement Learning, Deep Learning, Natural Language Processing, Optimal Control, Soft Robotics, Bionic Systems, Data Science",
+"Graduate coursework in Reinforcement Learning, Deep Learning, Computer Vision, Natural Language Processing, Optimal Control, Soft Robotics, Bionic Systems, Data Science",
 "Focus: Robotics, Machine Learning, Autonomous Systems"
 ],
 },

@@ -35,13 +35,12 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           loop
           playsinline
           preload="metadata"
-          poster="/images/autonomous-rover/hero-poster.jpg"
+          poster="/images/autonomous-rover/hero-poster.png"
         >
-          <source src="/images/autonomous-rover/hero.webm" type="video/webm" />
-          <source src="/images/autonomous-rover/hero.mp4" type="video/mp4" />
+          <source src="/images/autonomous-rover/Hero.mp4" type="video/mp4" />
           {/* Fallback for ancient browsers */}
           <img
-            src="/images/autonomous-rover/rover-hero.jpg"
+            src="/images/autonomous-rover/final-assembly.jpg"
             alt="Autonomous rover prototype transporting disks"
             class="w-full h-auto"
           />
@@ -90,14 +89,14 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <ul class="list-disc pl-5 space-y-3 text-gray-600">
           <li>
             <span class="font-medium">Raspberry Pi (robot_ws):</span>
-            Ubuntu 20.04 + ROS 2 Humble.
+            ROS 2 on the Raspberry Pi.
             Handles perception, behavior logic, and high-level velocity commands.
           </li>
 
           <li>
             <span class="font-medium">Arduino Nano:</span>
             Executes low-level motor and encoder control.
-            Closes the wheel velocity loop using PID.
+            Closes the wheel velocity loop with PD gains in a PID implementation (Ki = 0).
           </li>
 
           <li>
@@ -336,15 +335,16 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
           <li>ROS image → OpenCV via <code>cv_bridge</code></li>
-          <li>Grayscale → crop → threshold segmentation to isolate the black line</li>
+          <li>Bird's-eye mapping, grayscale and thresholding to isolate the black track</li>
           <li>Morphological cleanup → contour detection → select largest contour</li>
-          <li>Bounding box center → publish x-coordinate as <code>/line_position</code></li>
+          <li>Line estimate → publish a lateral position as <code>/line_position</code></li>
         </ul>
 
         <p class="text-gray-600">
-          Lateral error was computed relative to image center and converted into
-          steering correction using a proportional gain of approximately
-          <span class="font-medium">K ≈ 0.005</span>.
+          Lateral error relative to image center supplied a steering correction.
+          The debug image below shows a detected region and center marker. It does
+          not establish the exact fitting method or measure latency. The path
+          representation was a line estimate, not a polynomial trajectory.
         </p>
 
         <h4 class="font-semibold mt-4">Special Case Handling</h4>
@@ -380,12 +380,17 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         </p>
 
         <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
-  v_left  = v_linear + (ω · L) / (2 · r)
-  v_right = v_linear - (ω · L) / (2 · r)
+  v_left  = v - ω · L / 2
+  v_right = v + ω · L / 2
+  wheel_rate_left  = v_left / r
+  wheel_rate_right = v_right / r
         </pre>
 
         <p class="text-gray-600 text-sm">
-          where L is wheel separation, r is wheel radius, and ω = K · lateral_error.
+          Here v is forward speed in m/s, ω is counterclockwise yaw rate in rad/s,
+          L is wheel separation in metres, and r is wheel radius in metres.
+          Wheel rates are rad/s. This no-slip kinematic convention requires
+          corresponding motor and encoder signs in the implementation.
         </p>
       </div>
 
@@ -397,12 +402,13 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           <li>Encoder resolution: ~1975 counts per revolution</li>
           <li>Control loop frequency: 30 Hz</li>
           <li>Baseline command: PWM ≈ 70 (0–255) → ~1 rev/s</li>
-          <li>PID gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50 (scaling factor)</li>
+          <li>PID implementation with PD gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50 (implementation-specific scaling)</li>
         </ul>
 
         <p class="text-gray-600">
-          Closing the loop at the wheel level ensured velocity tracking remained
-          stable under battery voltage variation and ramp loading.
+          Wheel feedback supported velocity tracking while gains were tested under
+          varying loads and battery conditions. It did not eliminate delayed
+          observations in the outer steering loop.
         </p>
       </div>
 
@@ -435,9 +441,9 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <h3 class="font-semibold text-lg">Reliability Observations</h3>
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Camera required ~15 minute warm-up after reboot</li>
-          <li>Autonomy performance strongly correlated with image processing latency</li>
-          <li>When latency was low, full-course navigation was nearly flawless</li>
+          <li>Camera startup and processing behavior affected operation</li>
+          <li>Delayed observations caused late steering corrections</li>
+          <li>Some full-course runs succeeded, but completion was inconsistent</li>
         </ul>
       </div>
     </div>
@@ -452,7 +458,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
         <h3 class="font-semibold">System Performance</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Completed full course (line + ramp + pickup + drop-off) in <span class="font-medium">&lt; 5 minutes</span> when camera operated smoothly.</li>
+          <li>Some successful full-course runs (line + ramp + pickup + drop-off) took <span class="font-medium">&lt; 5 minutes</span> when camera input operated smoothly. Results were inconsistent; no established success rate.</li>
           <li>Ramp traversal + curved segment: <span class="font-medium">28–32 seconds</span>.</li>
           <li>Single disk pickup cycle: <span class="font-medium">3–4 seconds</span>.</li>
           <li>Single disk unload cycle: <span class="font-medium">5–6 seconds</span>.</li>
@@ -462,17 +468,17 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
         <h3 class="font-semibold mt-6">What Worked Well</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Reliable mechanical pickup and transport when perception loop was stable.</li>
-          <li>Consistent wheel velocity tracking using encoder-based PID at 30 Hz.</li>
+          <li>Observed disk pickup and transport during successful runs.</li>
+          <li>Encoder-based wheel feedback at a nominal 30 Hz, using PD gains in a PID structure.</li>
           <li>Successfully navigated a <span class="font-medium">15° incline</span> with 3 disks at lowest motor speed.</li>
-          <li>With stable camera input, line tracking was nearly perfect.</li>
+          <li>Line tracking supported successful runs but did not establish repeatable completion.</li>
         </ul>
 
         <h3 class="font-semibold mt-6">Observed Challenges</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Camera required ~<span class="font-medium">15-minute warm-up</span> after reboot for smooth performance.</li>
+          <li>Camera startup behavior was inconsistent; no validated fixed warm-up time.</li>
           <li>Image lag introduced delayed corrections and overshoot.</li>
-          <li>Autonomy performance was highly dependent on Raspberry Pi processing state.</li>
+          <li>Reduced image resolution and adaptive velocity scaling were mitigations, without a quantified reliability improvement.</li>
           <li>Integration across subsystems (vision + state logic + actuation) was significantly harder than individual module testing.</li>
           <li>Platform height inconsistencies (~1 cm variance) required mechanical rework (shortened standoffs, basket sanding).</li>
         </ul>
@@ -524,14 +530,14 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
       <li>
         <span class="font-medium">Camera dependency was the dominant system risk.</span>
         The rover’s autonomy was tightly coupled to Raspberry Pi camera performance.
-        When processing was smooth, performance was excellent; when lag occurred,
-        corrections were delayed and instability emerged.
+        Some runs succeeded, but delayed observations produced late corrections
+        and completion remained inconsistent.
       </li>
 
       <li>
-        <span class="font-medium">Add sensor redundancy.</span>
-        Future versions would integrate IR or ultrasonic sensors for edge detection,
-        obstacle confirmation, and incline transitions to reduce reliance on vision alone.
+        <span class="font-medium">Evaluate complementary line sensing.</span>
+        Infrared line sensors could provide another track measurement. Placement,
+        lighting, intersections and disagreement handling would need testing.
       </li>
 
       <li>
@@ -542,8 +548,8 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
       <li>
         <span class="font-medium">Improve autonomy robustness.</span>
-        Harden ROS startup sequence, automate code re-deployment,
-        and reduce reboot sensitivity to eliminate 15-minute warm-up variability.
+        Timestamp capture, processing and command receipt to measure observation age.
+        Test stale-data handling and startup validation before claiming improved reliability.
       </li>
 
       <li>

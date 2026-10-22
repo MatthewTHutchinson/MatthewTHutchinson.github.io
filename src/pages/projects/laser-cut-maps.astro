@@ -7,19 +7,23 @@ import ProjectTags from "../../components/ProjectTags.astro";
   <section class="mb-12">
     <div class="flex flex-col gap-6">
       <div>
-        <h1 class="text-4xl sm:text-5xl font-bold mb-4">MapLaser</h1>
+        <div class="flex items-center gap-4 mb-4">
+          <h1 class="text-4xl sm:text-5xl font-bold">MapLaser</h1>
+          <a href="https://github.com/MatthewTHutchinson/maplaser" target="_blank" rel="noopener noreferrer" aria-label="MapLaser on GitHub" title="View MapLaser on GitHub" class="inline-flex size-11 shrink-0 items-center justify-center rounded hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" /></svg>
+          </a>
+        </div>
         <p class="text-lg leading-relaxed text-gray-700 max-w-3xl">
           I built a local web app that turns geographic data into layered SVG maps for laser cutting and terrain models for 3D printing. It grew out of city and campus maps I made at the UCLA Makerspace, where preparing roads, aligning layers, and keeping small details sturdy took substantial manual cleanup.
         </p>
         <ProjectTags />
-        <a href="https://github.com/MatthewTHutchinson/maplaser" target="_blank" rel="noopener noreferrer" class="inline-block mt-4 underline underline-offset-4 text-sm">View Code on GitHub</a>
       </div>
 
-      <figure class="rounded-lg overflow-hidden shadow-md border border-gray-200">
+      <figure class="w-full sm:w-2/3 mx-auto">
         <img
           src="/media/makerspace work/sf-map-1.jpeg"
           alt="Laser-cut San Francisco map"
-          class="w-full h-auto"
+          class="w-full aspect-square object-cover object-[50%_46%]"
         />
         <figcaption class="px-3 py-1.5 text-xs text-gray-400">San Francisco map, made at the UCLA Makerspace.</figcaption>
       </figure>
@@ -39,10 +43,20 @@ import ProjectTags from "../../components/ProjectTags.astro";
     <h2 class="text-2xl font-bold">Laser Maps</h2>
     <p class="text-gray-700 leading-relaxed">Road classes have independent filters and physical widths. The generator buffers and merges road geometry into closed outlines, retaining bridge roads instead of clipping them to land. Editable SVGs keep roads grouped by class; separate cut exports merge intersections and an optional supporting frame to avoid duplicate cut lines.</p>
     <p class="text-gray-700 leading-relaxed">A review bundle contains aligned base and road SVGs, an editable reference, and checks for disconnected pieces and laser-bed fit. Margins expand the board without rescaling the map. The original NYC pipeline also combines detailed shoreline and transit layers for compositions finished in Illustrator.</p>
-    <figure class="pt-4">
-      <img src="/media/maplaser/nyc-map.png" alt="Generated NYC map in Illustrator with road, shoreline, and transit layers" class="w-full h-auto" loading="lazy" />
-      <figcaption class="mt-3 text-sm text-gray-500">New York City composition in Illustrator.</figcaption>
-    </figure>
+    <div class="grid gap-6 sm:grid-cols-2 pt-4">
+      <figure>
+        <a href="/media/maplaser/nyc-map-2.png" target="_blank" rel="noopener noreferrer" aria-label="Open New York City map at full size">
+          <img src="/media/maplaser/nyc-map-2.png" alt="New York City map composition and its Illustrator layer structure" class="w-full aspect-[4/3] object-contain bg-white" loading="lazy" />
+        </a>
+        <figcaption class="mt-3 text-sm text-gray-500">New York City composition in Illustrator.</figcaption>
+      </figure>
+      <figure>
+        <a href="/media/maplaser/la-map-1.png" target="_blank" rel="noopener noreferrer" aria-label="Open Los Angeles map at full size">
+          <img src="/media/maplaser/la-map-1.png" alt="Los Angeles map showing roads, coastline, waterways, and terrain contours" class="w-full aspect-[4/3] object-contain bg-white" loading="lazy" />
+        </a>
+        <figcaption class="mt-3 text-sm text-gray-500">Los Angeles map.</figcaption>
+      </figure>
+    </div>
   </section>
 
   <section class="mb-12 space-y-4">

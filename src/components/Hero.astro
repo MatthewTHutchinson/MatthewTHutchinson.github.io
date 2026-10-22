@@ -4,7 +4,7 @@ import { siteConfig } from "../config";
 
 <div
   id="hero"
-  class="relative isolate overflow-hidden bg-white py-24 md:h-screen"
+  class="relative isolate overflow-hidden bg-white py-12 md:py-16"
   style={`--accent-color: ${siteConfig.accentColor}`}
 >
   <!-- Gradient overlay -->
@@ -133,10 +133,10 @@ import { siteConfig } from "../config";
   </svg>
 
   <!-- Wrapped with original padding and center alignment -->
-  <div class="h-full mx-auto p-8 sm:p-12 md:p-24 flex flex-col-reverse md:flex-row items-center gap-8">
+  <div class="hero-layout mx-auto p-8 sm:p-12 md:px-24 md:py-16">
 
     <!-- LEFT COLUMN -->
-    <div class="relative flex flex-col min-w-0 w-full md:basis-[55%] lg:basis-[60%] h-full">
+    <div class="hero-copy relative flex flex-col min-w-0 w-full h-full">
 
       <!-- 1. Centered Text Block -->
       <div class="flex-1 flex flex-col justify-center text-center md:text-left">
@@ -144,11 +144,11 @@ import { siteConfig } from "../config";
           Hello!
         </h2>
 
-        <h1 class="mt-6 sm:mt-8 md:mt-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 animate-fade-in animation-delay-200">
+        <h1 class="hero-name mt-6 sm:mt-8 md:mt-10 text-3xl md:text-5xl font-bold text-gray-800 animate-fade-in animation-delay-200">
           I'm <span style={{ color: siteConfig.accentColor }}>Matthew Hutchinson</span>
         </h1>
 
-        <p class="mt-4 sm:mt-6 md:mt-8 text-base sm:text-lg md:text-xl font-medium text-gray-600 animate-fade-in animation-delay-400">
+        <p class="hero-subtitle mt-4 sm:mt-6 md:mt-8 text-base md:text-lg font-medium text-gray-600 animate-fade-in animation-delay-400">
           {siteConfig.title}
         </p>
       </div>
@@ -290,7 +290,7 @@ import { siteConfig } from "../config";
     </div>
 
     <!-- Right Column: Profile Image -->
-    <div class="flex justify-center md:justify-end items-center md:basis-[45%] lg:basis-[40%]">
+    <div class="hero-portrait flex justify-center items-center">
       <img 
         src="/headshot.jpg" 
         alt="Matthew Hutchinson headshot" 
@@ -302,6 +302,15 @@ import { siteConfig } from "../config";
 </div>
 
 <style>
+  .hero-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; align-items: center; }
+  .hero-portrait { grid-row: 1; }
+  @media (min-width: 1024px) {
+    .hero-name, .hero-subtitle { white-space: nowrap; }
+  }
+  @media (min-width: 1200px) {
+    .hero-layout { grid-template-columns: minmax(0, 1fr) 14rem; min-height: 40rem; }
+    .hero-portrait { grid-row: auto; }
+  }
   @keyframes fadeIn {
     from {
       opacity: 0;

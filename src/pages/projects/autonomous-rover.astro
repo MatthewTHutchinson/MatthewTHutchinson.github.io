@@ -28,12 +28,12 @@ import ProjectTags from "../../components/ProjectTags.astro";
           loop
           playsinline
           preload="metadata"
-          poster="/images/autonomous-rover/hero-poster.png"
+          poster="/media/autonomous-rover/hero-poster.png"
         >
-          <source src="/images/autonomous-rover/hero.mp4" type="video/mp4" />
+          <source src="/media/autonomous-rover/hero.mp4" type="video/mp4" />
           {/* Fallback for ancient browsers */}
           <img
-            src="/images/autonomous-rover/final-assembly.jpg"
+            src="/media/autonomous-rover/final-assembly.jpg"
             alt="Autonomous rover prototype transporting disks"
             class="w-full h-auto"
           />
@@ -59,7 +59,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
       </div>
 
       <img
-        src="/images/autonomous-rover/venue-diagram.png"
+        src="/media/autonomous-rover/venue-diagram.png"
         alt="Testing venue diagram showing start, pickup, ramp, and drop-off zones"
         class="rounded-lg shadow-sm w-full"
       />
@@ -119,13 +119,13 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
       <div class="space-y-6">
         <img
-          src="/images/autonomous-rover/ros-network-architecture.png"
+          src="/media/autonomous-rover/ros-network-architecture.png"
           alt="ROS 2 communication architecture between robot_ws and dev_ws"
           class="rounded-lg shadow-sm w-full"
         />
 
         <img
-          src="/images/autonomous-rover/electronics-schematic.png"
+          src="/media/autonomous-rover/electronics-schematic.png"
           alt="Electronics and wiring layout of rover components"
           class="rounded-lg shadow-sm w-full"
         />
@@ -162,7 +162,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
     <div class="grid md:grid-cols-3 gap-6">
       <div class="rounded-lg border bg-white p-5 shadow-sm">
         <h3 class="font-semibold text-lg mb-2">Chassis</h3>
-        <img class="rounded-md mb-3" src="/images/autonomous-rover/cad-overview.png" alt="Assembled rover CAD overview" />
+        <img class="rounded-md mb-3" src="/media/autonomous-rover/cad-overview.png" alt="Assembled rover CAD overview" />
         <p class="text-gray-600 text-sm">
           Modular layered chassis designed for stability, rapid iteration, and serviceability.
         </p>
@@ -170,7 +170,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
       <div class="rounded-lg border bg-white p-5 shadow-sm">
         <h3 class="font-semibold text-lg mb-2">Basket Lift</h3>
-        <img class="rounded-md mb-3" src="/images/autonomous-rover/basket-lift.png" alt="Basket lift crank-slider mechanism" />
+        <img class="rounded-md mb-3" src="/media/autonomous-rover/basket-lift.png" alt="Basket lift crank-slider mechanism" />
         <p class="text-gray-600 text-sm">
           Crank-slider lift raises the basket for controlled placement at the drop-off platform.
         </p>
@@ -178,7 +178,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
       <div class="rounded-lg border bg-white p-5 shadow-sm">
         <h3 class="font-semibold text-lg mb-2">Scoop Arm</h3>
-        <img class="rounded-md mb-3" src="/images/autonomous-rover/arm-rack-pinion.png" alt="Rack and pinion scoop arm mechanism" />
+        <img class="rounded-md mb-3" src="/media/autonomous-rover/arm-rack-pinion.png" alt="Rack and pinion scoop arm mechanism" />
         <p class="text-gray-600 text-sm">
           Rack-and-pinion style extension with servo control for disk pickup and unloading.
         </p>
@@ -353,7 +353,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
       {/* CV steering diagram */}
       <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
         <img
-          src="/images/autonomous-rover/cv-steering-diagram.jpg"
+          src="/media/autonomous-rover/cv-steering-diagram.jpg"
           alt="Computer vision steering: segmented regions and extracted line center used to compute lateral error"
           class="w-full h-auto block"
           loading="lazy"
@@ -408,7 +408,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
       {/* High-level behavior state machine */}
       <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
         <img
-          src="/images/autonomous-rover/state-machine.png"
+          src="/media/autonomous-rover/state-machine.png"
           alt="High-level state machine for rover autonomy: line follow, pickup, ramp, drop-off, and termination"
           class="w-full h-auto block"
           loading="lazy"
@@ -489,7 +489,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
             playsinline
             preload="metadata"
           >
-            <source src="/images/autonomous-rover/demo-pickup.mp4" type="video/mp4" />
+            <source src="/media/autonomous-rover/demo-pickup.mp4" type="video/mp4" />
           </video>
           <figcaption class="px-3 py-2 text-sm text-gray-600">
             Disk pickup sequence (3–4 s cycle)
@@ -506,7 +506,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
             playsinline
             preload="metadata"
           >
-            <source src="/images/autonomous-rover/demo-dropoff.mp4" type="video/mp4" />
+            <source src="/media/autonomous-rover/demo-dropoff.mp4" type="video/mp4" />
           </video>
           <figcaption class="px-3 py-2 text-sm text-gray-600">
             Drop-off sequence (5–6 s unload cycle)

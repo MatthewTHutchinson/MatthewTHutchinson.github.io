@@ -16,11 +16,10 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
       <figure class="rounded-lg overflow-hidden shadow-md border border-gray-200">
         <img
-          src="/images/makerspace work/lantern-1.JPG"
+          src="/media/makerspace work/lantern-1.JPG"
           alt="Japanese pagoda lantern"
           class="w-full h-auto"
         />
-        <figcaption class="px-3 py-1.5 text-xs text-gray-400 font-mono">lantern-1.JPG</figcaption>
       </figure>
     </div>
   </section>
@@ -46,12 +45,11 @@ import ProjectTags from "../../components/ProjectTags.astro";
       ].map((filename) => (
         <figure class="rounded-lg overflow-hidden border border-gray-200 shadow-sm">
           <img
-            src={`/images/makerspace work/${filename}`}
-            alt={filename}
+            src={`/media/makerspace work/${filename}`}
+            alt="Laser-cut pagoda lantern construction detail"
             class="w-full h-auto"
             loading="lazy"
           />
-          <figcaption class="px-2 py-1 text-xs text-gray-400 font-mono">{filename}</figcaption>
         </figure>
       ))}
     </div>

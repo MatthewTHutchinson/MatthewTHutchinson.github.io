@@ -17,11 +17,10 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
       <figure class="rounded-lg overflow-hidden shadow-md border border-gray-200">
         <img
-          src="/images/mtc/IMG_0533.JPG"
+          src="/media/mtc/IMG_0533.JPG"
           alt="Suzuki SV650"
           class="w-full h-auto"
         />
-        <figcaption class="px-3 py-1.5 text-xs text-gray-400 font-mono">IMG_0533.JPG</figcaption>
       </figure>
     </div>
   </section>
@@ -46,12 +45,11 @@ import ProjectTags from "../../components/ProjectTags.astro";
       ].map((filename) => (
         <figure class="rounded-lg overflow-hidden border border-gray-200 shadow-sm">
           <img
-            src={`/images/mtc/${filename}`}
-            alt={filename}
+            src={`/media/mtc/${filename}`}
+            alt="Suzuki SV650 maintenance and component detail"
             class="w-full h-auto"
             loading="lazy"
           />
-          <figcaption class="px-2 py-1 text-xs text-gray-400 font-mono">{filename}</figcaption>
         </figure>
       ))}
     </div>

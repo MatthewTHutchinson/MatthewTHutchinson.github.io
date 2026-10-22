@@ -6,43 +6,40 @@ import ProjectTags from "../../components/ProjectTags.astro";
 <ProjectLayout>
   <article class="space-y-12">
     <header>
-      <h1 class="text-4xl sm:text-5xl font-bold mb-5">Hexapod</h1>
-      <p class="text-lg leading-relaxed text-gray-700">I developed a Python and ROS 2 control and diagnostics stack for TOCATL, an 18-actuator hexapod. The work brings motor communication, calibration, telemetry, behavior planning, and operator controls into a workflow that can be tested offline and commissioned on hardware.</p>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-5">Hexapod: TOCATL</h1>
+      <p class="text-lg leading-relaxed text-gray-700">TOCATL is an 18-actuator hexapod at UCLA’s Robotics and Mechanisms Laboratory, being prepared for an art museum installation in Korea. I built its Python and ROS 2 control and diagnostics stack and developed coordinated leg motions for the installation.</p>
       <ProjectTags />
     </header>
 
     <figure>
-      <video autoplay loop controls muted playsinline preload="metadata" poster="/images/hexapod/simulation.png" class="w-full aspect-video object-contain">
-        <source src="/images/hexapod/walk-simulation.mp4" type="video/mp4" />
+      <video autoplay loop controls muted playsinline preload="metadata" poster="/media/hexapod/simulation.png" class="w-full aspect-video object-contain">
+        <source src="/media/hexapod/walk-simulation.mp4" type="video/mp4" />
       </video>
-      <figcaption class="mt-3 text-sm text-gray-500">Walking simulation of the TOCATL platform. This clip demonstrates simulated behavior, not a physical walking trial.</figcaption>
+      <figcaption class="mt-3 text-sm text-gray-500">TOCATL walking simulation in MuJoCo.</figcaption>
     </figure>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold">What I Built</h2>
-      <ul class="list-disc pl-5 space-y-3 text-gray-700 leading-relaxed">
-        <li>Organized motor control, diagnostics, kinematics, and behavior planning into ROS 2 packages with explicit message and command contracts.</li>
-        <li>Integrated dual CAN buses with motor identification, calibration handling, feedback logging, and command limits.</li>
-        <li>Developed coordinated leg-motion plans, alternating-tripod behavior previews, and expressive motions for an art installation.</li>
-        <li>Built an operator dashboard for selecting motion scope, previewing trajectories, and inspecting controller state before execution.</li>
-        <li>Added hardware-independent tests and no-CAN simulation checks, alongside staged motor and leg commissioning tools.</li>
-      </ul>
+      <h2 class="text-2xl font-bold">Control and Diagnostics</h2>
+      <p class="leading-relaxed text-gray-700">The stack integrates two CAN buses with session calibration, motor feedback, and fault handling. Coordinated motion runs at a 100 Hz command rate, sending position and velocity targets with PD gains and torque feedforward to the motors’ internal controllers.</p>
+      <p class="leading-relaxed text-gray-700">I developed and tested bounded leg motions using motor feedback, alongside walking-gait baselines and expressive art motions. The motion plans define joint travel and timing so tests can progress from individual joints to coordinated movement.</p>
     </section>
 
     <figure>
-      <img src="/images/hexapod/operator-preview.png" alt="TOCATL dashboard showing motion selection and controller state in preview mode" class="w-full h-auto" width="1280" height="720" loading="lazy" />
-      <figcaption class="mt-3 text-sm text-gray-500">Operator interface in preview mode, with motion parameters and the selected leg scope visible before execution.</figcaption>
+      <img src="/media/hexapod/operator-preview.png" alt="TOCATL dashboard showing motion selection and controller state in preview mode" class="w-full h-auto" width="1280" height="720" loading="lazy" />
+      <figcaption class="mt-3 text-sm text-gray-500">TOCATL operator dashboard.</figcaption>
     </figure>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold">Feedback Before Motion</h2>
-      <p class="leading-relaxed text-gray-700">A responding bus is not enough to establish that every commanded joint has valid feedback. The control workflow checks the selected motors, calibration state, and telemetry freshness before permitting motion. Missing or stale feedback becomes an explicit diagnostic condition.</p>
-      <p class="leading-relaxed text-gray-700">The software separates behavior planning from hardware access, so the same motion can be inspected and tested without opening a live CAN connection. Logs help distinguish communication failures from calibration and trajectory problems.</p>
+      <h2 class="text-2xl font-bold">Operator Interface</h2>
+      <p class="leading-relaxed text-gray-700">I built a browser interface to initialize CAN, capture the session reference, and preview motions before running them. It also provides selected-leg position capture, manual-motion recording, and downloadable logs.</p>
+      <p class="leading-relaxed text-gray-700">Motion checks include calibrated joint limits and fresh motor feedback. Return and disable controls support supervised testing, with a physical power disconnect available because software stops depend on communication.</p>
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold">Testing and Current Scope</h2>
-      <p class="leading-relaxed text-gray-700">The project includes simulation, telemetry inspection, and supervised commissioning workflows. These provide evidence for individual software and hardware interfaces; they do not establish fleet reliability or unrestricted autonomous walking. Physical operation still depends on the configured motor scope and the current hardware checks.</p>
+      <h2 class="text-2xl font-bold">Logging and Testing</h2>
+      <p class="leading-relaxed text-gray-700">Run logs pair commanded motion with measured motor positions, reported torque, and temperature. Telemetry age, motor faults, CAN diagnostics, and loop timing help identify whether a problem comes from tracking, calibration, or communication.</p>
+      <p class="leading-relaxed text-gray-700">Those logs helped isolate command bursts after delayed control cycles. A pacing fix removed transmit-buffer errors in repeat tests, while intermittent missing replies remained under investigation.</p>
+      <p class="leading-relaxed text-gray-700">Hardware testing has demonstrated supported art motion. Walking-gait work remains in development, and the simulation above is separate from the physical tests. The dashboard has been deployed and checked with read-only feedback; its motion and manual-recording workflows still need hardware validation.</p>
     </section>
   </article>
 </ProjectLayout>

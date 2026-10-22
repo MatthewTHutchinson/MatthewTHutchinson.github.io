@@ -1,41 +1,70 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
 import ProjectTags from "../../components/ProjectTags.astro";
+import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.astro";
 ---
 
 <ProjectLayout>
   <article class="space-y-12">
     <header>
       <h1 class="text-4xl sm:text-5xl font-bold mb-5">Tripteron</h1>
-      <p class="text-lg leading-relaxed text-gray-700">I developed the geometry, motion-planning software, and browser interface that let an operator move a parallel robot in XYZ while checking its modeled limits. The work connects assembled CAD, physical calibration, continuous path validation, and coordinated motor commands.</p>
+      <p class="text-lg leading-relaxed text-gray-700">I developed the geometric model, motion planner, and browser controls for a parallel robot at UCLA’s Robotics and Mechanisms Laboratory. The software connects assembled CAD and physical calibration to coordinated XYZ motion, with checks for joint reach, carriage travel, and modeled collisions along the entire path.</p>
       <ProjectTags />
     </header>
 
     <figure>
-      <img src="/images/tripteron/concept.png" alt="Concept rendering of two mirrored Tripteron platforms supporting a light" class="w-full max-h-[640px] object-contain" width="939" height="1025" />
+      <img src="/media/tripteron/concept.png" alt="Concept rendering of two mirrored Tripteron platforms supporting a light" class="w-full max-h-[640px] object-contain" width="939" height="1025" />
     </figure>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold">What I Built</h2>
-      <ul class="list-disc pl-5 space-y-3 text-gray-700 leading-relaxed">
-        <li>Extracted hinge geometry from STEP assemblies and registered the model to a measured physical calibration pose.</li>
-        <li>Mapped Cartesian targets into three signed carriage commands for a mechanism with four two-link chains and a fixed-orientation platform.</li>
-        <li>Implemented continuous route checks for linkage reach, rail travel, and modeled carriage-foot clearance.</li>
-        <li>Built workspace visualization, target selection, path preview, and execution controls backed by the same Python planning layer.</li>
-        <li>Compiled coordinated motion into a continuous Klipper queue and developed an offline simulator for two mirrored platforms supporting a light.</li>
-      </ul>
+      <h2 class="text-2xl font-bold">From CAD to Coordinated Motion</h2>
+      <p class="leading-relaxed text-gray-700">The mechanism uses four two-link chains, with 140 mm links, driven by three carriage groups. The two upper chains share one carriage drive. Within the model, the platform maintains a fixed orientation while translating in X, Y, and Z. My contribution was the modeling, planning, and control integration for this existing mechanism.</p>
+      <ol class="list-decimal pl-5 space-y-3 text-gray-700 leading-relaxed">
+        <li><strong>Extract the geometry.</strong> I used Python and OpenCascade to identify cylindrical hinge axes in STEP assemblies and reconstruct the linkage chains.</li>
+        <li><strong>Register the physical zero.</strong> Carriage measurements tied the CAD frame to the robot’s bottom calibration pose. Motor signs and travel scale then connected the model to the hardware.</li>
+        <li><strong>Derive the motor motion.</strong> Hinge-plane geometry gives a linear mapping from XYZ displacement to three carriage displacements. Joint reach and collisions determine which of those positions are usable.</li>
+        <li><strong>Preview, validate, and execute.</strong> A browser interface shows the X/Z workspace, remaining carriage travel, and the proposed route. Execution rechecks the controller state before sending coordinated commands.</li>
+      </ol>
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold">The Engineering Problem</h2>
-      <p class="leading-relaxed text-gray-700">Two reachable endpoints do not guarantee a feasible route between them. A linkage can approach compression inside a segment even when both endpoints pass. I checked interior extrema and used bounded subdivision for curved paths, while keeping planning costs separate from the checks that accept or reject a route.</p>
-      <p class="leading-relaxed text-gray-700">Physical calibration also had to remain distinct from the display origin. Motor direction, carriage travel, and the CAD reference frame all need to agree before a workspace preview can correspond to the real mechanism.</p>
+      <h2 class="text-2xl font-bold">The Workspace Is a Set of Coupled Constraints</h2>
+      <p class="leading-relaxed text-gray-700">A single maximum for each axis cannot describe this robot. Moving outward changes upper and lower carriage travel in opposite directions; moving sideways extends one side while compressing the other.</p>
+      <dl class="grid sm:grid-cols-3 gap-5">
+        <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
+          <dt class="font-bold mb-2">Joint geometry</dt>
+          <dd class="text-gray-700 leading-relaxed">Calibrated compression floors and a 161° operating extension cap keep the modeled linkage on its selected knee configuration, away from a fully straight leg.</dd>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
+          <dt class="font-bold mb-2">Rail travel</dt>
+          <dd class="text-gray-700 leading-relaxed">Measured stop geometry gives 1,226.5 mm of upper-carriage travel allowance. Its constraint is approximately Y ≤ 1,226.5 − 0.9271 Z, with distances in millimetres.</dd>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
+          <dt class="font-bold mb-2">Route clearance</dt>
+          <dd class="text-gray-700 leading-relaxed">STEP solid-distance checks cover three carriage-foot pairs. Belt contact observations remain recorded separately; the collision model is not yet complete.</dd>
+        </div>
+      </dl>
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold">Testing and Current Scope</h2>
-      <p class="leading-relaxed text-gray-700">The platform has undergone supervised motion testing. The paired-platform simulator supports studies of mounting separation, light span, and operating depth. My contribution is the modeling, planning, and control integration for an existing mechanism.</p>
-      <p class="leading-relaxed text-gray-700">Position is reconstructed from motor commands rather than independent platform feedback. Accuracy, repeatability, payload, and tracking error have not yet been quantitatively established; the collision model covers selected components, not every possible contact.</p>
+      <h2 class="text-2xl font-bold">Why the Whole Path Matters</h2>
+      <p class="leading-relaxed text-gray-700">Two reachable endpoints can have an invalid straight connection: a linkage may reach its minimum span inside the segment. I check that interior minimum analytically. Curved routes use conservative bounds and recursive subdivision to check the continuous path.</p>
+      <p class="leading-relaxed text-gray-700">Even a valid straight route can keep one side near maximum compression for too long. The comfort planner searches a family of quintic curves that first open away from tight configurations, travel with more room, and settle into the target. Its cost balances joint margins, carriage separation, path length, and curvature. Separate constraint checks decide whether the resulting curve can execute.</p>
+      <p class="leading-relaxed text-gray-700">To avoid stopping at every interpolation point, I compiled the curve into independently checked short segments for Klipper’s native motion queue. All three motor targets share one motion clock and look-ahead. This is local geometric path optimization; it does not claim a globally optimal or jerk-limited trajectory.</p>
+    </section>
+
+    <section class="space-y-5" aria-labelledby="paired-workspace-heading">
+      <h2 id="paired-workspace-heading" class="text-2xl font-bold">Choosing an Operating Depth for Two Platforms</h2>
+      <p class="leading-relaxed text-gray-700">For the light installation, both robots must satisfy their own constraints while maintaining the required attachment span. I built an offline browser simulator and studied how their default outward depth changes the shared workspace. For level-light translation, one platform extends as the other retracts; the starting depth sets the available room in both directions.</p>
+      <TripteronWorkspaceStudy />
+      <p class="leading-relaxed text-gray-700">The original coarse sweep favored Z = 75 mm. Added samples found the largest area at 65 mm, only about 1.5% higher. The useful result is a broad candidate range around 65–75 mm for this motion family. It is not a universal best height or a collision-certified operating range. Z is measured outward from physical calibration zero.</p>
+      <p class="leading-relaxed text-gray-700">Light length and mounting separation are separate design variables. A taut light fixes endpoint distance; extra strip length permits slack and changes the possible offsets and sag. The simulator helps compare those choices before building a paired hardware installation.</p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold">Testing and Next Steps</h2>
+      <p class="leading-relaxed text-gray-700">Supervised hardware tests established motion direction and demonstrated coordinated moves, startup, and return sequences. Software checks cover kinematic inverses, path constraints, stale controller state, and queue behavior. The interface makes rejected paths and remaining travel visible to the operator.</p>
+      <p class="leading-relaxed text-gray-700">Platform position is reconstructed from motor commands rather than independent encoders. Quantitative accuracy, repeatability, payload, and tracking error remain to be established. The next steps are independent pose measurements, completion of belt and linkage collision models, and load and tension checks for paired operation.</p>
     </section>
   </article>
 </ProjectLayout>

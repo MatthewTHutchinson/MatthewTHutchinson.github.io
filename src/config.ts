@@ -1,7 +1,7 @@
 export const siteConfig = {
 base: "MatthewTHutchinson.github.io",
 name: "Matthew Hutchinson",
-title: "Mechanical Engineer | Robotics and Artificial Intelligence",
+title: "M.S. Mechanical Engineering | Robotics and Artificial Intelligence",
 description:
 "Portfolio of Matthew Hutchinson, a UCLA mechanical engineering graduate building robotics software and evaluating machine learning systems.",
 accentColor: "#1d4ed8",
@@ -12,7 +12,7 @@ twitter: "",
 github: "https://github.com/MatthewTHutchinson",
 },
 aboutMe:
-"I'm a UCLA mechanical engineering graduate building robotics software and evaluating machine learning systems. My work spans robot motion planning and control, computer vision, and LLM evaluation. I'm interested in how foundation models and reinforcement learning can help robots understand and act in the physical world, and in the testing and integration needed to make those systems useful.",
+"I build robotics software and evaluate machine learning systems. My work spans robot motion planning and control, computer vision, and LLM evaluation. I'm interested in AI research and development and its applications to engineering, especially how foundation models and reinforcement learning can help robots understand and act in the physical world. That includes the testing and integration needed to make those systems useful.",
 skills: [
 "Python",
 "C++",
@@ -36,29 +36,34 @@ skills: [
 "Additive Manufacturing",
 "Laser Cutting",
 ],
+tripteronStudy: {
+commonY: 600, grid: 5, hingeBuffer: 15, railBuffer: 20,
+// Oct 21, 2026: connected level-light translation study; collision checks excluded.
+samples: [[25, 93.75], [50, 161.75], [60, 171.25], [65, 172.25], [70, 171.75], [75, 169.75], [80, 166.75], [85, 162.75], [90, 157.25], [100, 128.75], [125, 61.25], [150, 16.25]],
+},
 projects: [
 {
 name: "Tripteron",
 description:
-"Built the kinematic model, continuous path checks, and browser control interface for a parallel robot, translating XYZ targets into coordinated carriage motion.",
+"Developed CAD-derived kinematics, constraint-aware motion planning, and browser controls for a parallel robot. Studied paired-platform workspaces for a moving light installation.",
 link: "/projects/tripteron",
-skills: ["Python", "Kinematics", "Motion Planning", "CAD Geometry", "Klipper"],
+skills: ["Python", "Kinematics", "Motor Control", "Motion Planning", "Workspace Analysis", "Klipper"],
 category: "engineering",
 },
 {
 name: "Hexapod",
 description:
-"Developed control, diagnostics, and operator tools for RoMeLa's TOCATL hexapod, connecting motor telemetry, calibration, and coordinated behavior previews.",
+"Built a Python/ROS 2 control stack and operator UI for an 18-actuator hexapod being prepared for an art museum in Korea, with dual CAN buses, 100 Hz motion, and telemetry logging.",
 link: "/projects/hexapod",
-skills: ["Python", "ROS 2", "CAN Bus", "Control Systems", "Telemetry"],
+skills: ["Python", "ROS 2", "CAN Bus", "Motor Control", "Motion Planning", "Diagnostics"],
 category: "engineering",
 },
 {
 name: "MapLaser",
 description:
-"Built a Python pipeline that turns geographic data into layered SVG maps, with configurable crops, road widths, and geometry processing for laser fabrication.",
+"Built a geospatial web app that turns OpenStreetMap and elevation data into layered laser-cut SVGs and 3D terrain models, with interactive crops, physical road widths, and GPX route overlays.",
 link: "/projects/laser-cut-maps",
-skills: ["Python", "Geospatial Processing", "OpenStreetMap", "SVG", "Laser Cutting"],
+skills: ["Python", "FastAPI", "Geospatial Processing", "Three.js", "Digital Fabrication"],
 category: "engineering",
 },
 {

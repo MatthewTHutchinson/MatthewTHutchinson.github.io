@@ -33,7 +33,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
   <section class="mb-12 space-y-4">
     <h2 class="text-2xl font-bold">What I Built</h2>
     <ul class="list-disc pl-5 space-y-3 text-gray-700 leading-relaxed">
-      <li>Built a Python/FastAPI backend with a Leaflet map interface and Three.js model preview. Users can search for places worldwide, move and rotate crops, and choose rectangular, circular, or hexagonal outputs.</li>
+      <li>Built a Python/FastAPI backend with a Leaflet map interface and Three.js model preview, including worldwide place search, movable and rotatable crops, and rectangular, circular, or hexagonal outputs.</li>
       <li>Combined OpenStreetMap roads and buildings with elevation tiles and imported GPX routes. A shared local projection, crop, and physical scale keep the exported layers aligned.</li>
       <li>Separated laser and 3D generation so vector-only work skips elevation fetching and mesh construction. Recipes preserve the selected area and fabrication settings for reuse.</li>
     </ul>
@@ -62,13 +62,12 @@ import ProjectTags from "../../components/ProjectTags.astro";
   <section class="mb-12 space-y-4">
     <h2 class="text-2xl font-bold">3D Terrain</h2>
     <p class="text-gray-700 leading-relaxed">The 3D workflow samples elevation into a terrain surface with adjustable exaggeration, base thickness, and grid resolution. Roads, building footprints, and GPX routes can be included on the surface. The generator closes the sides and bottom, validates the mesh, and exports a single-body STL or 3MF for slicer review.</p>
-    <p class="text-gray-700 leading-relaxed">Elevation comes from AWS Terrain Tiles, map features from OpenStreetMap through Overpass, and place search from Photon. Data coverage varies by location; increasing the model resolution cannot recover missing source detail.</p>
+    <p class="text-gray-700 leading-relaxed">Elevation comes from AWS Terrain Tiles, map features from OpenStreetMap through Overpass, and place search from Photon.</p>
   </section>
 
   <section class="mb-12 space-y-4">
     <h2 class="text-2xl font-bold">Fabrication Constraints</h2>
     <p class="text-gray-700 leading-relaxed">Road widths are set in output millimeters rather than taken as surveyed street widths. This lets a small map retain roads that would otherwise be too delicate to cut. In 3D, the terrain grid limits how much road and building detail survives; vector exports bypass that grid.</p>
-    <p class="text-gray-700 leading-relaxed">Exports still need review at their final physical size and material test cuts or prints. Automated checks do not establish part strength, and kerf compensation and support tabs are not yet implemented. Global coastline handling is incomplete; the detailed NYC shoreline workflow remains separate.</p>
   </section>
 
   <section class="mb-12">

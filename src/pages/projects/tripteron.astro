@@ -52,7 +52,7 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
         </div>
         <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
           <dt class="font-bold mb-2">Route clearance</dt>
-          <dd class="text-gray-700 leading-relaxed">STEP solid-distance checks cover three carriage-foot pairs. Belt contact observations remain recorded separately; the collision model is not yet complete.</dd>
+          <dd class="text-gray-700 leading-relaxed">STEP solid-distance checks cover three carriage-foot pairs. I recorded belt-contact observations separately to guide the next collision-model update.</dd>
         </div>
       </dl>
     </section>
@@ -61,21 +61,21 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
       <h2 class="text-2xl font-bold">Why the Whole Path Matters</h2>
       <p class="leading-relaxed text-gray-700">Two reachable endpoints can have an invalid straight connection: a linkage may reach its minimum span inside the segment. I check that interior minimum analytically. Curved routes use conservative bounds and recursive subdivision to check the continuous path.</p>
       <p class="leading-relaxed text-gray-700">Even a valid straight route can keep one side near maximum compression for too long. The comfort planner searches a family of quintic curves that first open away from tight configurations, travel with more room, and settle into the target. Its cost balances joint margins, carriage separation, path length, and curvature. Separate constraint checks decide whether the resulting curve can execute.</p>
-      <p class="leading-relaxed text-gray-700">To avoid stopping at every interpolation point, I compiled the curve into independently checked short segments for Klipper’s native motion queue. All three motor targets share one motion clock and look-ahead. This is local geometric path optimization; it does not claim a globally optimal or jerk-limited trajectory.</p>
+      <p class="leading-relaxed text-gray-700">I compiled the curve into independently checked short segments for Klipper’s native motion queue, allowing continuous motion through interpolation points. All three motor targets share one motion clock and look-ahead. The planner performs local geometric path optimization.</p>
     </section>
 
     <section class="space-y-5" aria-labelledby="paired-workspace-heading">
       <h2 id="paired-workspace-heading" class="text-2xl font-bold">Choosing an Operating Depth for Two Platforms</h2>
       <p class="leading-relaxed text-gray-700">For the light installation, both robots must satisfy their own constraints while maintaining the required attachment span. I built an offline browser simulator and studied how their default outward depth changes the shared workspace. For level-light translation, one platform extends as the other retracts; the starting depth sets the available room in both directions.</p>
       <TripteronWorkspaceStudy />
-      <p class="leading-relaxed text-gray-700">The original coarse sweep favored Z = 75 mm. Added samples found the largest area at 65 mm, only about 1.5% higher. The useful result is a broad candidate range around 65–75 mm for this motion family. It is not a universal best height or a collision-certified operating range. Z is measured outward from physical calibration zero.</p>
+      <p class="leading-relaxed text-gray-700">The original coarse sweep favored Z = 75 mm. Added samples found the largest area at 65 mm, only about 1.5% higher, suggesting a candidate range around 65–75 mm for this level-light motion study. Z is measured outward from physical calibration zero.</p>
       <p class="leading-relaxed text-gray-700">Light length and mounting separation are separate design variables. A taut light fixes endpoint distance; extra strip length permits slack and changes the possible offsets and sag. The simulator helps compare those choices before building a paired hardware installation.</p>
     </section>
 
     <section class="space-y-4">
       <h2 class="text-2xl font-bold">Testing and Next Steps</h2>
       <p class="leading-relaxed text-gray-700">Supervised hardware tests established motion direction and demonstrated coordinated moves, startup, and return sequences. Software checks cover kinematic inverses, path constraints, stale controller state, and queue behavior. The interface makes rejected paths and remaining travel visible to the operator.</p>
-      <p class="leading-relaxed text-gray-700">Platform position is reconstructed from motor commands rather than independent encoders. Quantitative accuracy, repeatability, payload, and tracking error remain to be established. The next steps are independent pose measurements, completion of belt and linkage collision models, and load and tension checks for paired operation.</p>
+      <p class="leading-relaxed text-gray-700">The interface reconstructs platform position from motor commands. Next, I plan to measure accuracy and repeatability with independent pose measurements, extend the belt and linkage collision models, and test loads and tension for paired operation.</p>
     </section>
   </article>
 </ProjectLayout>

@@ -13,7 +13,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
         </h1>
 
         <p class="text-lg text-gray-700 max-w-3xl">
-          Simulated an AFP task with a UR5e in PyDrake: a roller end-effector follows a surface trajectory while regulating contact forces via operational-space impedance control. The focus was contact stability — bounded forces and damped recovery — rather than pure position tracking.
+          I simulated automated fiber placement with a UR5e in PyDrake. A roller end-effector follows a surface trajectory using operational-space impedance control to regulate contact forces and recover from disturbances.
         </p>
 
         <ProjectTags />
@@ -147,7 +147,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="text-gray-700 space-y-4">
         <p class="text-gray-600">
-          Purely position-based control produces unstable interaction forces when the robot encounters surface variation. Impedance control instead enforces a virtual mass–spring–damper relationship between the actual end-effector motion and the desired trajectory, allowing the robot to comply with the surface rather than fight it.
+          The controller uses a virtual mass-spring-damper relationship between actual end-effector motion and the desired trajectory. This gives the roller compliance when surface variation or an external push displaces it from the reference path.
         </p>
 
         <div class="rounded-md border bg-gray-50 p-4 text-sm text-gray-700 overflow-auto">
@@ -161,8 +161,6 @@ import ProjectTags from "../../components/ProjectTags.astro";
         </div>
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li><span class="font-medium">Goal:</span> stable contact forces during compaction while tracking the path</li>
-          <li><span class="font-medium">Behavior:</span> compliance under disturbances instead of rigid position enforcement</li>
           <li><span class="font-medium">Output:</span> desired task-space accelerations → inverse dynamics torques</li>
         </ul>
       </div>
@@ -184,7 +182,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
     <div class="space-y-8">
       <div class="text-gray-700 space-y-4">
         <p class="text-gray-600">
-          Validation focused on two things: stable interaction under disturbance (push test) and tracking quality along a generated surface pass. Single-pass tuning achieved tight tracking and bounded forces; full-trajectory runs showed force spikes at some transitions, where contact model assumptions break down.
+          I tested disturbance recovery with an external push and tracking along a generated surface pass. The tuned single pass maintained bounded pose error and contact forces. Longer runs showed force spikes at some transitions.
         </p>
 
         <h3 class="font-semibold">Key outcomes</h3>
@@ -196,9 +194,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
         <h3 class="font-semibold mt-6">Limitations</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li><span class="font-medium">Full-trajectory edge cases:</span> force spikes at some transitions in the longer run.</li>
           <li><span class="font-medium">Planar assumptions:</span> orientation targets were simplified; a curved mold requires surface-normal alignment and nonzero desired angular rates.</li>
-          <li><span class="font-medium">Simulation-only:</span> real sensing, friction variability, and calibration will change behavior.</li>
         </ul>
       </div>
 
@@ -287,7 +283,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
     <h2 class="text-2xl font-bold mb-4">Lessons & Next Steps</h2>
 
     <ul class="list-disc pl-5 space-y-3 text-gray-600">
-      <li><span class="font-medium">Gain scheduling across phases:</span> retune or schedule gains for approach → contact → roll → lift to eliminate transition spikes.</li>
+      <li><span class="font-medium">Gain scheduling across phases:</span> retune or schedule gains for approach → contact → roll → lift to reduce transition spikes.</li>
       <li><span class="font-medium">Curved molds:</span> generate desired pose from surface normals and add nonzero desired angular rates for stable alignment.</li>
       <li><span class="font-medium">Model realism:</span> add sensor noise, filtering delay, and friction variability to stress-test the controller.</li>
       <li><span class="font-medium">Compare controllers:</span> benchmark against hybrid force–motion control to quantify tradeoffs.</li>

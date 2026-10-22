@@ -12,7 +12,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
         </h1>
 
         <p class="text-lg text-gray-700 max-w-3xl">
-          CS263 final project comparing ROME, MEMIT, and IKE on GPT-2 XL. The core question was whether successful factual edits also propagate through paraphrases, locality checks, multi-hop questions, ripple effects, and logical-consistency probes.
+          For my UCLA CS263 final project, I compared ROME, MEMIT, and IKE on GPT-2 XL. I tested factual rewrite success, paraphrase consistency, preservation of unrelated facts, multi-hop reasoning, ripple effects, and logical consistency.
         </p>
 
         <ProjectTags />
@@ -45,7 +45,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
         <div class="text-xs text-gray-500 mt-1">RippleEdits + custom probes</div>
       </div>
       <div class="rounded-lg border bg-white p-4 shadow-sm">
-        <div class="text-sm text-gray-500">Novel Eval</div>
+        <div class="text-sm text-gray-500">Custom evaluation</div>
         <div class="text-base font-semibold text-gray-800">225 probes</div>
         <div class="text-xs text-gray-500 mt-1">50 RAG conflict cases</div>
       </div>
@@ -73,7 +73,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="text-gray-700 space-y-4">
         <p class="text-gray-600">
-          The strongest result was also the most useful warning: high rewrite accuracy does not guarantee logically consistent downstream behavior. ROME gave the best CounterFact tradeoff among weight-editing methods, MEMIT preserved locality well but underperformed on single-edit rewrite/rephrase in this setup, and IKE was strong when facts were supplied in context but did not behave like a persistent weight edit.
+          High rewrite accuracy did not guarantee logically consistent follow-up answers. ROME gave the best CounterFact tradeoff among weight-editing methods. MEMIT preserved unrelated facts well but underperformed on single-edit rewrite and rephrase scores in this setup. IKE was strong when facts were supplied in context, without making a persistent weight edit.
         </p>
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
@@ -85,9 +85,9 @@ import ProjectTags from "../../components/ProjectTags.astro";
       </div>
 
       <div class="rounded-lg border bg-white p-5 shadow-sm">
-        <h3 class="font-semibold text-lg mb-3">Takeaway</h3>
+        <h3 class="font-semibold text-lg mb-3">Failure Modes</h3>
         <p class="text-gray-600 text-sm leading-relaxed">
-          Knowledge editing should be evaluated beyond whether the model repeats the new fact. The project showed that paraphrases, inverse questions, multi-hop reasoning, and contradictory retrieval contexts expose failure modes that direct rewrite metrics can hide.
+          Paraphrases, inverse questions, multi-hop reasoning, and contradictory retrieval contexts exposed failures that direct rewrite metrics missed.
         </p>
       </div>
     </div>

@@ -74,9 +74,8 @@ import ProjectTags from "../../components/ProjectTags.astro";
       <div class="text-gray-700 space-y-4">
 
         <p class="text-gray-600">
-          The rover was built around a layered hardware and compute architecture,
-          separating high-level autonomy from low-level motor control for robustness
-          and modularity.
+          The Raspberry Pi handled vision and autonomy, while the Arduino ran
+          the wheel-velocity controller independently.
         </p>
 
         <ul class="list-disc pl-5 space-y-3 text-gray-600">
@@ -108,12 +107,6 @@ import ProjectTags from "../../components/ProjectTags.astro";
             (e.g., rqt_image_view).
           </li>
         </ul>
-
-        <p class="text-gray-600">
-          This separation ensured computational tasks (vision + autonomy)
-          remained independent from time-critical motor control,
-          improving stability and simplifying debugging.
-        </p>
 
       </div>
 
@@ -234,8 +227,8 @@ import ProjectTags from "../../components/ProjectTags.astro";
           <h4 class="font-semibold">Motor Selection Strategy</h4>
 
           <p class="text-gray-600">
-            Rather than directly assuming gearbox ratio or drivetrain efficiency,
-            we used the calculated required wheel torque as the primary selection metric.
+            We selected motors using the calculated wheel torque, with allowance
+            for drivetrain losses.
           </p>
 
           <p class="text-gray-600">
@@ -334,10 +327,8 @@ import ProjectTags from "../../components/ProjectTags.astro";
         </ul>
 
         <p class="text-gray-600">
-          Lateral error relative to image center supplied a steering correction.
-          The debug image below shows a detected region and center marker. It does
-          not establish the exact fitting method or measure latency. The path
-          representation was a line estimate, not a polynomial trajectory.
+          The vision pipeline estimates the line's lateral position relative to
+          the image center and uses that error for steering.
         </p>
 
         <h4 class="font-semibold mt-4">Special Case Handling</h4>
@@ -382,8 +373,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
         <p class="text-gray-600 text-sm">
           Here v is forward speed in m/s, ω is counterclockwise yaw rate in rad/s,
           L is wheel separation in metres, and r is wheel radius in metres.
-          Wheel rates are rad/s. This no-slip kinematic convention requires
-          corresponding motor and encoder signs in the implementation.
+          Wheel rates are rad/s, using a no-slip kinematic model.
         </p>
       </div>
 
@@ -399,9 +389,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
         </ul>
 
         <p class="text-gray-600">
-          Wheel feedback supported velocity tracking while gains were tested under
-          varying loads and battery conditions. It did not eliminate delayed
-          observations in the outer steering loop.
+          I tested wheel-velocity gains under varying loads and battery conditions.
         </p>
       </div>
 
@@ -429,16 +417,6 @@ import ProjectTags from "../../components/ProjectTags.astro";
         </ul>
       </div>
 
-      {/* RELIABILITY */}
-      <div class="space-y-3">
-        <h3 class="font-semibold text-lg">Reliability Observations</h3>
-
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Camera startup and processing behavior affected operation</li>
-          <li>Delayed observations caused late steering corrections</li>
-          <li>Some full-course runs succeeded, but completion was inconsistent</li>
-        </ul>
-      </div>
     </div>
   </section>
 
@@ -451,7 +429,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
         <h3 class="font-semibold">System Performance</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Some successful full-course runs (line + ramp + pickup + drop-off) took <span class="font-medium">&lt; 5 minutes</span> when camera input operated smoothly. Results were inconsistent; no established success rate.</li>
+          <li>Successful full-course runs took <span class="font-medium">&lt; 5 minutes</span> when camera input operated smoothly. Completion was inconsistent, and the success rate was not measured.</li>
           <li>Ramp traversal + curved segment: <span class="font-medium">28–32 seconds</span>.</li>
           <li>Single disk pickup cycle: <span class="font-medium">3–4 seconds</span>.</li>
           <li>Single disk unload cycle: <span class="font-medium">5–6 seconds</span>.</li>
@@ -459,19 +437,9 @@ import ProjectTags from "../../components/ProjectTags.astro";
           <li>Drop-off phase: <span class="font-medium">30 seconds–2 minutes</span> depending on drop-off order.</li>
         </ul>
 
-        <h3 class="font-semibold mt-6">What Worked Well</h3>
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Observed disk pickup and transport during successful runs.</li>
-          <li>Encoder-based wheel feedback at a nominal 30 Hz, using PD gains in a PID structure.</li>
-          <li>Successfully navigated a <span class="font-medium">15° incline</span> with 3 disks at lowest motor speed.</li>
-          <li>Line tracking supported successful runs but did not establish repeatable completion.</li>
-        </ul>
-
         <h3 class="font-semibold mt-6">Observed Challenges</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Camera startup behavior was inconsistent; no validated fixed warm-up time.</li>
-          <li>Image lag introduced delayed corrections and overshoot.</li>
-          <li>Reduced image resolution and adaptive velocity scaling were mitigations, without a quantified reliability improvement.</li>
+          <li>Inconsistent camera startup and image lag caused late steering corrections and overshoot. I reduced image resolution and added adaptive velocity scaling to address the delay.</li>
           <li>Integration across subsystems (vision + state logic + actuation) was significantly harder than individual module testing.</li>
           <li>Platform height inconsistencies (~1 cm variance) required mechanical rework (shortened standoffs, basket sanding).</li>
         </ul>
@@ -522,42 +490,9 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
     <ul class="list-disc pl-5 space-y-3 text-gray-600">
 
-      <li>
-        <span class="font-medium">Camera dependency was the dominant system risk.</span>
-        The rover’s autonomy was tightly coupled to Raspberry Pi camera performance.
-        Some runs succeeded, but delayed observations produced late corrections
-        and completion remained inconsistent.
-      </li>
-
-      <li>
-        <span class="font-medium">Evaluate complementary line sensing.</span>
-        Infrared line sensors could provide another track measurement. Placement,
-        lighting, intersections and disagreement handling would need testing.
-      </li>
-
-      <li>
-        <span class="font-medium">Decouple mechanical performance from platform tolerances.</span>
-        Height inconsistencies revealed over-reliance on fixed geometry.
-        A small additional lift DOF or compliant mechanism would increase robustness.
-      </li>
-
-      <li>
-        <span class="font-medium">Improve autonomy robustness.</span>
-        Timestamp capture, processing and command receipt to measure observation age.
-        Test stale-data handling and startup validation before claiming improved reliability.
-      </li>
-
-      <li>
-        <span class="font-medium">System integration should begin earlier.</span>
-        Individual subsystems performed well, but integration revealed timing and coordination issues.
-        Earlier full-stack testing would have reduced debugging overhead.
-      </li>
-
-      <li>
-        <span class="font-medium">Electrical integration is part of mechanical design.</span>
-        Cable routing and serviceability should be designed in CAD from the start
-        to improve reliability and aesthetics.
-      </li>
+      <li>Full-stack tests exposed timing and coordination problems that individual module tests missed. I would begin those tests earlier in the next build.</li>
+      <li>My next sensing experiments would measure observation age from capture to command receipt and compare the camera with infrared line sensing.</li>
+      <li>The platform-height mismatch pointed to a need for lift adjustment or compliance. I would also include cable routing and service access earlier in CAD.</li>
 
     </ul>
   </section>

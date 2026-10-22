@@ -77,7 +77,7 @@ category: "engineering",
 {
 name: "Robotic Arm for Automated Fiber Placement",
 description:
-"Developed an impedance controller in PyDrake for automated composite fiber placement, focusing on accurate force control and dynamic interaction with mold surfaces.",
+"Simulated automated fiber placement with a UR5e in PyDrake, using impedance control to study contact forces, trajectory tracking, and recovery from disturbances.",
 link: "/projects/robotic-arm-afp",
 skills: ["Python", "PyDrake", "Impedance Control", "Contact Modeling", "UR5e"],
 category: "engineering",
@@ -93,7 +93,7 @@ category: "research",
 {
 name: "Motorcycle Maintenance & Modifications",
 description:
-"Hands-on work on my Suzuki SV650: performed valve inspections, coolant flush, exhaust upgrade, oil changes.",
+"Maintained and modified my Suzuki SV650, including valve inspections, a coolant flush, an exhaust upgrade, and oil changes.",
 link: "/projects/motorcycle",
 skills: ["Mechanical Systems", "Diagnostics", "Engine Work", "Tools & Torque Specs"],
 category: "fabrication",

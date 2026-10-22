@@ -11,6 +11,7 @@
   --site-border: #e5e7eb;
   --site-chip: #f3f4f6;
   --site-header: rgb(255 255 255 / 82%);
+  --background-decoration: block;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,6 +26,7 @@
     --site-border: #343c46;
     --site-chip: #252c35;
     --site-header: rgb(16 19 23 / 84%);
+    --background-decoration: none;
   }
 }
 
@@ -39,6 +41,7 @@
   --site-border: #343c46;
   --site-chip: #252c35;
   --site-header: rgb(16 19 23 / 84%);
+  --background-decoration: none;
 }
 
 :root[data-theme="light"] {
@@ -52,8 +55,9 @@ body {
   transition: background-color 180ms ease, color 180ms ease;
 }
 
-body { background-color: var(--site-bg); }
 .bg-white { background-color: var(--site-surface-raised) !important; }
+body.bg-white { background-color: var(--site-bg) !important; }
+#hero.bg-white, footer.bg-gray-50 { background-color: var(--site-bg) !important; }
 .bg-gray-50 { background-color: var(--site-surface) !important; }
 .bg-gray-100 { background-color: var(--site-chip) !important; }
 .bg-gray-200 { background-color: var(--site-border) !important; }
@@ -67,6 +71,33 @@ body { background-color: var(--site-bg); }
 .border-gray-200,
 .border-gray-300 { border-color: var(--site-border) !important; }
 .stroke-gray-200 { stroke: var(--site-border); }
+
+.section-heading { font-size: 2rem; line-height: 1.2; letter-spacing: 0; }
+@media (min-width: 640px) {
+  .section-heading { font-size: 2.5rem; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .section-heading { font-size: 2rem; }
+}
+
+.footer-grid { display: grid; gap: 1.5rem; }
+.footer-identity, .footer-links { display: contents; }
+.footer-name { grid-area: name; }
+.footer-tagline { grid-area: tagline; }
+.footer-social { grid-area: social; }
+.footer-nav { grid-area: nav; }
+.footer-copyright { grid-area: copyright; }
+.footer-grid { grid-template-areas: "name" "tagline" "social" "nav" "copyright"; }
+@media (min-width: 1280px) {
+  .footer-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "name name" "tagline nav" "social copyright";
+    column-gap: 3rem;
+    align-items: center;
+  }
+  .footer-nav { justify-content: flex-end; }
+  .footer-copyright { text-align: right; }
+}
 
 .site-header-scrolled { background-color: var(--site-header); }
 .portfolio-background-wash {
@@ -107,12 +138,6 @@ body { background-color: var(--site-bg); }
   background: radial-gradient(ellipse 800px 1200px at 0% 0%, rgb(29 78 216 / 18%) 0%, rgb(29 78 216 / 9%) 32%, transparent 72%) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) #hero > .absolute.inset-0 {
-    background: radial-gradient(ellipse 850px 1000px at 0% 0%, rgb(29 78 216 / 22%) 0%, rgb(29 78 216 / 9%) 34%, transparent 72%) !important;
-  }
-}
-
-:root[data-theme="dark"] #hero > .absolute.inset-0 {
-  background: radial-gradient(ellipse 850px 1000px at 0% 0%, rgb(29 78 216 / 22%) 0%, rgb(29 78 216 / 9%) 34%, transparent 72%) !important;
+.portfolio-decoration, #hero > .absolute.inset-0 {
+  display: var(--background-decoration);
 }

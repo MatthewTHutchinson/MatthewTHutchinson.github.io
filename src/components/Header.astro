@@ -2,9 +2,9 @@
 import { siteConfig } from "../config";
 
 const currentPath = Astro.url.pathname;
-const isHomePage = currentPath === "/" || currentPath === `/${siteConfig.base}/`;
+const isHomePage = currentPath === import.meta.env.BASE_URL;
 const makeLink = (hash: string) =>
-  isHomePage ? `#${hash}` : `/${siteConfig.base}#${hash}`;
+  isHomePage ? `#${hash}` : `${import.meta.env.BASE_URL}#${hash}`;
 ---
 
 <header id="header" class="site-header fixed inset-x-0 top-0 z-50 hidden transition-all duration-300 md:block">

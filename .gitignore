@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Local portfolio originals; public/images contains selected website copies.
+/local-media/

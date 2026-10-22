@@ -6,14 +6,13 @@ import ProjectTags from "../../components/ProjectTags.astro";
 <ProjectLayout>
   <article class="space-y-12">
     <header>
-      <p class="text-sm text-gray-500 mb-3">UCLA RoMeLa · TOCATL</p>
       <h1 class="text-4xl sm:text-5xl font-bold mb-5">Hexapod</h1>
       <p class="text-lg leading-relaxed text-gray-700">I developed a Python and ROS 2 control and diagnostics stack for TOCATL, an 18-actuator hexapod. The work brings motor communication, calibration, telemetry, behavior planning, and operator controls into a workflow that can be tested offline and commissioned on hardware.</p>
       <ProjectTags />
     </header>
 
     <figure>
-      <video controls muted playsinline preload="metadata" poster="/images/hexapod/simulation.png" class="w-full aspect-video object-contain">
+      <video autoplay loop controls muted playsinline preload="metadata" poster="/images/hexapod/simulation.png" class="w-full aspect-video object-contain">
         <source src="/images/hexapod/walk-simulation.mp4" type="video/mp4" />
       </video>
       <figcaption class="mt-3 text-sm text-gray-500">Walking simulation of the TOCATL platform. This clip demonstrates simulated behavior, not a physical walking trial.</figcaption>

@@ -1,7 +1,7 @@
 export const siteConfig = {
 base: "MatthewTHutchinson.github.io",
 name: "Matthew Hutchinson",
-title: "Mechanical Engineer | Robotics and AI",
+title: "Mechanical Engineer | Robotics and Artificial Intelligence",
 description:
 "Portfolio of Matthew Hutchinson, a UCLA mechanical engineering graduate building robotics software and evaluating machine learning systems.",
 accentColor: "#1d4ed8",

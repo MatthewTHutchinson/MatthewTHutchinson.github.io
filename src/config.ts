@@ -64,7 +64,7 @@ description:
 "Built a geospatial web app that turns OpenStreetMap and elevation data into layered laser-cut SVGs and 3D terrain models, with interactive crops, physical road widths, and GPX route overlays.",
 link: "/projects/laser-cut-maps",
 skills: ["Python", "FastAPI", "Geospatial Processing", "Three.js", "Digital Fabrication"],
-category: "engineering",
+category: "fabrication",
 },
 {
 name: "Autonomous Rover",

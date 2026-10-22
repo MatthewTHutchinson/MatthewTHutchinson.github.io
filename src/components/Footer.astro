@@ -71,7 +71,7 @@ const makeLink = (hash: string) => `${import.meta.env.BASE_URL}#${hash}`;
               ></path></svg
             >
           </a>
-          <a
+          {siteConfig.social.twitter && (<a
             href={siteConfig.social.twitter}
             target="_blank"
             rel="noopener noreferrer"
@@ -94,7 +94,7 @@ const makeLink = (hash: string) => `${import.meta.env.BASE_URL}#${hash}`;
                 d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path
                 d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg
             >
-          </a>
+          </a>)}
           <a
             href={siteConfig.social.github}
             target="_blank"

@@ -67,6 +67,7 @@ body.bg-white { background-color: var(--site-bg) !important; }
 .text-gray-600 { color: var(--site-muted) !important; }
 .text-gray-500,
 .text-gray-400 { color: var(--site-soft) !important; }
+.filter-btn.active-filter { color: #ffffff !important; }
 .border-gray-100,
 .border-gray-200,
 .border-gray-300 { border-color: var(--site-border) !important; }

@@ -1,31 +1,27 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
 ---
 
 <ProjectLayout>
   <article class="space-y-12">
     <header class="space-y-5">
-      <p class="text-sm uppercase tracking-[0.2em] text-blue-700">Selected work · personal software</p>
-      <h1 class="text-4xl sm:text-5xl font-bold">cookbook</h1>
+      <h1 class="text-4xl sm:text-5xl font-bold">Cookbook</h1>
       <p class="max-w-3xl text-lg leading-relaxed text-gray-700">
         A personal cooking library for saving recipes, organizing them around how they are used, and making them practical at mealtime.
       </p>
-      <div class="flex flex-wrap gap-2 text-sm">
-        {['Next.js', 'TypeScript', 'Recipe organization', 'Progressive web app'].map((item) => (
-          <span class="rounded-full border border-gray-300 bg-white px-3 py-1 text-gray-700">{item}</span>
-        ))}
-      </div>
+      <ProjectTags />
     </header>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">The idea</h2>
+      <h2 class="text-2xl font-semibold">The Idea</h2>
       <p class="leading-relaxed text-gray-700">
         Recipes are easier to use when the collection reflects real cooking decisions. The library combines dish role, cuisine, cooking technique, saved collections, and practical details such as prep time, cook time, and adjustable servings.
       </p>
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Design priorities</h2>
+      <h2 class="text-2xl font-semibold">Design Priorities</h2>
       <ul class="list-disc space-y-2 pl-5 leading-relaxed text-gray-700">
         <li>Keep recipe browsing calm, legible, and comfortable on a phone.</li>
         <li>Use structured categories and saved filters instead of uncontrolled tags.</li>

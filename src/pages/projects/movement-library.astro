@@ -1,31 +1,27 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
 ---
 
 <ProjectLayout>
   <article class="space-y-12">
     <header class="space-y-5">
-      <p class="text-sm uppercase tracking-[0.2em] text-blue-700">Selected work · personal software</p>
-      <h1 class="text-4xl sm:text-5xl font-bold">movement library</h1>
+      <h1 class="text-4xl sm:text-5xl font-bold">Movement Library</h1>
       <p class="max-w-3xl text-lg leading-relaxed text-gray-700">
         A private-first library for saving movement ideas and finding the right exercise to try in a workout.
       </p>
-      <div class="flex flex-wrap gap-2 text-sm">
-        {['Next.js', 'TypeScript', 'Movement taxonomy', 'Progressive web app'].map((item) => (
-          <span class="rounded-full border border-gray-300 bg-white px-3 py-1 text-gray-700">{item}</span>
-        ))}
-      </div>
+      <ProjectTags />
     </header>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">The idea</h2>
+      <h2 class="text-2xl font-semibold">The Idea</h2>
       <p class="leading-relaxed text-gray-700">
         Useful exercise references tend to be scattered across saved videos, notes, and programs. This project brings them together in a searchable library with a controlled vocabulary for training role, workout focus, equipment, and goal connection.
       </p>
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Design priorities</h2>
+      <h2 class="text-2xl font-semibold">Design Priorities</h2>
       <ul class="list-disc space-y-2 pl-5 leading-relaxed text-gray-700">
         <li>Find a useful movement quickly, without requiring perfect labeling.</li>
         <li>Keep exercise names and prescription details distinct and easy to scan.</li>

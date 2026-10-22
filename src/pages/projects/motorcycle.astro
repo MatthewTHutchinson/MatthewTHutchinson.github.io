@@ -1,5 +1,6 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
 ---
 
 <ProjectLayout>
@@ -11,12 +12,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           Ongoing maintenance on my Suzuki SV650. Work includes valve clearance inspections, oil changes,
           coolant flush, brake fluid flush, and exhaust swap. Done from the service manual.
         </p>
-        <ul class="flex flex-wrap gap-3 mt-5">
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Mechanical Systems</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Diagnostics</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Engine Work</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Tools & Torque Specs</li>
-        </ul>
+        <ProjectTags />
       </div>
 
       <figure class="rounded-lg overflow-hidden shadow-md border border-gray-200">

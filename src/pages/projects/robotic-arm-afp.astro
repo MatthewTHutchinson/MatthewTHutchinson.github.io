@@ -1,5 +1,6 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
 ---
 
 <ProjectLayout>
@@ -15,13 +16,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           Simulated an AFP task with a UR5e in PyDrake: a roller end-effector follows a surface trajectory while regulating contact forces via operational-space impedance control. The focus was contact stability — bounded forces and damped recovery — rather than pure position tracking.
         </p>
 
-        <ul class="flex flex-wrap gap-3 mt-5">
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Python</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">PyDrake</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Impedance Control</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Contact Modeling</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">UR5e</li>
-        </ul>
+        <ProjectTags />
       </div>
 
       <div class="rounded-lg shadow-md overflow-hidden w-full">

@@ -5,6 +5,11 @@ import Footer from "../components/Footer.astro";
 import BackgroundLayer from "../components/BackgroundLayer.astro";
 import "../styles/global.css";
 import { siteConfig } from "../config";
+const path = Astro.url.pathname.replace(/\/$/, "");
+const project = [...siteConfig.projects, ...siteConfig.archivedProjects].find((item) => item.link === path);
+const title = Astro.props.title ?? project?.name ?? "Project";
+const description = project?.description ?? siteConfig.description;
+const archived = siteConfig.archivedProjects.some((item) => item.link === path);
 ---
 
 <!DOCTYPE html>
@@ -12,7 +17,8 @@ import { siteConfig } from "../config";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{siteConfig.name} | Project</title>
+    <title>{title} | {siteConfig.name}</title>
+    <meta name="description" content={description} />
 
     <!-- Global Fonts (IBM Plex Mono) -->      
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,6 +43,7 @@ import { siteConfig } from "../config";
     <Header />
 
     <main class="relative z-10 max-w-4xl mx-auto px-4 pt-48 pb-32">
+      {archived && <p class="mb-8 text-sm text-gray-500">Archived Project · <a class="underline underline-offset-4" href="/projects/archive">Project Archive</a></p>}
       <slot />
     </main>
 

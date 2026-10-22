@@ -1,5 +1,6 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
 ---
 
 <ProjectLayout>
@@ -10,12 +11,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
         <p class="text-lg text-gray-700 max-w-3xl">
           A lantern inspired by Japanese pagoda architecture, made from laser-cut wood joinery, acrylic light panels, and surface engraving.
         </p>
-        <ul class="flex flex-wrap gap-3 mt-5">
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Laser Cutting</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Design for Fabrication</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Wood Joinery</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Acrylic</li>
-        </ul>
+        <ProjectTags />
       </div>
 
       <figure class="rounded-lg overflow-hidden shadow-md border border-gray-200">

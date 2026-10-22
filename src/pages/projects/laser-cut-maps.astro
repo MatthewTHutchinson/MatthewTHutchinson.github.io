@@ -1,21 +1,17 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
 ---
 
 <ProjectLayout>
   <section class="mb-12">
     <div class="flex flex-col gap-6">
       <div>
-        <h1 class="text-4xl sm:text-5xl font-bold mb-4">Laser-Cut Maps</h1>
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4">MapLaser</h1>
         <p class="text-lg text-gray-700 max-w-3xl">
-          City and campus maps designed in Illustrator and laser-cut from wood at the UCLA Makerspace.
+          A Python pipeline that converts geographic data into layered SVG maps for laser fabrication. I built configurable cropping, rotation, road buffering, and layer export, extending earlier city and campus maps I made at the UCLA Makerspace.
         </p>
-        <ul class="flex flex-wrap gap-3 mt-5">
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Laser Cutting</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Illustrator</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Wood</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Design for Fabrication</li>
-        </ul>
+        <ProjectTags />
       </div>
 
       <figure class="rounded-lg overflow-hidden shadow-md border border-gray-200">
@@ -24,9 +20,23 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
           alt="Laser-cut San Francisco map"
           class="w-full h-auto"
         />
-        <figcaption class="px-3 py-1.5 text-xs text-gray-400 font-mono">sf-map-1.jpeg</figcaption>
+        <figcaption class="px-3 py-1.5 text-xs text-gray-400 font-mono">Earlier laser-cut San Francisco map, made at the UCLA Makerspace.</figcaption>
       </figure>
     </div>
+  </section>
+
+  <section class="mb-12 space-y-4">
+    <h2 class="text-2xl font-bold">What I Built</h2>
+    <ul class="list-disc pl-5 space-y-3 text-gray-700 leading-relaxed">
+      <li>Combined OpenStreetMap roads and NYC shoreline data in a projected coordinate system before scaling the output to physical dimensions.</li>
+      <li>Built recipe-based controls for crop, rotation, road classes, layer selection, and minimum physical road width.</li>
+      <li>Handled clipping and road buffering while preserving bridges and other connections that can disappear when roads are clipped only to land.</li>
+      <li>Exported named SVG layers for cutting, engraving, and alignment, with Illustrator cleanup and material test cuts as part of the fabrication workflow.</li>
+    </ul>
+    <figure class="pt-4">
+      <img src="/images/maplaser/nyc-map.png" alt="Generated NYC map in Illustrator with road, shoreline, and transit layers" class="w-full h-auto" loading="lazy" />
+      <figcaption class="mt-3 text-sm text-gray-500">NYC composition in Illustrator. This is a digital design preview; the photographs below show earlier fabricated maps.</figcaption>
+    </figure>
   </section>
 
   <section class="mb-12">

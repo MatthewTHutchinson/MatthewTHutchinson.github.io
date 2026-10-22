@@ -1,0 +1,15 @@
+---
+import { siteConfig } from "../config";
+const path = Astro.url.pathname.replace(/\/$/, "");
+const project = [...siteConfig.projects, ...siteConfig.archivedProjects].find(
+  (item) => item.link === path,
+);
+---
+
+{project && (
+  <ul class="flex flex-wrap gap-2 mt-5" aria-label="Project technologies">
+    {project.skills.map((skill) => (
+      <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">{skill}</li>
+    ))}
+  </ul>
+)}

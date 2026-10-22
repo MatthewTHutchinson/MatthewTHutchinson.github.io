@@ -1,0 +1,43 @@
+---
+import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
+---
+
+<ProjectLayout>
+  <article class="space-y-12">
+    <header>
+      <p class="text-sm text-gray-500 mb-3">UCLA RoMeLa · Motion Planning and Control</p>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-5">Tripteron</h1>
+      <p class="text-lg leading-relaxed text-gray-700">I developed the geometry, motion-planning software, and browser interface that let an operator move a parallel robot in XYZ while checking its modeled limits. The work connects assembled CAD, physical calibration, continuous path validation, and coordinated motor commands.</p>
+      <ProjectTags />
+    </header>
+
+    <figure>
+      <img src="/images/tripteron/concept.png" alt="Concept rendering of two mirrored Tripteron platforms supporting a light" class="w-full max-h-[640px] object-contain" width="939" height="1025" />
+      <figcaption class="mt-3 text-sm text-gray-500">Concept rendering of the paired lighting application. This illustrates the intended installation, rather than a hardware test result.</figcaption>
+    </figure>
+
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold">What I Built</h2>
+      <ul class="list-disc pl-5 space-y-3 text-gray-700 leading-relaxed">
+        <li>Extracted hinge geometry from STEP assemblies and registered the model to a measured physical calibration pose.</li>
+        <li>Mapped Cartesian targets into three signed carriage commands for a mechanism with four two-link chains and a fixed-orientation platform.</li>
+        <li>Implemented continuous route checks for linkage reach, rail travel, and modeled carriage-foot clearance.</li>
+        <li>Built workspace visualization, target selection, path preview, and execution controls backed by the same Python planning layer.</li>
+        <li>Compiled coordinated motion into a continuous Klipper queue and developed an offline simulator for two mirrored platforms supporting a light.</li>
+      </ul>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold">The Engineering Problem</h2>
+      <p class="leading-relaxed text-gray-700">Two reachable endpoints do not guarantee a feasible route between them. A linkage can approach compression inside a segment even when both endpoints pass. I checked interior extrema and used bounded subdivision for curved paths, while keeping planning costs separate from the checks that accept or reject a route.</p>
+      <p class="leading-relaxed text-gray-700">Physical calibration also had to remain distinct from the display origin. Motor direction, carriage travel, and the CAD reference frame all need to agree before a workspace preview can correspond to the real mechanism.</p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold">Testing and Current Scope</h2>
+      <p class="leading-relaxed text-gray-700">The platform has undergone supervised motion testing. The paired-platform simulator supports studies of mounting separation, light span, and operating depth. My contribution is the modeling, planning, and control integration for an existing mechanism.</p>
+      <p class="leading-relaxed text-gray-700">Position is reconstructed from motor commands rather than independent platform feedback. Accuracy, repeatability, payload, and tracking error have not yet been quantitatively established; the collision model covers selected components, not every possible contact.</p>
+    </section>
+  </article>
+</ProjectLayout>

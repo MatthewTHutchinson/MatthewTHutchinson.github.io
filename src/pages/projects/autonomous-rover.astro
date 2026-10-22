@@ -1,5 +1,6 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
 ---
 
 <ProjectLayout>
@@ -7,23 +8,14 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
   <section class="mb-12">
     <div class="flex flex-col gap-6">
       <div>
-        <h1 class="text-4xl sm:text-5xl font-bold mb-4">Autonomous Rover for Disk Transport</h1>
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4">Autonomous Rover</h1>
         <p class="text-lg text-gray-700 max-w-3xl">
           Autonomous rover that navigates a constrained course, collects and stacks disk-shaped objects,
           climbs a ramp, and delivers them to a designated drop-off location using camera-based perception
           and closed-loop control.
         </p>
 
-        <ul class="flex flex-wrap gap-3 mt-5">
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">ROS 2</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">OpenCV</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">SolidWorks</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Python</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">C++</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Controls (PID)</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Raspberry Pi</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Arduino</li>
-        </ul>
+        <ProjectTags />
       </div>
 
       {/* HERO MEDIA */}
@@ -196,7 +188,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     <div class="mt-12">
       <h3 class="text-lg font-semibold mb-4">Drive Motor Sizing</h3>
 
-      <div class="grid md:grid-cols-2 gap-8">
+      <div class="grid md:grid-cols-2 gap-8 [&>div]:min-w-0">
         <div class="text-gray-700 space-y-4">
           <p>
             We sized the drive system based on the worst-case condition:

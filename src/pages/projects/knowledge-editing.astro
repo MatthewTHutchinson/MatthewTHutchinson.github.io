@@ -1,5 +1,6 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
 ---
 
 <ProjectLayout>
@@ -7,22 +8,14 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     <div class="flex flex-col gap-6">
       <div>
         <h1 class="text-4xl sm:text-5xl font-bold mb-4">
-          Beyond Rewrite Accuracy: Knowledge Editing Consistency
+          Knowledge Editing of Large Language Models
         </h1>
 
         <p class="text-lg text-gray-700 max-w-3xl">
           CS263 final project comparing ROME, MEMIT, and IKE on GPT-2 XL. The core question was whether successful factual edits also propagate through paraphrases, locality checks, multi-hop questions, ripple effects, and logical-consistency probes.
         </p>
 
-        <ul class="flex flex-wrap gap-3 mt-5">
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">Python</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">EasyEdit</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">GPT-2 XL</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">ROME</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">MEMIT</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">IKE</li>
-          <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">RAG</li>
-        </ul>
+        <ProjectTags />
       </div>
 
       <img
@@ -63,7 +56,7 @@ import ProjectLayout from "../../layouts/ProjectLayout.astro";
     <h2 class="text-2xl font-bold mb-4">What I Built</h2>
     <div class="text-gray-700 space-y-4">
       <p class="text-gray-600">
-        I set up and patched the EasyEdit workflow, ran ROME, MEMIT, and IKE experiments on CounterFact and external benchmarks, and built a custom diagnostic probe set to separate direct rewrite success from broader consistency behavior.
+        I set up and patched the EasyEdit workflow, ran ROME, MEMIT, and IKE experiments on a Google Cloud T4 GPU using CounterFact and external benchmarks, and built a custom diagnostic probe set to separate direct rewrite success from broader consistency behavior.
       </p>
 
       <ul class="list-disc pl-5 space-y-2 text-gray-600">

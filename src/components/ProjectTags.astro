@@ -9,7 +9,7 @@ const project = [...siteConfig.projects, ...siteConfig.archivedProjects].find(
 {project && (
   <ul class="flex flex-wrap gap-2 mt-5" aria-label="Project technologies">
     {project.skills.map((skill) => (
-      <li class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm">{skill}</li>
+      <li class="bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded text-xs leading-5">{skill}</li>
     ))}
   </ul>
 )}

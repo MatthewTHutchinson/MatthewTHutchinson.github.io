@@ -55,18 +55,21 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
   html[data-present] [data-presentation-source] { display: none !important; }
   #presentation-stage { position: fixed; inset: 0 0 82px; padding: 28px 40px; overflow: auto; background: var(--site-bg); z-index: 66; display: flex; flex-direction: column; }
   #presentation-stage[hidden] { display: none; }
-  .presentation-slide { width: 100%; max-width: 1280px; margin: auto; flex-shrink: 0; color: var(--site-text); line-height: 1.5; }
+  .presentation-slide { width: 100%; max-width: 1280px; margin: auto; flex-shrink: 0; color: var(--site-text); font-size: 1rem; line-height: 1.6; letter-spacing: 0; }
   .presentation-slide > * { margin: 0 !important; min-width: 0; }
-  .presentation-slide h1 { font-size: 2.25rem; }
-  .presentation-slide h2 { font-size: 1.65rem; margin-bottom: 1rem; }
-  .presentation-slide h3 { font-size: 1.15rem; }
+  .presentation-slide h1 { font-size: 2.25rem; line-height: 1.2; margin-bottom: 1.25rem; }
+  #presentation-stage h2 { font-size: 1.75rem; line-height: 1.25; margin-bottom: 1.25rem; }
+  .presentation-slide h3 { font-size: 1.125rem; line-height: 1.4; }
+  .presentation-slide #perception > h3, .presentation-slide #drive-mapping > h3, .presentation-slide #wheel-control > h3, .presentation-slide #safeguards > h3 { font-size: 1.75rem; line-height: 1.25; margin-bottom: 1.25rem; }
+  .presentation-slide .border { border-color: var(--site-border); }
+  .presentation-slide .shadow-sm, .presentation-slide .shadow-md { box-shadow: none; }
   .presentation-slide img, .presentation-slide video { width: 100%; height: auto; object-fit: contain; max-height: 460px; margin-inline: auto; }
   .presentation-slide figure { margin-inline: auto; }
-  .presentation-slide figcaption { font-size: .8rem; line-height: 1.45; }
+  .presentation-slide figcaption { font-size: .8125rem; line-height: 1.5; color: var(--site-soft); margin-top: .75rem; }
   .presentation-slide .points { line-height: 1.5; }
   .presentation-slide .points li + li { margin-top: .5rem; }
   .presentation-slide #about { padding: 0; }
-  .presentation-slide #about p { font-size: 1.25rem; }
+  .presentation-slide #about p { font-size: 1.625rem; line-height: 1.6; }
   .presentation-slide #overview video { max-height: calc(100dvh - 390px); }
   .presentation-slide #overview .overview-images img { height: min(300px, calc(100dvh - 450px)); }
   .presentation-slide #art-motion video { max-height: calc(100dvh - 190px); }
@@ -86,14 +89,14 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
   .presentation-slide #trajectory-generation h2 { grid-column: 1 / -1; }
   .presentation-slide #trajectory-generation img { max-height: calc(100dvh - 270px); }
   .presentation-slide #trajectory-generation ul { margin: 0; }
-  .presentation-slide[data-slide="perception"], .presentation-slide[data-slide="drive-mapping"], .presentation-slide[data-slide="operator-interface"] { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+  .presentation-slide[data-slide="perception"], .presentation-slide[data-slide="drive-mapping"], .presentation-slide[data-slide="operator-interface"] { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
   .presentation-slide #dashboard img { max-height: 300px; }
   .presentation-slide #safeguards table { font-size: .8rem; line-height: 1.4; }
   .presentation-slide #safeguards th, .presentation-slide #safeguards td { padding: .6rem; }
   .presentation-slide #telemetry-plots { padding-top: 0; }
   .presentation-slide #testing > figure { margin-block: .5rem; }
   .presentation-slide #testing > figure img { max-height: calc(100dvh - 350px); }
-  .presentation-slide #testing > .points { font-size: .95rem; }
+  .presentation-slide #testing > .points { font-size: 1rem; }
   .presentation-slide #telemetry-plots img { max-height: calc(100dvh - 250px); }
   #closing { display: none; }
   .presentation-slide #closing { display: block; }
@@ -111,6 +114,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
     .presentation-slide #closing .closing-projects { grid-template-columns: 1fr; }
     .presentation-slide #closing video { height: auto; max-height: 300px; }
     .presentation-slide #testing > figure img { max-height: none; }
+    .presentation-slide #ros-architecture svg { width: 100%; height: auto; max-height: none; }
   }
   @media print { #presentation-navigation, #presentation-start { display: none !important; } }
 </style>

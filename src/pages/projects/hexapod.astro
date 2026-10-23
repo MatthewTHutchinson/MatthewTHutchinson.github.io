@@ -7,7 +7,7 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
 <ProjectLayout>
   <article class="hexapod space-y-12">
     <header id="overview">
-      <h1 class="text-4xl sm:text-5xl font-bold mb-5">Hexapod: TOCATL</h1>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-5">Hexapod: Spider</h1>
       <div class="overview-images">
         <figure>
           <img src="/media/hexapod/silva.png" alt="Earlier SILVA hexapod with exposed chassis and six articulated legs" width="1104" height="894" />
@@ -119,8 +119,9 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
       <h2>Testing and Results</h2>
       <figure>
         <a href="/media/hexapod/command-pacing-before-after.png" target="_blank" rel="noopener noreferrer" aria-label="Open measured command pacing before and after the fix at full size">
-          <img src="/media/hexapod/command-pacing-before-after.png" alt="Recorded motor 3-1 host command intervals before and after the pacing fix: a 778 ms gap led to 39 rapid intervals of 0.73 to 1.52 ms; after a 780 ms gap, intervals remained about 18 to 20 ms. Separate 50 Hz tests, not CAN-wire timing." width="2240" height="1056" loading="lazy" />
+          <img src="/media/hexapod/command-pacing-before-after.png" alt="Recorded motor 3-1 host command intervals before and after the pacing fix: a 778 ms gap led to 39 rapid intervals of 0.73 to 1.52 ms; after a 780 ms gap, intervals remained about 18 to 20 ms. Separate 50 Hz tests, not CAN-wire timing." width="2240" height="896" loading="lazy" />
         </a>
+        <figcaption>Motor 3-1, 50 Hz tests. Separate recordings of host command timing, not CAN-wire timing.</figcaption>
       </figure>
       <ul class="points">
         <li><strong>Fault:</strong> recovery delays triggered catch-up bursts and transmit-buffer errors.</li>

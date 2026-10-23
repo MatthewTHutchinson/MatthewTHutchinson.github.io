@@ -193,7 +193,7 @@ import RoverArchitecture from "../../components/RoverArchitecture.astro";
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
           <li>ROS image → OpenCV via <code>cv_bridge</code></li>
-          <li>Bird's-eye mapping, grayscale and thresholding to isolate the black track</li>
+          <li>Grayscale conversion and thresholding to isolate the black track</li>
           <li>Morphological cleanup → contour detection → select largest contour</li>
           <li>Lateral offset from the image center → <code>/line_position</code></li>
         </ul>

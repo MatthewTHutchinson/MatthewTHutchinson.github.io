@@ -117,11 +117,15 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
 
     <section id="testing" class="space-y-4">
       <h2>Testing and Results</h2>
+      <figure>
+        <a href="/media/hexapod/command-pacing-before-after.png" target="_blank" rel="noopener noreferrer" aria-label="Open measured command pacing before and after the fix at full size">
+          <img src="/media/hexapod/command-pacing-before-after.png" alt="Recorded motor 3-1 host command intervals before and after the pacing fix: a 778 ms gap led to 39 rapid intervals of 0.73 to 1.52 ms; after a 780 ms gap, intervals remained about 18 to 20 ms. Separate 50 Hz tests, not CAN-wire timing." width="2240" height="1056" loading="lazy" />
+        </a>
+      </figure>
       <ul class="points">
-        <li><strong>Fault:</strong> delayed host cycles triggered catch-up command bursts and CAN transmit-buffer errors.</li>
-        <li><strong>Change:</strong> revised command pacing to avoid burst transmission after a delay.</li>
-        <li><strong>Retest:</strong> transmit-buffer errors cleared in repeat tests.</li>
-        <li><strong>Hardware result:</strong> coordinated art motion on the supported robot.</li>
+        <li><strong>Fault:</strong> recovery delays triggered catch-up bursts and transmit-buffer errors.</li>
+        <li><strong>Change:</strong> reset overdue scheduling to resume at a paced cadence.</li>
+        <li><strong>Retest:</strong> no transmit-buffer errors in the post-fix motion and recovery tests; intermittent feedback loss remained.</li>
       </ul>
       <div id="telemetry-plots" class="space-y-4 pt-4">
         <h2>Motion &amp; Motor Load</h2>

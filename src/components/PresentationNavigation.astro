@@ -91,6 +91,9 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
   .presentation-slide #safeguards table { font-size: .8rem; line-height: 1.4; }
   .presentation-slide #safeguards th, .presentation-slide #safeguards td { padding: .6rem; }
   .presentation-slide #telemetry-plots { padding-top: 0; }
+  .presentation-slide #testing > figure { margin-block: .5rem; }
+  .presentation-slide #testing > figure img { max-height: calc(100dvh - 350px); }
+  .presentation-slide #testing > .points { font-size: .95rem; }
   .presentation-slide #telemetry-plots img { max-height: calc(100dvh - 250px); }
   #closing { display: none; }
   .presentation-slide #closing { display: block; }
@@ -107,6 +110,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
     .presentation-slide #overview .overview-images img { height: auto; max-height: 300px; }
     .presentation-slide #closing .closing-projects { grid-template-columns: 1fr; }
     .presentation-slide #closing video { height: auto; max-height: 300px; }
+    .presentation-slide #testing > figure img { max-height: none; }
   }
   @media print { #presentation-navigation, #presentation-start { display: none !important; } }
 </style>

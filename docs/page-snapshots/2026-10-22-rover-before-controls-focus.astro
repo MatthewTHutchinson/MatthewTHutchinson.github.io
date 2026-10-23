@@ -1,0 +1,485 @@
+---
+import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import ProjectTags from "../../components/ProjectTags.astro";
+import RoverArchitecture from "../../components/RoverArchitecture.astro";
+---
+
+<ProjectLayout>
+  {/* HERO */}
+  <section id="overview" class="mb-12">
+    <div class="flex flex-col gap-6">
+      <div>
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4">Autonomous Rover</h1>
+        <p class="text-lg text-gray-700 max-w-3xl">
+          Autonomous rover that navigates a constrained course, collects and stacks disk-shaped objects,
+          climbs a ramp, and delivers them to a designated drop-off location using camera-based perception
+          and closed-loop control.
+        </p>
+
+        <ProjectTags />
+      </div>
+
+      {/* HERO MEDIA */}
+      <div class="rounded-lg shadow-md overflow-hidden w-full">
+        <video
+          class="w-full h-auto"
+          autoplay
+          controls
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster="/media/autonomous-rover/hero-poster.png"
+        >
+          <source src="/media/autonomous-rover/hero.mp4" type="video/mp4" />
+          {/* Fallback for ancient browsers */}
+          <img
+            src="/media/autonomous-rover/final-assembly.jpg"
+            alt="Autonomous rover prototype transporting disks"
+            class="w-full h-auto"
+          />
+        </video>
+      </div>
+    </div>
+  </section>
+
+  {/* PROBLEM + CONSTRAINTS */}
+  <section id="course" class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Problem & Constraints</h2>
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-3">
+        <p>
+          The rover must autonomously traverse a course (curves, ramp, obstacles), collect and stack disks,
+          and drop them off in a specified order under strict size and robustness constraints.
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Must fit within a compact volume and remain functional after a short drop test.</li>
+          <li>Line-following navigation through curved segments and a ramp.</li>
+          <li>Pick up and transport at least two disks; bonus for three.</li>
+        </ul>
+      </div>
+
+      <img
+        src="/media/autonomous-rover/venue-diagram.png"
+        alt="Testing venue diagram showing start, pickup, ramp, and drop-off zones"
+        class="rounded-lg shadow-sm w-full"
+      />
+    </div>
+  </section>
+
+  {/* SYSTEM OVERVIEW 2 */}
+  <section id="hardware" class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">System Overview</h2>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      <div class="text-gray-700 space-y-4">
+
+        <p class="text-gray-600">
+          The Raspberry Pi handled vision and autonomy, while the Arduino ran
+          the wheel-velocity controller independently.
+        </p>
+
+        <ul class="list-disc pl-5 space-y-3 text-gray-600">
+          <li>
+            <span class="font-medium">Raspberry Pi (robot_ws):</span>
+            ROS 2 on the Raspberry Pi.
+            Handles perception, behavior logic, and high-level velocity commands.
+          </li>
+
+          <li>
+            <span class="font-medium">Arduino Nano:</span>
+            Executes low-level motor and encoder control.
+            Closes the wheel velocity loop with PD gains in a PID implementation (Ki = 0).
+          </li>
+
+          <li>
+            <span class="font-medium">L298N Motor Driver:</span>
+            Drives two 12V DC motors with encoder feedback.
+          </li>
+
+          <li>
+            <span class="font-medium">12V Battery + Buck Converter:</span>
+            Distributes regulated 12V and 5V to motors, logic, and servos.
+          </li>
+
+          <li>
+            <span class="font-medium">Development Workspace (dev_ws):</span>
+            Laptop connected via SSH for monitoring, logging, and ROS debugging tools
+            (e.g., rqt_image_view).
+          </li>
+        </ul>
+
+      </div>
+
+      <div class="space-y-6">
+        <img
+          src="/media/autonomous-rover/ros-network-architecture.png"
+          alt="ROS 2 communication architecture between robot_ws and dev_ws"
+          class="rounded-lg shadow-sm w-full"
+        />
+
+        <img
+          src="/media/autonomous-rover/electronics-schematic.png"
+          alt="Electronics and wiring layout of rover components"
+          class="rounded-lg shadow-sm w-full"
+        />
+      </div>
+    </div>
+  </section>
+
+  {/* MECHANICAL */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-6">Mechanical Design</h2>
+
+    {/* KEY SPECS */}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Dimensions (L×W×H)</div>
+        <div class="text-lg font-semibold text-gray-800">29.9 × 24.1 × 16.4 cm</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Total mass</div>
+        <div class="text-lg font-semibold text-gray-800">2.902 kg</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Max ramp</div>
+        <div class="text-lg font-semibold text-gray-800">15° with 3 disks</div>
+      </div>
+      <div class="rounded-lg border bg-white p-4 shadow-sm">
+        <div class="text-sm text-gray-500">Speed targets</div>
+        <div class="text-lg font-semibold text-gray-800">5–15 cm/s</div>
+        <div class="text-xs text-gray-500 mt-1">~10 cm/s straight, ~8 cm/s turns</div>
+      </div>
+    </div>  
+
+    <!-- Your existing 3 mechanical cards below -->
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Chassis</h3>
+        <img class="rounded-md mb-3" src="/media/autonomous-rover/cad-overview.png" alt="Assembled rover CAD overview" />
+        <p class="text-gray-600 text-sm">
+          Modular layered chassis designed for stability, rapid iteration, and serviceability.
+        </p>
+      </div>
+
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Basket Lift</h3>
+        <img class="rounded-md mb-3" src="/media/autonomous-rover/basket-lift.png" alt="Basket lift crank-slider mechanism" />
+        <p class="text-gray-600 text-sm">
+          Crank-slider lift raises the basket for controlled placement at the drop-off platform.
+        </p>
+      </div>
+
+      <div class="rounded-lg border bg-white p-5 shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Scoop Arm</h3>
+        <img class="rounded-md mb-3" src="/media/autonomous-rover/arm-rack-pinion.png" alt="Rack and pinion scoop arm mechanism" />
+        <p class="text-gray-600 text-sm">
+          Rack-and-pinion style extension with servo control for disk pickup and unloading.
+        </p>
+      </div>
+    </div>
+
+    {/* DRIVE MOTOR SIZING */}
+    <div class="mt-12">
+      <h3 class="text-lg font-semibold mb-4">Drive Motor Sizing</h3>
+
+      <div class="grid md:grid-cols-2 gap-8 [&>div]:min-w-0">
+        <div class="text-gray-700 space-y-4">
+          <p>
+            We sized the drive system based on the worst-case condition:
+            climbing a 15° ramp at low speed
+            (8–10 cm/s) with the full 3-disk payload.
+          </p>
+
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>Total mass: <span class="font-medium">m = 2.90 kg</span></li>
+            <li>Ramp angle: <span class="font-medium">θ = 15°</span></li>
+            <li>Rolling resistance coefficient: <span class="font-medium">C<sub>rr</sub> = 0.003</span></li>
+            <li>Wheel radius: <span class="font-medium">r ≈ 0.065 m</span></li>
+          </ul>
+
+          <p class="text-gray-600">
+            The required tractive force on the incline was approximated as:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    F_required ≈ m·g ( sinθ + C_rr · cosθ )
+          </pre>
+
+          <p class="text-gray-600">
+            Using the rover's mass and ramp angle:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    F_required ≈ 8.21 N
+          </pre>
+
+          <p class="text-gray-600">
+            With two driven wheels, required torque per wheel:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    τ_wheel ≈ (F_required · r) / 2
+    τ_wheel ≈ 0.27 N·m  (per driven wheel)
+          </pre>
+        </div>
+
+        <div class="text-gray-700 space-y-4">
+          <h4 class="font-semibold">Motor Selection Strategy</h4>
+
+          <p class="text-gray-600">
+            We selected motors using the calculated wheel torque, with allowance
+            for drivetrain losses.
+          </p>
+
+          <p class="text-gray-600">
+            In practice, available wheel torque is:
+          </p>
+
+          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+    τ_wheel_available ≈ τ_motor · G · η
+          </pre>
+
+          <p class="text-gray-600">
+            where:
+          </p>
+
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>G = drivetrain gear ratio</li>
+            <li>η = drivetrain efficiency</li>
+          </ul>
+
+          <p class="text-gray-600">
+            To account for losses and uncertainty, we ensured the selected motors
+            could deliver at least 1.3–1.5× the required wheel torque at operating speed.
+          </p>
+
+          <p class="text-gray-600">
+            This provided margin for:
+          </p>
+
+          <ul class="list-disc pl-5 space-y-2 text-gray-600">
+            <li>Acceleration from rest</li>
+            <li>Surface variability</li>
+            <li>Electrical and gearbox losses</li>
+            <li>Minor misalignment or wheel slip</li>
+          </ul>
+
+          <p class="text-gray-600">
+            The rover successfully climbed a 15° ramp with three disks at the lowest motor speed,
+            validating the sizing approach.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* CONTROLS */}
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>
+
+    <div class="text-gray-700 space-y-10">
+
+      {/* HIGH-LEVEL STACK */}
+      <div>
+        <p class="text-gray-600">
+          The autonomy stack was structured as:
+          <span class="font-medium">perception → behavior → motion mapping → closed-loop control → actuation</span>.
+          ROS 2 handled inter-node communication and behavior sequencing,
+          while the Arduino maintained deterministic wheel velocity control.
+        </p>
+      </div>
+
+      {/* ROS ARCHITECTURE */}
+      <div id="ros-architecture" class="space-y-3">
+        <h3 class="font-semibold text-lg">ROS 2 Architecture</h3>
+        <RoverArchitecture />
+      </div>
+
+      {/* PERCEPTION */}
+      <div id="perception" class="space-y-3">
+        <h3 class="font-semibold text-lg">Computer Vision Pipeline</h3>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>ROS image → OpenCV via <code>cv_bridge</code></li>
+          <li>Bird's-eye mapping, grayscale and thresholding to isolate the black track</li>
+          <li>Morphological cleanup → contour detection → select largest contour</li>
+          <li>Line estimate → publish a lateral position as <code>/line_position</code></li>
+        </ul>
+
+        <p class="text-gray-600">
+          The vision pipeline estimates the line's lateral position relative to
+          the image center and uses that error for steering.
+        </p>
+
+        <h4 class="font-semibold mt-4">Special Case Handling</h4>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li><span class="font-mono">x ≥ 0</span> → normal tracking</li>
+          <li><span class="font-mono">x = -3 / -4</span> → sharp turn detected (bounding box hits an edge)</li>
+          <li><span class="font-mono">x = -2</span> → intersection detected (box hits both edges) → behavior handoff</li>
+          <li><span class="font-mono">x = -1</span> → line lost → slow reverse / recovery search</li>
+        </ul>
+      </div>
+
+      {/* CV steering diagram */}
+      <figure id="perception-output" class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
+        <img
+          src="/media/autonomous-rover/cv-steering-diagram.jpg"
+          alt="Computer vision steering: segmented regions and extracted line center used to compute lateral error"
+          class="w-full h-auto block"
+          loading="lazy"
+        />
+        <figcaption class="px-4 py-2 text-sm text-gray-600">
+          CV steering output: the pipeline isolates the line, extracts its x-center, and produces a lateral error signal used for steering.
+        </figcaption>
+      </figure>
+
+      {/* DIFFERENTIAL DRIVE */}
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Differential Drive Mapping</h3>
+
+        <p class="text-gray-600">
+          ROS velocity commands use <code>linear.x</code> (forward) and
+          <code>angular.z</code> (turn). These were mapped to wheel velocities using:
+        </p>
+
+        <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
+  v_left  = v - ω · L / 2
+  v_right = v + ω · L / 2
+  wheel_rate_left  = v_left / r
+  wheel_rate_right = v_right / r
+        </pre>
+
+        <p class="text-gray-600 text-sm">
+          Here v is forward speed in m/s, ω is counterclockwise yaw rate in rad/s,
+          L is wheel separation in metres, and r is wheel radius in metres.
+          Wheel rates are rad/s, using a no-slip kinematic model.
+        </p>
+      </div>
+
+      {/* CLOSED LOOP CONTROL */}
+      <div id="wheel-control" class="space-y-3">
+        <h3 class="font-semibold text-lg">Closed-Loop Wheel Control</h3>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Encoder resolution: ~1975 counts per revolution</li>
+          <li>Control loop frequency: 30 Hz</li>
+          <li>Baseline command: PWM ≈ 70 (0–255) → ~1 rev/s</li>
+          <li>PID implementation with PD gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50 (implementation-specific scaling)</li>
+        </ul>
+
+        <p class="text-gray-600">
+          I tested wheel-velocity gains under varying loads and battery conditions.
+        </p>
+      </div>
+
+      {/* High-level behavior state machine */}
+      <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
+        <img
+          src="/media/autonomous-rover/state-machine.png"
+          alt="High-level state machine for rover autonomy: line follow, pickup, ramp, drop-off, and termination"
+          class="w-full h-auto block"
+          loading="lazy"
+        />
+        <figcaption class="px-4 py-2 text-sm text-gray-600">
+          High-level autonomy flow: state machine sequencing line-following, pickup, ramp traversal, and drop-off.
+        </figcaption>
+      </figure>
+
+      {/* ACTUATION */}
+      <div class="space-y-3">
+        <h3 class="font-semibold text-lg">Arm & Lift Actuation</h3>
+
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Servos controlled on Raspberry Pi via <code>pigpiod</code></li>
+          <li>1 continuous servo (rack & pinion extension)</li>
+          <li>2 positional servos (opening + lifting)</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  {/* RESULTS*/}
+  <section id="results" class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Results & Performance</h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="text-gray-700 space-y-4">
+
+        <h3 class="font-semibold">System Performance</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Successful full-course runs took <span class="font-medium">&lt; 5 minutes</span> when camera input operated smoothly. Completion was inconsistent, and the success rate was not measured.</li>
+          <li>Ramp traversal + curved segment: <span class="font-medium">28–32 seconds</span>.</li>
+          <li>Single disk pickup cycle: <span class="font-medium">3–4 seconds</span>.</li>
+          <li>Single disk unload cycle: <span class="font-medium">5–6 seconds</span>.</li>
+          <li>Pick-up phase: <span class="font-medium">1:30–2:30</span> depending on pick-up order.</li>
+          <li>Drop-off phase: <span class="font-medium">30 seconds–2 minutes</span> depending on drop-off order.</li>
+        </ul>
+
+        <h3 class="font-semibold mt-6">Observed Challenges</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Inconsistent camera startup and image lag caused late steering corrections and overshoot. I reduced image resolution and added adaptive velocity scaling to address the delay.</li>
+          <li>Integration across subsystems (vision + state logic + actuation) was significantly harder than individual module testing.</li>
+          <li>Platform height inconsistencies (~1 cm variance) required mechanical rework (shortened standoffs, basket sanding).</li>
+        </ul>
+
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <video
+            class="w-full h-auto"
+            autoplay
+            controls
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            <source src="/media/autonomous-rover/demo-pickup.mp4" type="video/mp4" />
+          </video>
+          <figcaption class="px-3 py-2 text-sm text-gray-600">
+            Disk pickup sequence (3–4 s cycle)
+          </figcaption>
+        </figure>
+
+        <figure class="rounded-lg shadow-sm overflow-hidden bg-white border">
+          <video
+            class="w-full h-auto"
+            autoplay
+            controls
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            <source src="/media/autonomous-rover/demo-dropoff.mp4" type="video/mp4" />
+          </video>
+          <figcaption class="px-3 py-2 text-sm text-gray-600">
+            Drop-off sequence (5–6 s unload cycle)
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  {/* LESSONS*/}
+  <section class="mb-4">
+    <h2 class="text-2xl font-bold mb-4">Lessons Learned & Next Steps</h2>
+
+    <ul class="list-disc pl-5 space-y-3 text-gray-600">
+
+      <li>Full-stack tests exposed timing and coordination problems that individual module tests missed. I would begin those tests earlier in the next build.</li>
+      <li>My next sensing experiments would measure observation age from capture to command receipt and compare the camera with infrared line sensing.</li>
+      <li>The platform-height mismatch pointed to a need for lift adjustment or compliance. I would also include cable routing and service access earlier in CAD.</li>
+
+    </ul>
+  </section>
+
+</ProjectLayout>
+
+<style>
+  [id] { scroll-margin-top: 7rem; }
+</style>

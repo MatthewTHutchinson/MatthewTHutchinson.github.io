@@ -12,7 +12,7 @@ twitter: "",
 github: "https://github.com/MatthewTHutchinson",
 },
 aboutMe:
-"I build robotics software and evaluate machine learning systems. My work spans robot motion planning and control, computer vision, and LLM evaluation. I'm interested in AI research and development and its applications to engineering, especially how foundation models and reinforcement learning can help robots understand and act in the physical world. That includes the testing and integration needed to make those systems useful.",
+"I build robotics software, with a focus on motion planning, feedback control and hardware integration. My work includes camera-based rover autonomy, kinematic modeling for a parallel mechanism, and actuator communication and diagnostics for an 18-actuator hexapod. I'm interested in advanced control and state estimation for autonomous systems, and in how machine learning can improve perception and planning. I enjoy developing algorithms and testing how they behave on physical hardware.",
 skills: [
 "Python",
 "C++",
@@ -125,7 +125,7 @@ experience: [
 {
 company: "UCLA Engineering Makerspace",
 title: "Fabrication Lab Technician",
-dateRange: "Sep 2023 – Jun 2024",
+dateRange: "Apr 2024 – Jul 2024",
 bullets: [
 "Assisted students in laser cutting, 3D printing, and digital fabrication tools",
 "Supported rapid prototyping for research and class projects",

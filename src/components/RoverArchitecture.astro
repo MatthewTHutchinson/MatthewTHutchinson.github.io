@@ -1,0 +1,120 @@
+<figure class="architecture">
+  <div class="diagram-scroll" tabindex="0" role="region" aria-label="Rover architecture diagram">
+    <svg viewBox="0 0 1040 790" role="img" aria-labelledby="rover-architecture-title rover-architecture-description">
+      <title id="rover-architecture-title">ROS 2 and embedded rover architecture</title>
+      <desc id="rover-architecture-description">Camera images enter LineDetector through /image_in. LineDetector publishes /line_position to FollowLine, which publishes geometry_msgs/Twist on /cmd_vel. Differential-drive mapping produces wheel-speed targets for the Arduino Nano. The Arduino closes the 30 Hz PD velocity loop using wheel encoders and sends PWM and direction signals to the L298N driver and two DC motors. Separately, collection behavior on the Raspberry Pi commands pigpiod and three collection servos. Blocks without ROS node or topic names are functional components, not additional named ROS nodes.</desc>
+      <defs>
+        <marker id="rover-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
+        </marker>
+      </defs>
+
+      <text x="24" y="30" class="lane">SENSOR</text>
+      <text x="228" y="30" class="lane">RASPBERRY PI / ROS 2</text>
+      <text x="750" y="30" class="lane">CONTROL &amp; ACTUATION</text>
+
+      <g class="device">
+        <rect x="24" y="92" width="150" height="78" rx="6" />
+        <text x="99" y="124">Camera</text>
+        <text x="99" y="148" class="detail">Image capture</text>
+      </g>
+      <g class="node">
+        <rect x="228" y="92" width="208" height="78" rx="6" />
+        <text x="332" y="124">LineDetector</text>
+        <text x="332" y="148" class="detail">ROS 2 node</text>
+      </g>
+      <path class="signal" d="M174 131 H228" />
+      <text x="195" y="73" class="topic">/image_in</text>
+
+      <path class="signal" d="M332 170 V267" />
+      <text x="332" y="211" class="topic">/line_position</text>
+      <text x="332" y="235" class="detail center">Line offset / state codes</text>
+      <g class="node">
+        <rect x="228" y="267" width="208" height="78" rx="6" />
+        <text x="332" y="299">FollowLine</text>
+        <text x="332" y="323" class="detail">ROS 2 node</text>
+      </g>
+
+      <path class="signal" d="M332 345 V442" />
+      <text x="332" y="385" class="topic">/cmd_vel</text>
+      <text x="332" y="410" class="detail center">geometry_msgs/Twist</text>
+      <g class="software">
+        <rect x="228" y="442" width="208" height="90" rx="6" />
+        <text x="332" y="472">Diff-drive mapping</text>
+        <text x="332" y="497" class="detail">v, yaw rate to</text>
+        <text x="332" y="519" class="detail">left/right wheel speed</text>
+      </g>
+
+      <path class="signal" d="M436 471 H750" />
+      <text x="592" y="458" class="topic">Wheel-speed targets</text>
+      <path class="signal feedback" d="M750 514 H436" />
+      <text x="592" y="545" class="detail center">Encoder readback</text>
+      <text x="592" y="570" class="detail center">ROS-to-Arduino interface</text>
+      <g class="controller">
+        <rect x="750" y="442" width="266" height="90" rx="6" />
+        <text x="883" y="472">Arduino Nano</text>
+        <text x="883" y="497" class="detail">30 Hz wheel-velocity loop</text>
+        <text x="883" y="519" class="detail">PD gains; Ki = 0</text>
+      </g>
+      <path class="signal" d="M883 532 V602" />
+      <text x="883" y="575" class="topic">PWM + direction</text>
+      <g class="device">
+        <rect x="750" y="602" width="266" height="60" rx="6" />
+        <text x="883" y="639">L298N motor driver</text>
+      </g>
+      <path class="signal" d="M883 662 V704" />
+      <g class="device">
+        <rect x="750" y="704" width="266" height="62" rx="6" />
+        <text x="883" y="730">Two DC drive motors</text>
+        <text x="883" y="752" class="detail">Left / right wheels</text>
+      </g>
+      <path class="signal feedback" d="M750 735 H672" />
+      <g class="device">
+        <rect x="476" y="704" width="196" height="62" rx="6" />
+        <text x="574" y="730">Wheel encoders</text>
+        <text x="574" y="752" class="detail">Velocity feedback</text>
+      </g>
+      <path class="signal feedback" d="M574 704 V625 H714 V498 H750" />
+
+      <text x="568" y="73" class="lane center">COLLECTION BRANCH</text>
+      <g class="software">
+        <rect x="464" y="92" width="208" height="78" rx="6" />
+        <text x="568" y="124">Collection logic</text>
+        <text x="568" y="148" class="detail">Raspberry Pi logic</text>
+      </g>
+      <path class="signal" d="M672 131 H883 V220" />
+      <text x="842" y="190" class="detail center">Servo commands</text>
+      <g class="software">
+        <rect x="750" y="220" width="266" height="62" rx="6" />
+        <text x="883" y="247">pigpiod</text>
+        <text x="883" y="270" class="detail">Raspberry Pi GPIO PWM</text>
+      </g>
+      <path class="signal" d="M883 282 V328" />
+      <g class="device">
+        <rect x="750" y="328" width="266" height="78" rx="6" />
+        <text x="883" y="356">Collection servos</text>
+        <text x="883" y="381" class="detail">1 continuous + 2 positional</text>
+      </g>
+    </svg>
+  </div>
+  <figcaption>ROS 2 topics connect the perception and steering nodes. The Arduino closes the wheel-speed loop; collection servos use a separate Raspberry Pi GPIO path. Other blocks denote functions or hardware.</figcaption>
+</figure>
+
+<style>
+  .architecture { margin: 1.5rem 0; color: var(--site-text); }
+  .diagram-scroll { max-width: 100%; overflow-x: auto; }
+  .diagram-scroll:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 4px; }
+  svg { display: block; width: 100%; min-width: 780px; height: auto; }
+  rect { fill: var(--site-surface); stroke: var(--site-border); stroke-width: 1.5; }
+  text { fill: currentColor; font: 500 18px 'IBM Plex Mono', monospace; text-anchor: middle; letter-spacing: 0; }
+  .lane { text-anchor: start; font-size: 15px; fill: var(--site-soft); }
+  .detail { font-size: 14px; font-weight: 400; fill: var(--site-muted); }
+  .center, .topic { text-anchor: middle; }
+  .topic { font-size: 15px; }
+  .topic, text.detail.center { paint-order: stroke; stroke: var(--site-bg); stroke-width: 8px; stroke-linejoin: round; }
+  .node rect { stroke: #5c87cb; }
+  .controller rect { stroke: #31968b; }
+  .signal { fill: none; stroke: currentColor; stroke-width: 1.8; marker-end: url(#rover-arrow); }
+  .feedback { stroke-dasharray: 6 4; }
+  figcaption { margin-top: 1rem; font-size: 0.875rem; line-height: 1.6; color: var(--site-muted); }
+</style>

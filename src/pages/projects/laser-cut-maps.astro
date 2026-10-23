@@ -61,6 +61,12 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
   <section class="mb-12 space-y-4">
     <h2 class="text-2xl font-bold">3D Terrain</h2>
+    <figure>
+      <a href="/media/maplaser/la-3d-ui.png" target="_blank" rel="noopener noreferrer" aria-label="Open Los Angeles 3D terrain workspace at full size">
+        <img src="/media/maplaser/la-3d-ui.png" alt="MapLaser workspace showing a circular Los Angeles terrain model with roads and buildings, layer controls, and export settings" width="2752" height="1640" class="w-full h-auto" loading="lazy" />
+      </a>
+      <figcaption class="mt-3 text-sm text-gray-500">Los Angeles terrain preview with roads and buildings. Building heights are exaggerated; missing source heights use an estimated value.</figcaption>
+    </figure>
     <p class="text-gray-700 leading-relaxed">The 3D workflow samples elevation into a terrain surface with adjustable exaggeration, base thickness, and grid resolution. Roads, building footprints, and GPX routes can be included on the surface. The generator closes the sides and bottom, validates the mesh, and exports a single-body STL or 3MF for slicer review.</p>
     <p class="text-gray-700 leading-relaxed">Elevation comes from AWS Terrain Tiles, map features from OpenStreetMap through Overpass, and place search from Photon.</p>
   </section>

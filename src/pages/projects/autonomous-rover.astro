@@ -1,19 +1,19 @@
 ---
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
 import ProjectTags from "../../components/ProjectTags.astro";
+import RoverArchitecture from "../../components/RoverArchitecture.astro";
 ---
 
 <ProjectLayout>
   {/* HERO */}
-  <section class="mb-12">
+  <section id="overview" class="mb-12">
     <div class="flex flex-col gap-6">
       <div>
         <h1 class="text-4xl sm:text-5xl font-bold mb-4">Autonomous Rover</h1>
-        <p class="text-lg text-gray-700 max-w-3xl">
-          Autonomous rover that navigates a constrained course, collects and stacks disk-shaped objects,
-          climbs a ramp, and delivers them to a designated drop-off location using camera-based perception
-          and closed-loop control.
-        </p>
+        <ul class="list-disc pl-5 space-y-2 text-lg text-gray-700 max-w-3xl">
+          <li>Camera-guided rover for disk collection, ramp traversal, and delivery.</li>
+          <li>My work: perception, behavior sequencing, and encoder-based wheel control.</li>
+        </ul>
 
         <ProjectTags />
       </div>
@@ -43,18 +43,14 @@ import ProjectTags from "../../components/ProjectTags.astro";
   </section>
 
   {/* PROBLEM + CONSTRAINTS */}
-  <section class="mb-12">
+  <section id="course" class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Problem & Constraints</h2>
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="text-gray-700 space-y-3">
-        <p>
-          The rover must autonomously traverse a course (curves, ramp, obstacles), collect and stack disks,
-          and drop them off in a specified order under strict size and robustness constraints.
-        </p>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Must fit within a compact volume and remain functional after a short drop test.</li>
-          <li>Line-following navigation through curved segments and a ramp.</li>
-          <li>Pick up and transport at least two disks; bonus for three.</li>
+          <li>Follow the line through curves, intersections, and a 15° ramp.</li>
+          <li>Collect and deliver at least two disks in the specified order; bonus for three.</li>
+          <li>Meet size limits and remain functional after a short drop test.</li>
         </ul>
       </div>
 
@@ -67,44 +63,36 @@ import ProjectTags from "../../components/ProjectTags.astro";
   </section>
 
   {/* SYSTEM OVERVIEW 2 */}
-  <section class="mb-12">
+  <section id="hardware" class="mb-12">
     <h2 class="text-2xl font-bold mb-4">System Overview</h2>
 
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="text-gray-700 space-y-4">
 
-        <p class="text-gray-600">
-          The Raspberry Pi handled vision and autonomy, while the Arduino ran
-          the wheel-velocity controller independently.
-        </p>
-
         <ul class="list-disc pl-5 space-y-3 text-gray-600">
           <li>
-            <span class="font-medium">Raspberry Pi (robot_ws):</span>
-            ROS 2 on the Raspberry Pi.
-            Handles perception, behavior logic, and high-level velocity commands.
+            <span class="font-medium">Raspberry Pi:</span>
+            ROS 2 perception, behavior logic, and velocity commands.
           </li>
 
           <li>
             <span class="font-medium">Arduino Nano:</span>
-            Executes low-level motor and encoder control.
-            Closes the wheel velocity loop with PD gains in a PID implementation (Ki = 0).
+            Independent encoder-based wheel-speed control; PD gains with Ki = 0.
           </li>
 
           <li>
-            <span class="font-medium">L298N Motor Driver:</span>
-            Drives two 12V DC motors with encoder feedback.
+            <span class="font-medium">L298N driver:</span>
+            Two 12 V DC motors with encoders.
           </li>
 
           <li>
-            <span class="font-medium">12V Battery + Buck Converter:</span>
-            Distributes regulated 12V and 5V to motors, logic, and servos.
+            <span class="font-medium">Power:</span>
+            12 V battery and buck converter supply the motors, logic, and servos.
           </li>
 
           <li>
-            <span class="font-medium">Development Workspace (dev_ws):</span>
-            Laptop connected via SSH for monitoring, logging, and ROS debugging tools
-            (e.g., rqt_image_view).
+            <span class="font-medium">Development laptop:</span>
+            SSH access, logging, and ROS image inspection.
           </li>
         </ul>
 
@@ -127,7 +115,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
   </section>
 
   {/* MECHANICAL */}
-  <section class="mb-12">
+  <section id="mechanical-design" class="mb-12">
     <h2 class="text-2xl font-bold mb-6">Mechanical Design</h2>
 
     {/* KEY SPECS */}
@@ -149,15 +137,14 @@ import ProjectTags from "../../components/ProjectTags.astro";
         <div class="text-lg font-semibold text-gray-800">5–15 cm/s</div>
         <div class="text-xs text-gray-500 mt-1">~10 cm/s straight, ~8 cm/s turns</div>
       </div>
-    </div>  
+    </div>
 
-    <!-- Your existing 3 mechanical cards below -->
     <div class="grid md:grid-cols-3 gap-6">
       <div class="rounded-lg border bg-white p-5 shadow-sm">
         <h3 class="font-semibold text-lg mb-2">Chassis</h3>
         <img class="rounded-md mb-3" src="/media/autonomous-rover/cad-overview.png" alt="Assembled rover CAD overview" />
         <p class="text-gray-600 text-sm">
-          Modular layered chassis designed for stability, rapid iteration, and serviceability.
+          Layered chassis with access to electronics and drive components.
         </p>
       </div>
 
@@ -165,7 +152,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
         <h3 class="font-semibold text-lg mb-2">Basket Lift</h3>
         <img class="rounded-md mb-3" src="/media/autonomous-rover/basket-lift.png" alt="Basket lift crank-slider mechanism" />
         <p class="text-gray-600 text-sm">
-          Crank-slider lift raises the basket for controlled placement at the drop-off platform.
+          Crank-slider mechanism raises the basket to the drop-off platform.
         </p>
       </div>
 
@@ -173,104 +160,11 @@ import ProjectTags from "../../components/ProjectTags.astro";
         <h3 class="font-semibold text-lg mb-2">Scoop Arm</h3>
         <img class="rounded-md mb-3" src="/media/autonomous-rover/arm-rack-pinion.png" alt="Rack and pinion scoop arm mechanism" />
         <p class="text-gray-600 text-sm">
-          Rack-and-pinion style extension with servo control for disk pickup and unloading.
+          Servo-driven rack-and-pinion extension for disk pickup and unloading.
         </p>
       </div>
     </div>
 
-    {/* DRIVE MOTOR SIZING */}
-    <div class="mt-12">
-      <h3 class="text-lg font-semibold mb-4">Drive Motor Sizing</h3>
-
-      <div class="grid md:grid-cols-2 gap-8 [&>div]:min-w-0">
-        <div class="text-gray-700 space-y-4">
-          <p>
-            We sized the drive system based on the worst-case condition:
-            climbing a 15° ramp at low speed
-            (8–10 cm/s) with the full 3-disk payload.
-          </p>
-
-          <ul class="list-disc pl-5 space-y-2 text-gray-600">
-            <li>Total mass: <span class="font-medium">m = 2.90 kg</span></li>
-            <li>Ramp angle: <span class="font-medium">θ = 15°</span></li>
-            <li>Rolling resistance coefficient: <span class="font-medium">C<sub>rr</sub> = 0.003</span></li>
-            <li>Wheel radius: <span class="font-medium">r ≈ 0.065 m</span></li>
-          </ul>
-
-          <p class="text-gray-600">
-            The required tractive force on the incline was approximated as:
-          </p>
-
-          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
-    F_required ≈ m·g ( sinθ + C_rr · cosθ )
-          </pre>
-
-          <p class="text-gray-600">
-            Using the rover's mass and ramp angle:
-          </p>
-
-          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
-    F_required ≈ 8.21 N
-          </pre>
-
-          <p class="text-gray-600">
-            With two driven wheels, required torque per wheel:
-          </p>
-
-          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
-    τ_wheel ≈ (F_required · r) / 2
-    τ_wheel ≈ 0.27 N·m  (per driven wheel)
-          </pre>
-        </div>
-
-        <div class="text-gray-700 space-y-4">
-          <h4 class="font-semibold">Motor Selection Strategy</h4>
-
-          <p class="text-gray-600">
-            We selected motors using the calculated wheel torque, with allowance
-            for drivetrain losses.
-          </p>
-
-          <p class="text-gray-600">
-            In practice, available wheel torque is:
-          </p>
-
-          <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
-    τ_wheel_available ≈ τ_motor · G · η
-          </pre>
-
-          <p class="text-gray-600">
-            where:
-          </p>
-
-          <ul class="list-disc pl-5 space-y-2 text-gray-600">
-            <li>G = drivetrain gear ratio</li>
-            <li>η = drivetrain efficiency</li>
-          </ul>
-
-          <p class="text-gray-600">
-            To account for losses and uncertainty, we ensured the selected motors
-            could deliver at least 1.3–1.5× the required wheel torque at operating speed.
-          </p>
-
-          <p class="text-gray-600">
-            This provided margin for:
-          </p>
-
-          <ul class="list-disc pl-5 space-y-2 text-gray-600">
-            <li>Acceleration from rest</li>
-            <li>Surface variability</li>
-            <li>Electrical and gearbox losses</li>
-            <li>Minor misalignment or wheel slip</li>
-          </ul>
-
-          <p class="text-gray-600">
-            The rover successfully climbed a 15° ramp with three disks at the lowest motor speed,
-            validating the sizing approach.
-          </p>
-        </div>
-      </div>
-    </div>
   </section>
 
   {/* CONTROLS */}
@@ -290,33 +184,13 @@ import ProjectTags from "../../components/ProjectTags.astro";
       </div>
 
       {/* ROS ARCHITECTURE */}
-      <div class="space-y-3">
+      <div id="ros-architecture" class="space-y-3">
         <h3 class="font-semibold text-lg">ROS 2 Architecture</h3>
-
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>
-            <span class="font-medium">LineDetector node:</span>
-            subscribes <code>/image_in</code>,
-            publishes processed image and outputs <code>/line_position</code>.
-          </li>
-
-          <li>
-            <span class="font-medium">FollowLine node:</span>
-            subscribes <code>/line_position</code>,
-            publishes velocity commands to <code>/cmd_vel</code>
-            (<code>geometry_msgs/Twist</code>).
-          </li>
-
-          <li>
-            <span class="font-medium">Diff-drive controller:</span>
-            converts <code>/cmd_vel</code> into individual wheel targets and
-            closes the loop using encoder feedback via ROS-to-Arduino read/write.
-          </li>
-        </ul>
+        <RoverArchitecture />
       </div>
 
       {/* PERCEPTION */}
-      <div class="space-y-3">
+      <div id="perception" class="space-y-3">
         <h3 class="font-semibold text-lg">Computer Vision Pipeline</h3>
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
@@ -342,7 +216,7 @@ import ProjectTags from "../../components/ProjectTags.astro";
       </div>
 
       {/* CV steering diagram */}
-      <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
+      <figure id="perception-output" class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
         <img
           src="/media/autonomous-rover/cv-steering-diagram.jpg"
           alt="Computer vision steering: segmented regions and extracted line center used to compute lateral error"
@@ -372,13 +246,13 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
         <p class="text-gray-600 text-sm">
           Here v is forward speed in m/s, ω is counterclockwise yaw rate in rad/s,
-          L is wheel separation in metres, and r is wheel radius in metres.
+          L is wheel separation in meters, and r is wheel radius in meters.
           Wheel rates are rad/s, using a no-slip kinematic model.
         </p>
       </div>
 
       {/* CLOSED LOOP CONTROL */}
-      <div class="space-y-3">
+      <div id="wheel-control" class="space-y-3">
         <h3 class="font-semibold text-lg">Closed-Loop Wheel Control</h3>
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
@@ -388,40 +262,18 @@ import ProjectTags from "../../components/ProjectTags.astro";
           <li>PID implementation with PD gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50 (implementation-specific scaling)</li>
         </ul>
 
-        <p class="text-gray-600">
-          I tested wheel-velocity gains under varying loads and battery conditions.
-        </p>
-      </div>
-
-      {/* High-level behavior state machine */}
-      <figure class="mt-5 rounded-lg border bg-white shadow-sm overflow-hidden">
-        <img
-          src="/media/autonomous-rover/state-machine.png"
-          alt="High-level state machine for rover autonomy: line follow, pickup, ramp, drop-off, and termination"
-          class="w-full h-auto block"
-          loading="lazy"
-        />
-        <figcaption class="px-4 py-2 text-sm text-gray-600">
-          High-level autonomy flow: state machine sequencing line-following, pickup, ramp traversal, and drop-off.
-        </figcaption>
-      </figure>
-
-      {/* ACTUATION */}
-      <div class="space-y-3">
-        <h3 class="font-semibold text-lg">Arm & Lift Actuation</h3>
-
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Servos controlled on Raspberry Pi via <code>pigpiod</code></li>
-          <li>1 continuous servo (rack & pinion extension)</li>
-          <li>2 positional servos (opening + lifting)</li>
+          <li>Tuned proportional and derivative gains using wheel-speed step-response tests, with Ki = 0.</li>
+          <li>Tested the gains under varying loads and battery conditions.</li>
         </ul>
       </div>
+
 
     </div>
   </section>
 
   {/* RESULTS*/}
-  <section class="mb-12">
+  <section id="results" class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Results & Performance</h2>
 
     <div class="grid md:grid-cols-2 gap-8">
@@ -429,19 +281,16 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
         <h3 class="font-semibold">System Performance</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Successful full-course runs took <span class="font-medium">&lt; 5 minutes</span> when camera input operated smoothly. Completion was inconsistent, and the success rate was not measured.</li>
+          <li>Full course: <span class="font-medium">&lt; 5 minutes</span> with smooth camera input. Completion was inconsistent; success rate was not measured.</li>
           <li>Ramp traversal + curved segment: <span class="font-medium">28–32 seconds</span>.</li>
-          <li>Single disk pickup cycle: <span class="font-medium">3–4 seconds</span>.</li>
-          <li>Single disk unload cycle: <span class="font-medium">5–6 seconds</span>.</li>
-          <li>Pick-up phase: <span class="font-medium">1:30–2:30</span> depending on pick-up order.</li>
-          <li>Drop-off phase: <span class="font-medium">30 seconds–2 minutes</span> depending on drop-off order.</li>
+          <li>Per disk: pickup <span class="font-medium">3–4 seconds</span>; unload <span class="font-medium">5–6 seconds</span>.</li>
         </ul>
 
         <h3 class="font-semibold mt-6">Observed Challenges</h3>
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Inconsistent camera startup and image lag caused late steering corrections and overshoot. I reduced image resolution and added adaptive velocity scaling to address the delay.</li>
-          <li>Integration across subsystems (vision + state logic + actuation) was significantly harder than individual module testing.</li>
-          <li>Platform height inconsistencies (~1 cm variance) required mechanical rework (shortened standoffs, basket sanding).</li>
+          <li>Camera startup failures and image lag caused late corrections and overshoot.</li>
+          <li>Reduced image resolution and added adaptive velocity scaling to mitigate delay.</li>
+          <li>Full-system tests exposed timing and coordination issues missed by module tests.</li>
         </ul>
 
       </div>
@@ -490,11 +339,15 @@ import ProjectTags from "../../components/ProjectTags.astro";
 
     <ul class="list-disc pl-5 space-y-3 text-gray-600">
 
-      <li>Full-stack tests exposed timing and coordination problems that individual module tests missed. I would begin those tests earlier in the next build.</li>
-      <li>My next sensing experiments would measure observation age from capture to command receipt and compare the camera with infrared line sensing.</li>
-      <li>The platform-height mismatch pointed to a need for lift adjustment or compliance. I would also include cable routing and service access earlier in CAD.</li>
+      <li>Begin integrated perception and motion tests earlier.</li>
+      <li>Measure observation age from image capture to command receipt.</li>
+      <li>Compare camera and infrared line sensing under repeatable course conditions.</li>
 
     </ul>
   </section>
 
 </ProjectLayout>
+
+<style>
+  [id] { scroll-margin-top: 7rem; }
+</style>

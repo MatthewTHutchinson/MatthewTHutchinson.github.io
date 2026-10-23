@@ -29,15 +29,14 @@
       <path class="signal feedback" d="M860 520 H400 V440" />
       <text x="630" y="505" class="topic">Velocity feedback</text>
 
-      <text x="20" y="620" class="lane">COLLECTION · RASPBERRY PI GPIO</text>
-      <g class="software"><rect x="20" y="670" width="240" height="80" rx="6" /><text x="140" y="703">Collection Behavior</text><text x="140" y="728" class="detail">Pickup / lift / unload</text></g>
+      <text x="20" y="620" class="lane">DISK COLLECTION · RASPBERRY PI GPIO</text>
+      <g class="software"><rect x="20" y="670" width="260" height="80" rx="6" /><text x="150" y="703">Disk Collection Behavior</text><text x="150" y="728" class="detail">Pickup / lift / unload</text></g>
       <g class="software"><rect x="420" y="670" width="240" height="80" rx="6" /><text x="540" y="703">pigpiod</text><text x="540" y="728" class="detail">GPIO PWM service</text></g>
       <g class="device"><rect x="820" y="670" width="240" height="80" rx="6" /><text x="940" y="703">Collection Servos</text><text x="940" y="728" class="detail">1 continuous, 2 positional</text></g>
-      <path class="signal" d="M260 710 H420" /><text x="340" y="655" class="topic">Servo commands</text>
+      <path class="signal" d="M280 710 H420" /><text x="350" y="655" class="topic">Servo commands</text>
       <path class="signal" d="M660 710 H820" /><text x="740" y="655" class="topic">PWM signals</text>
     </svg>
   </div>
-  <figcaption><code>/cmd_vel</code> connects the first two rows. Solid arrows: commands and data. Dashed arrows: encoder feedback.</figcaption>
 </figure>
 
 <style>
@@ -54,6 +53,4 @@
   .controller rect { stroke: #31968b; }
   .port rect { stroke: #5c87cb; stroke-dasharray: 5 3; }
   .signal { fill: none; stroke: currentColor; stroke-width: 1.8; marker-end: url(#rover-arrow); }
-  .feedback { stroke-dasharray: 6 4; }
-  figcaption { margin-top: 1rem; font-size: 0.875rem; line-height: 1.6; color: var(--site-muted); }
 </style>

@@ -1,0 +1,33 @@
+<div class="architecture" id="software-architecture">
+  <h3>Hardware Motion Pipeline</h3>
+  <ol class="flow" aria-label="Hardware motion pipeline, in order">
+    <li><strong>Joint Trajectories</strong><span>Keyframes + interpolation</span></li>
+    <li><strong>Python Launcher</strong><span>Calibration + execution checks</span></li>
+    <li><strong>Dual CAN</strong><span>100 Hz host commands</span></li>
+    <li><strong>CyberGear Motors</strong><span>Internal actuator control</span></li>
+  </ol>
+  <p>Motor feedback returns over CAN to the launcher and run logger.</p>
+  <h3>ROS 2 Supervisory Layer</h3>
+  <ol class="flow supervisory" aria-label="ROS 2 supervisory data path, in order">
+    <li><strong>State Inputs</strong><span>Motor state + calibration + power status</span></li>
+    <li><strong>Safety Supervisor</strong><span>Readiness + latched faults</span></li>
+    <li><strong>Command Gate</strong><span>Joint limits + freshness + sequence</span></li>
+    <li><strong>Bounded Commands</strong><span>ROS 2 output for integration</span></li>
+  </ol>
+  <p>The ROS 2 layer is under integration; bounded commands are not yet connected to CAN actuation.</p>
+</div>
+
+<style>
+  .architecture { margin-top: 2rem; scroll-margin-top: 7rem; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin: 1.8rem 0 1rem; }
+  .flow { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1.5rem; list-style: none; padding: 0; }
+  li { position: relative; border: 1px solid var(--site-border); border-radius: 6px; padding: 1rem 0.8rem; background: var(--site-surface); }
+  li:not(:last-child)::after { content: "→"; position: absolute; width: 1.5rem; right: -1.5rem; top: 50%; text-align: center; transform: translateY(-50%); }
+  strong { display: block; font-size: 0.9rem; font-weight: 600; }
+  span { display: block; font-size: 0.8rem; line-height: 1.6; margin-top: 0.7rem; color: var(--site-muted); }
+  p { margin-top: 0.8rem; font-size: 0.875rem; line-height: 1.6; color: var(--site-muted); }
+  @media (max-width: 767px) {
+    .flow { grid-template-columns: 1fr; }
+    li:not(:last-child)::after { content: "↓"; top: auto; bottom: -1.5rem; right: 50%; transform: translateX(50%); line-height: 1.5rem; }
+  }
+</style>

@@ -43,19 +43,27 @@ samples: [[25, 93.75], [50, 161.75], [60, 171.25], [65, 172.25], [70, 171.75], [
 },
 projects: [
 {
-name: "Tripteron",
+name: "Autonomous Rover",
 description:
-"Developed CAD-derived kinematics, constraint-aware motion planning, and browser controls for a parallel robot. Studied paired-platform workspaces for a moving light installation.",
-link: "/projects/tripteron",
-skills: ["Python", "Kinematics", "Motor Control", "Motion Planning", "Workspace Analysis", "Klipper"],
+"Built a ROS 2/OpenCV autonomy stack with line following, recovery behaviors, and encoder-based wheel control; tested how sensing latency affected course completion.",
+link: "/projects/autonomous-rover",
+skills: ["Python", "C++", "ROS 2", "OpenCV", "PID Control", "Raspberry Pi", "Arduino"],
 category: "engineering",
 },
 {
 name: "Hexapod",
 description:
-"Built a Python/ROS 2 control stack and operator UI for an 18-actuator hexapod being prepared for an art museum in Korea, with dual CAN buses, 100 Hz motion, and telemetry logging.",
+"Built coordinated joint trajectories, dual-CAN motor control, an operator dashboard, and telemetry diagnostics for an 18-actuator hexapod at UCLA RoMeLa.",
 link: "/projects/hexapod",
 skills: ["Python", "ROS 2", "CAN Bus", "Motor Control", "Motion Planning", "Diagnostics"],
+category: "engineering",
+},
+{
+name: "Tripteron",
+description:
+"Developed CAD-derived kinematics, constraint-aware motion planning, and browser controls for a parallel robot. Studied paired-platform workspaces for a moving light installation.",
+link: "/projects/tripteron",
+skills: ["Python", "Kinematics", "Motor Control", "Motion Planning", "Workspace Analysis", "Klipper"],
 category: "engineering",
 },
 {
@@ -65,14 +73,6 @@ description:
 link: "/projects/laser-cut-maps",
 skills: ["Python", "FastAPI", "Geospatial Processing", "Three.js", "Digital Fabrication"],
 category: "fabrication",
-},
-{
-name: "Autonomous Rover",
-description:
-"Built a ROS 2/OpenCV autonomy stack with line following, recovery behaviors, and encoder-based wheel control; tested how sensing latency affected course completion.",
-link: "/projects/autonomous-rover",
-skills: ["Python", "C++", "ROS 2", "OpenCV", "PID Control", "Raspberry Pi", "Arduino"],
-category: "engineering",
 },
 {
 name: "Robotic Arm for Automated Fiber Placement",

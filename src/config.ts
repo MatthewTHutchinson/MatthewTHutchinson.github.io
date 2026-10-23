@@ -59,20 +59,20 @@ skills: ["Python", "ROS 2", "CAN Bus", "Motor Control", "Motion Planning", "Diag
 category: "engineering",
 },
 {
-name: "Tripteron",
-description:
-"Developed CAD-derived kinematics, constraint-aware motion planning, and browser controls for a parallel robot. Studied paired-platform workspaces for a moving light installation.",
-link: "/projects/tripteron",
-skills: ["Python", "Kinematics", "Motor Control", "Motion Planning", "Workspace Analysis", "Klipper"],
-category: "engineering",
-},
-{
 name: "MapLaser",
 description:
 "Built a geospatial web app that turns OpenStreetMap and elevation data into layered laser-cut SVGs and 3D terrain models, with interactive crops, physical road widths, and GPX route overlays.",
 link: "/projects/laser-cut-maps",
 skills: ["Python", "FastAPI", "Geospatial Processing", "Three.js", "Digital Fabrication"],
 category: "fabrication",
+},
+{
+name: "Tripteron",
+description:
+"Developed CAD-derived kinematics, constraint-aware motion planning, and browser controls for a parallel robot. Studied paired-platform workspaces for a moving light installation.",
+link: "/projects/tripteron",
+skills: ["Python", "Kinematics", "Motor Control", "Motion Planning", "Workspace Analysis", "Klipper"],
+category: "engineering",
 },
 {
 name: "Robotic Arm for Automated Fiber Placement",

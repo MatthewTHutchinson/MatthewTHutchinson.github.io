@@ -227,14 +227,22 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
     previous.addEventListener('click', () => jump(index - 1));
     next.addEventListener('click', () => jump(index + 1));
     select.addEventListener('change', () => jump(select.selectedIndex));
-    exit.addEventListener('click', () => { setMode(false); start.focus(); });
+    const exitPresentation = () => {
+      setMode(false);
+      location.assign('/#projects');
+    };
+    exit.addEventListener('click', exitPresentation);
     window.addEventListener('keydown', event => {
       if (!active || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-      if (event.target instanceof Element && event.target.closest('input, textarea, select, video, [contenteditable="true"]')) return;
-      if (['ArrowRight', 'PageDown', 'ArrowLeft', 'PageUp', 'Escape'].includes(event.key)) {
+      if (event.key === 'Escape') {
         event.preventDefault();
-        if (event.key === 'Escape') { setMode(false); start.focus(); }
-        else jump(index + (['ArrowRight', 'PageDown'].includes(event.key) ? 1 : -1));
+        exitPresentation();
+        return;
+      }
+      if (event.target instanceof Element && event.target.closest('input, textarea, select, video, [contenteditable="true"]')) return;
+      if (['ArrowRight', 'PageDown', 'ArrowLeft', 'PageUp'].includes(event.key)) {
+        event.preventDefault();
+        jump(index + (['ArrowRight', 'PageDown'].includes(event.key) ? 1 : -1));
       }
     });
     setMode(active);

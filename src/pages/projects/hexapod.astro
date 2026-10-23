@@ -69,6 +69,19 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
       </ul>
     </section>
 
+    <section id="safeguards" class="space-y-4">
+      <h2>Execution Safeguards</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Software execution safeguards">
+        <table><thead><tr><th>Check or control</th><th>Software behavior</th></tr></thead><tbody>
+          <tr><th>Session calibration</th><td>Require the selected motors’ reference offsets and calibrated limits before motion.</td></tr>
+          <tr><th>Trajectory limits</th><td>Validate plans before launch; distinguish soft-limit recovery from measured hard-boundary stops.</td></tr>
+          <tr><th>Feedback and faults</th><td>Monitor freshness and motor faults during execution; log recovery and stop events.</td></tr>
+          <tr><th>Cross-bus recovery</th><td>In the recorded test, a peer-bus failure triggered a 4.5-second return on the responding bus, followed by a latched hold.</td></tr>
+          <tr><th>Operator controls</th><td>Request a controlled return or immediate motor disable. Physical power isolation remains independent.</td></tr>
+        </tbody></table>
+      </div>
+    </section>
+
     <section id="logging" class="space-y-4">
       <h2>Telemetry and Diagnostics</h2>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Recorded signals">
@@ -85,19 +98,6 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
         </a>
         <figcaption>August 24, 2026: motor 22 in motor coordinates; nine motors recorded on can0. A stale/missing-feedback report from can1 triggered the controlled return at 7.17 s.</figcaption>
       </figure>
-    </section>
-
-    <section id="safeguards" class="space-y-4">
-      <h2>Execution Safeguards</h2>
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Software execution safeguards">
-        <table><thead><tr><th>Check or control</th><th>Software behavior</th></tr></thead><tbody>
-          <tr><th>Session calibration</th><td>Require the selected motors’ reference offsets and calibrated limits before motion.</td></tr>
-          <tr><th>Trajectory limits</th><td>Validate plans before launch; distinguish soft-limit recovery from measured hard-boundary stops.</td></tr>
-          <tr><th>Feedback and faults</th><td>Monitor freshness and motor faults during execution; log recovery and stop events.</td></tr>
-          <tr><th>Cross-bus recovery</th><td>In the recorded test, a peer-bus failure triggered a 4.5-second return on the responding bus, followed by a latched hold.</td></tr>
-          <tr><th>Operator controls</th><td>Request a controlled return or immediate motor disable. Physical power isolation remains independent.</td></tr>
-        </tbody></table>
-      </div>
     </section>
 
     <section id="testing" class="space-y-4">

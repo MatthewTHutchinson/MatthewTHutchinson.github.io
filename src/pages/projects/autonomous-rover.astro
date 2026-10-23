@@ -77,7 +77,7 @@ import RoverArchitecture from "../../components/RoverArchitecture.astro";
 
           <li>
             <span class="font-medium">Arduino Nano:</span>
-            Independent encoder-based wheel-speed control; PD gains with Ki = 0.
+            Low-level motor PID control.
           </li>
 
           <li>
@@ -168,19 +168,17 @@ import RoverArchitecture from "../../components/RoverArchitecture.astro";
   </section>
 
   {/* CONTROLS */}
-  <section class="mb-12">
+  <section id="controls" class="mb-12">
     <h2 class="text-2xl font-bold mb-4">Controls & Autonomy</h2>
 
     <div class="text-gray-700 space-y-10">
 
       {/* HIGH-LEVEL STACK */}
       <div>
-        <p class="text-gray-600">
-          The autonomy stack was structured as:
-          <span class="font-medium">perception → behavior → motion mapping → closed-loop control → actuation</span>.
-          ROS 2 handled inter-node communication and behavior sequencing,
-          while the Arduino maintained deterministic wheel velocity control.
-        </p>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li>Autonomy stack: <span class="font-medium">Perception → Behavior → Motion Mapping → Closed-Loop Control → Actuation</span>.</li>
+          <li>ROS 2 topics connect perception, behavior sequencing, and velocity commands.</li>
+        </ul>
       </div>
 
       {/* ROS ARCHITECTURE */}
@@ -197,13 +195,8 @@ import RoverArchitecture from "../../components/RoverArchitecture.astro";
           <li>ROS image → OpenCV via <code>cv_bridge</code></li>
           <li>Bird's-eye mapping, grayscale and thresholding to isolate the black track</li>
           <li>Morphological cleanup → contour detection → select largest contour</li>
-          <li>Line estimate → publish a lateral position as <code>/line_position</code></li>
+          <li>Lateral offset from the image center → <code>/line_position</code></li>
         </ul>
-
-        <p class="text-gray-600">
-          The vision pipeline estimates the line's lateral position relative to
-          the image center and uses that error for steering.
-        </p>
 
         <h4 class="font-semibold mt-4">Special Case Handling</h4>
 
@@ -224,18 +217,18 @@ import RoverArchitecture from "../../components/RoverArchitecture.astro";
           loading="lazy"
         />
         <figcaption class="px-4 py-2 text-sm text-gray-600">
-          CV steering output: the pipeline isolates the line, extracts its x-center, and produces a lateral error signal used for steering.
+          Detected line center and lateral steering error.
         </figcaption>
       </figure>
 
       {/* DIFFERENTIAL DRIVE */}
-      <div class="space-y-3">
+      <div id="drive-mapping" class="space-y-3">
         <h3 class="font-semibold text-lg">Differential Drive Mapping</h3>
 
-        <p class="text-gray-600">
-          ROS velocity commands use <code>linear.x</code> (forward) and
-          <code>angular.z</code> (turn). These were mapped to wheel velocities using:
-        </p>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+          <li><code>linear.x</code>: forward speed v, in m/s.</li>
+          <li><code>angular.z</code>: counterclockwise yaw rate ω, in rad/s.</li>
+        </ul>
 
         <pre class="rounded-md bg-gray-50 border p-4 text-sm overflow-auto">
   v_left  = v - ω · L / 2
@@ -245,9 +238,7 @@ import RoverArchitecture from "../../components/RoverArchitecture.astro";
         </pre>
 
         <p class="text-gray-600 text-sm">
-          Here v is forward speed in m/s, ω is counterclockwise yaw rate in rad/s,
-          L is wheel separation in meters, and r is wheel radius in meters.
-          Wheel rates are rad/s, using a no-slip kinematic model.
+          L: wheel separation. r: wheel radius. Both in meters. Wheel rates are in rad/s; the kinematic model assumes no slip.
         </p>
       </div>
 
@@ -255,15 +246,16 @@ import RoverArchitecture from "../../components/RoverArchitecture.astro";
       <div id="wheel-control" class="space-y-3">
         <h3 class="font-semibold text-lg">Closed-Loop Wheel Control</h3>
 
-        <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Encoder resolution: ~1975 counts per revolution</li>
-          <li>Control loop frequency: 30 Hz</li>
-          <li>Baseline command: PWM ≈ 70 (0–255) → ~1 rev/s</li>
-          <li>PID implementation with PD gains: Kp = 20, Kd = 12, Ki = 0, Ko = 50 (implementation-specific scaling)</li>
-        </ul>
+        <p class="text-gray-600">Wheel-speed error → PID controller → PWM command → encoder feedback.</p>
+        <dl class="wheel-specs">
+          <div><dt>Encoder Resolution</dt><dd>~1975 counts/rev</dd></div>
+          <div><dt>Control Rate</dt><dd>30 Hz</dd></div>
+          <div><dt>Baseline Command</dt><dd>PWM ≈ 70 → ~1 rev/s</dd><p>Command range: 0–255</p></div>
+          <div><dt>Controller Gains</dt><dd>Kp = 20 · Ki = 0<br />Kd = 12 · Ko = 50</dd><p>Ko: implementation-specific scaling</p></div>
+        </dl>
 
         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Tuned proportional and derivative gains using wheel-speed step-response tests, with Ki = 0.</li>
+          <li>Tuned gains using wheel-speed step-response tests.</li>
           <li>Tested the gains under varying loads and battery conditions.</li>
         </ul>
       </div>
@@ -350,4 +342,10 @@ import RoverArchitecture from "../../components/RoverArchitecture.astro";
 
 <style>
   [id] { scroll-margin-top: 7rem; }
+  .wheel-specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .wheel-specs > div { border: 1px solid var(--site-border); border-radius: 8px; padding: 1rem; background: var(--site-surface); }
+  .wheel-specs dt { color: var(--site-muted); font-size: 0.875rem; margin-bottom: 0.6rem; }
+  .wheel-specs dd { color: var(--site-text); font-size: 1rem; font-weight: 600; line-height: 1.6; margin: 0; }
+  .wheel-specs p { color: var(--site-muted); font-size: 0.75rem; line-height: 1.6; margin: 0.4rem 0 0; }
+  @media (max-width: 479px) { .wheel-specs { grid-template-columns: 1fr; } }
 </style>

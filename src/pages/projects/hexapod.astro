@@ -108,10 +108,12 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
         </tbody></table>
       </div>
       <figure id="recorded-telemetry">
+        <h2>Feedback Fault &amp; Controlled Return</h2>
+        <p class="mb-4">A stale/missing-feedback report from can1 automatically triggered the controlled return at 7.17 s.</p>
         <a href="/media/hexapod/recognition-tracking.png" target="_blank" rel="noopener noreferrer" aria-label="Open recorded position and feedback-age plot at full size">
-          <img src="/media/hexapod/recognition-tracking.png" alt="Motor 2-2 command and measured position during a fault-triggered return, with feedback age for nine motors on can0" width="1800" height="1100" loading="lazy" />
+          <img src="/media/hexapod/recognition-tracking.png" alt="Leg 2 motor 2 command and measured position during a can1 fault-triggered return, with annotated feedback age showing nine motors on can0 continued reporting" width="2100" height="930" loading="lazy" />
         </a>
-        <figcaption>August 24, 2026: motor 2-2 in motor coordinates; nine motors recorded on can0. A stale/missing-feedback report from can1 triggered the controlled return at 7.17 s.</figcaption>
+        <figcaption>August 24, 2026: leg 2 motor 2 in motor coordinates; nine motors recorded on can0.</figcaption>
       </figure>
     </section>
 
@@ -121,7 +123,7 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
         <a href="/media/hexapod/command-pacing-before-after.png" target="_blank" rel="noopener noreferrer" aria-label="Open measured command pacing before and after the fix at full size">
           <img src="/media/hexapod/command-pacing-before-after.png" alt="Recorded motor 3-1 host command intervals before and after the pacing fix: a 778 ms gap led to 39 rapid intervals of 0.73 to 1.52 ms; after a 780 ms gap, intervals remained about 18 to 20 ms. Separate 50 Hz tests, not CAN-wire timing." width="2240" height="896" loading="lazy" />
         </a>
-        <figcaption>Motor 3-1, 50 Hz tests. Separate recordings of host command timing, not CAN-wire timing.</figcaption>
+        <figcaption>Motor 3-1, 50 Hz tests.</figcaption>
       </figure>
       <ul class="points">
         <li><strong>Fault:</strong> recovery delays triggered catch-up bursts and transmit-buffer errors.</li>

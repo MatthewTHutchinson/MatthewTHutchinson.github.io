@@ -68,6 +68,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
   .presentation-slide #about { padding: 0; }
   .presentation-slide #about p { font-size: 1.25rem; }
   .presentation-slide #overview video { max-height: calc(100dvh - 390px); }
+  .presentation-slide #overview .overview-images img { height: min(300px, calc(100dvh - 450px)); }
   .presentation-slide #art-motion video { max-height: calc(100dvh - 190px); }
   .presentation-slide #recorded-telemetry img { max-height: calc(100dvh - 220px); }
   .presentation-slide #installation { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem 2rem; align-items: center; }
@@ -103,6 +104,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
     .presentation-slide[data-slide], .presentation-slide #installation, .presentation-slide #trajectory-generation { display: block; }
     .presentation-slide > * + *, .presentation-slide #trajectory-generation ul { margin-top: 1.5rem !important; }
     .presentation-slide #overview video { max-height: 420px; }
+    .presentation-slide #overview .overview-images img { height: auto; max-height: 300px; }
     .presentation-slide #closing .closing-projects { grid-template-columns: 1fr; }
     .presentation-slide #closing video { height: auto; max-height: 300px; }
   }

@@ -8,7 +8,18 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
   <article class="hexapod space-y-12">
     <header id="overview">
       <h1 class="text-4xl sm:text-5xl font-bold mb-5">Hexapod: TOCATL</h1>
+      <div class="overview-images">
+        <figure>
+          <img src="/media/hexapod/silva.png" alt="Earlier SILVA hexapod with exposed chassis and six articulated legs" width="1104" height="894" />
+          <figcaption>SILVA: earlier platform</figcaption>
+        </figure>
+        <figure>
+          <img src="/media/hexapod/spider.png" alt="Spider hexapod with a black 3D-printed body and leg structure" width="1240" height="922" />
+          <figcaption>Spider: updated platform</figcaption>
+        </figure>
+      </div>
       <ul class="points">
+        <li>Spider builds on the earlier SILVA platform, with a 3D-printed body and leg structure.</li>
         <li>18-actuator platform at UCLA’s Robotics and Mechanisms Laboratory (RoMeLa), being prepared for an art museum installation in Korea.</li>
         <li>My work: coordinated joint trajectories, Python motor-control software, an operator dashboard, and ROS 2 diagnostics.</li>
       </ul>
@@ -157,6 +168,9 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
   img { display: block; width: 100%; height: auto; }
   figcaption { margin-top: 0.75rem; font-size: 0.875rem; line-height: 1.6; color: var(--site-muted); }
   .concept { max-width: 44rem; margin-inline: auto; }
+  .overview-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+  .overview-images img { width: 100%; height: 320px; object-fit: contain; }
+  @media (max-width: 640px) { .overview-images { grid-template-columns: 1fr; } .overview-images img { height: auto; max-height: 320px; } }
   .specs { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
   .specs div { border-top: 2px solid var(--site-border); padding-top: 0.8rem; }
   dt { color: var(--site-muted); font-size: 0.875rem; margin-bottom: 0.5rem; }

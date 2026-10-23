@@ -15,6 +15,10 @@ This is a modern, minimalist portfolio template built with Astro and Tailwind CS
 
 ## Development Commands
 
+### Publishing Default
+
+After completing Matthew's requested portfolio edits, build and verify them, commit the completed changes, and push to GitHub by default unless he asks for local-only work. Keep unrelated or unfinished work out of the commit. Wait for GitHub Pages deployment and verify the changed live pages; for resume updates, compare the served PDF with the approved local file. Report a blocked or failed deployment explicitly.
+
 ```bash
 npm run dev       # Start development server
 npm run build     # Build for production

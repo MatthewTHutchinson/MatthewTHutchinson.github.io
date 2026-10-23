@@ -1,0 +1,139 @@
+---
+const rover = '/projects/autonomous-rover/';
+const hexapod = '/projects/hexapod/';
+const stops = [
+  ['/', 'about', 'About'],
+  [rover, 'overview', 'Rover: Overview'],
+  [rover, 'course', 'Rover: Course'],
+  [rover, 'hardware', 'Rover: Hardware'],
+  [rover, 'mechanical-design', 'Rover: Mechanical Design'],
+  [rover, 'controls', 'Rover: Controls & Autonomy'],
+  [rover, 'ros-architecture', 'Rover: ROS 2 Architecture'],
+  [rover, 'perception', 'Rover: Perception'],
+  [rover, 'perception-output', 'Rover: Perception Output'],
+  [rover, 'drive-mapping', 'Rover: Drive Mapping'],
+  [rover, 'wheel-control', 'Rover: Wheel Control'],
+  [rover, 'results', 'Rover: Results'],
+  [hexapod, 'overview', 'Hexapod: Overview'],
+  [hexapod, 'art-motion', 'Hexapod: Art Motion'],
+  [hexapod, 'installation', 'Hexapod: Installation'],
+  [hexapod, 'control', 'Hexapod: Control Architecture'],
+  [hexapod, 'software-architecture', 'Hexapod: Software Architecture'],
+  [hexapod, 'trajectory-generation', 'Hexapod: Trajectories'],
+  [hexapod, 'operator-interface', 'Hexapod: Operator Interface'],
+  [hexapod, 'safeguards', 'Hexapod: Safeguards'],
+  [hexapod, 'logging', 'Hexapod: Logging'],
+  [hexapod, 'recorded-telemetry', 'Hexapod: Recorded Telemetry'],
+  [hexapod, 'testing', 'Hexapod: Testing & Results'],
+  [hexapod, 'telemetry-plots', 'Hexapod: Test Plots'],
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
+---
+
+{available && <>
+  <button id="presentation-start" type="button" hidden title="Start presentation" aria-label="Start presentation">&#9654; Present</button>
+  <nav id="presentation-navigation" aria-label="Presentation navigation" hidden>
+    <button id="presentation-previous" type="button" title="Previous section (Left Arrow)" aria-label="Previous section">&larr;</button>
+    <select id="presentation-section" aria-label="Presentation section">
+      {stops.map(([page, anchor, label], i) => <option value={`${page}?present=1#${anchor}`} data-page={page} data-anchor={anchor}>{i + 1}. {label}</option>)}
+    </select>
+    <button id="presentation-next" type="button" title="Next section (Right Arrow)" aria-label="Next section">&rarr;</button>
+    <button id="presentation-exit" type="button" title="Exit presentation (Escape)" aria-label="Exit presentation">&times;</button>
+  </nav>
+</>}
+
+<style is:global>
+  #presentation-start { position: fixed; bottom: 1rem; right: 1rem; z-index: 65; padding: .6rem .9rem; font: inherit; font-size: .8rem; }
+  #presentation-navigation { position: fixed; bottom: max(1rem, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 70; display: flex; gap: .35rem; padding: .4rem; width: min(36rem, calc(100% - 1rem)); background: var(--site-bg); border: 1px solid var(--site-border); border-radius: 8px; box-shadow: 0 3px 14px #0002; }
+  #presentation-navigation[hidden], #presentation-start[hidden] { display: none; }
+  #presentation-navigation button, #presentation-start, #presentation-section { background: var(--site-surface-raised); color: var(--site-text); border: 1px solid var(--site-border); border-radius: 6px; cursor: pointer; }
+  #presentation-navigation button { flex: 0 0 42px; height: 42px; font-size: 1.5rem; line-height: 1; }
+  #presentation-section { min-width: 0; flex: 1; font: inherit; font-size: .8rem; padding: 0 .4rem; text-overflow: ellipsis; }
+  #presentation-navigation button:hover:not(:disabled), #presentation-start:hover { background: var(--site-chip); }
+  #presentation-navigation button:disabled { opacity: .35; cursor: default; }
+  #presentation-navigation :focus-visible, #presentation-start:focus-visible { outline: 2px solid var(--accent-color, #1d4ed8); outline-offset: 2px; }
+  html[data-present] { scroll-behavior: auto !important; scroll-padding-top: 24px; }
+  html[data-present] [id] { scroll-margin-top: 0 !important; }
+  html[data-present] body { padding-bottom: 100px; }
+  html[data-present] #header, html[data-present] #theme-toggle { display: none; }
+  @media print { #presentation-navigation, #presentation-start { display: none !important; } }
+</style>
+
+<script>
+  const start = document.querySelector<HTMLButtonElement>('#presentation-start');
+  const navigation = document.querySelector<HTMLElement>('#presentation-navigation');
+  const select = document.querySelector<HTMLSelectElement>('#presentation-section');
+  const previous = document.querySelector<HTMLButtonElement>('#presentation-previous');
+  const next = document.querySelector<HTMLButtonElement>('#presentation-next');
+  const exit = document.querySelector<HTMLButtonElement>('#presentation-exit');
+  if (start && navigation && select && previous && next && exit) {
+    const options = Array.from(select.options);
+    const normalize = (path: string) => path.replace(/\/$/, '') || '/';
+    const localStops = options.flatMap((option, index) => {
+      if (normalize(option.dataset.page!) !== normalize(location.pathname)) return [];
+      const element = document.getElementById(option.dataset.anchor!);
+      return element ? [{ index, element }] : [];
+    });
+    let active = new URL(location.href).searchParams.get('present') === '1';
+    let index = localStops.find(stop => '#' + stop.element.id === location.hash)?.index ?? localStops[0]?.index ?? 0;
+    const update = () => {
+      select.selectedIndex = index;
+      previous.disabled = index === 0;
+      next.disabled = index === options.length - 1;
+    };
+    const setMode = (enabled: boolean) => {
+      active = enabled;
+      document.documentElement.toggleAttribute('data-present', enabled);
+      start.hidden = enabled;
+      navigation.hidden = !enabled;
+      const url = new URL(location.href);
+      if (enabled) url.searchParams.set('present', '1');
+      else url.searchParams.delete('present');
+      history.replaceState(null, '', url);
+      update();
+    };
+    const jump = (target: number) => {
+      if (target < 0 || target >= options.length) return;
+      document.querySelectorAll('video').forEach(video => video.pause());
+      const url = new URL(options[target].value, location.origin);
+      if (normalize(url.pathname) !== normalize(location.pathname)) {
+        location.assign(url.href);
+        return;
+      }
+      const element = document.getElementById(options[target].dataset.anchor!);
+      if (!element) return;
+      index = target;
+      history.replaceState(null, '', url);
+      element.scrollIntoView({ behavior: 'instant', block: 'start' });
+      update();
+    };
+    start.addEventListener('click', () => { setMode(true); jump(index); });
+    previous.addEventListener('click', () => jump(index - 1));
+    next.addEventListener('click', () => jump(index + 1));
+    select.addEventListener('change', () => jump(select.selectedIndex));
+    exit.addEventListener('click', () => { setMode(false); start.focus(); });
+    window.addEventListener('keydown', event => {
+      if (!active || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (event.target instanceof Element && event.target.closest('input, textarea, select, video, [contenteditable="true"]')) return;
+      if (['ArrowRight', 'PageDown', 'ArrowLeft', 'PageUp', 'Escape'].includes(event.key)) {
+        event.preventDefault();
+        if (event.key === 'Escape') { setMode(false); start.focus(); }
+        else jump(index + (['ArrowRight', 'PageDown'].includes(event.key) ? 1 : -1));
+      }
+    });
+    // Keep Next/Previous aligned when the presenter scrolls manually.
+    let pending = false;
+    window.addEventListener('scroll', () => {
+      if (!active || pending) return;
+      pending = true;
+      requestAnimationFrame(() => {
+        pending = false;
+        const reached = localStops.filter(stop => stop.element.getBoundingClientRect().top <= 40);
+        if (reached.length) { index = reached[reached.length - 1].index; update(); }
+      });
+    }, { passive: true });
+    setMode(active);
+    if (active) requestAnimationFrame(() => jump(index));
+  }
+</script>

@@ -21,7 +21,8 @@ const stops = [
   [hexapod, 'logging', 'Hexapod: Logging'],
   [hexapod, 'recorded-telemetry', 'Hexapod: Recorded Telemetry'],
   [hexapod, 'testing', 'Hexapod: Testing & Results'],
-  [hexapod, 'telemetry-plots', 'Hexapod: Test Plots'],
+  [hexapod, 'telemetry-plots', 'Hexapod: Motion & Motor Load'],
+  [hexapod, 'closing', 'Closing'],
 ];
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
@@ -90,12 +91,20 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
   .presentation-slide #safeguards th, .presentation-slide #safeguards td { padding: .6rem; }
   .presentation-slide #telemetry-plots { padding-top: 0; }
   .presentation-slide #telemetry-plots img { max-height: calc(100dvh - 250px); }
+  #closing { display: none; }
+  .presentation-slide #closing { display: block; }
+  .presentation-slide #closing .closing-projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+  .presentation-slide #closing h3 { margin-bottom: .75rem; }
+  .presentation-slide #closing video { height: min(350px, calc(100dvh - 360px)); background: #111; }
+  .presentation-slide #closing ul { margin-top: 1rem; }
   @media (max-width: 767px) {
     #presentation-stage { padding: 20px 16px; }
     .presentation-slide { margin-block: 0; }
     .presentation-slide[data-slide], .presentation-slide #installation, .presentation-slide #trajectory-generation { display: block; }
     .presentation-slide > * + *, .presentation-slide #trajectory-generation ul { margin-top: 1.5rem !important; }
     .presentation-slide #overview video { max-height: 420px; }
+    .presentation-slide #closing .closing-projects { grid-template-columns: 1fr; }
+    .presentation-slide #closing video { height: auto; max-height: 300px; }
   }
   @media print { #presentation-navigation, #presentation-start { display: none !important; } }
 </style>
@@ -200,8 +209,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
       stage.scrollTop = 0;
       stage.querySelectorAll<HTMLImageElement>('img').forEach(img => { img.loading = 'eager'; });
       // Start the selected clip, but leave playback controls available to the presenter.
-      const video = element.querySelector<HTMLVideoElement>('video');
-      if (video) {
+      for (const video of element.querySelectorAll<HTMLVideoElement>('video')) {
         video.muted = true;
         video.playsInline = true;
         video.currentTime = 0;

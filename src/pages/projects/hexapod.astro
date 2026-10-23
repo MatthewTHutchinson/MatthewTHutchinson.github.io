@@ -110,17 +110,14 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
       <ul class="points">
         <li><strong>Fault:</strong> delayed host cycles triggered catch-up command bursts and CAN transmit-buffer errors.</li>
         <li><strong>Change:</strong> revised command pacing to avoid burst transmission after a delay.</li>
-        <li><strong>Retest:</strong> transmit-buffer errors cleared in repeat tests; intermittent missing replies remained a separate diagnostic issue.</li>
+        <li><strong>Retest:</strong> transmit-buffer errors cleared in repeat tests.</li>
         <li><strong>Hardware result:</strong> coordinated art motion on the supported robot.</li>
       </ul>
-      <div id="telemetry-plots" class="grid gap-6 sm:grid-cols-2 pt-4">
+      <div id="telemetry-plots" class="space-y-4 pt-4">
+        <h2>Motion &amp; Motor Load</h2>
         <figure>
-          <a href="/media/hexapod/art-motion-loads.png" target="_blank" rel="noopener noreferrer" aria-label="Open motor-load plot at full size"><img src="/media/hexapod/art-motion-loads.png" alt="Combined q-axis current, reported torque, and estimated mechanical power for 15 motors during an art-motion test" class="aspect-[4/3] object-contain bg-white" loading="lazy" /></a>
-          <figcaption>Separate 15-motor run, August 24: actuator loads. Q-axis current is not battery current.</figcaption>
-        </figure>
-        <figure>
-          <a href="/media/hexapod/art-motion-thermal-voltage.png" target="_blank" rel="noopener noreferrer" aria-label="Open temperature and voltage plot at full size"><img src="/media/hexapod/art-motion-thermal-voltage.png" alt="Maximum reported temperature and minimum voltage by motor in the 15-motor run" class="aspect-[4/3] object-contain bg-white" loading="lazy" /></a>
-          <figcaption>Per-motor temperature and voltage from that run.</figcaption>
+          <a href="/media/hexapod/motion-and-load.png" target="_blank" rel="noopener noreferrer" aria-label="Open motor position and current plot at full size"><img src="/media/hexapod/motion-and-load.png" alt="Motor 2-2 commanded and measured position above its q-axis current, on a shared time axis during a 15-motor test" width="1800" height="1050" class="object-contain bg-white" loading="lazy" /></a>
+          <figcaption>Motor 2-2 during a separate 15-motor test, August 24. Q-axis current indicates actuator effort, not battery current.</figcaption>
         </figure>
       </div>
     </section>
@@ -129,6 +126,25 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
       <h2>Walking Simulation</h2>
       <video autoplay loop controls muted playsinline preload="metadata" poster="/media/hexapod/simulation.png" class="w-full aspect-video object-contain"><source src="/media/hexapod/walk-simulation.mp4" type="video/mp4" /></video>
       <p class="text-sm text-gray-500">Walking-gait development in MuJoCo.</p>
+    </section>
+    <section id="closing" class="space-y-5" aria-labelledby="closing-title">
+      <h2 id="closing-title">Closing</h2>
+      <div class="closing-projects">
+        <div>
+          <h3>Autonomous Rover</h3>
+          <video loop controls muted playsinline preload="metadata" aria-label="Autonomous rover project video">
+            <source src="/media/autonomous-rover/hero.mp4" type="video/mp4" />
+          </video>
+          <ul class="points"><li>Perception and behavior sequencing</li><li>Encoder-based wheel-speed control</li></ul>
+        </div>
+        <div>
+          <h3>Spider Hexapod</h3>
+          <video loop controls muted playsinline preload="metadata" poster="/media/hexapod/spider-art-poster.jpg" aria-label="Spider hexapod art-motion video">
+            <source src="/media/hexapod/spider-art.mp4" type="video/mp4" />
+          </video>
+          <ul class="points"><li>Coordinated joint trajectories</li><li>Actuator communication and diagnostics</li></ul>
+        </div>
+      </div>
     </section>
   </article>
 </ProjectLayout>

@@ -72,7 +72,9 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
   .presentation-slide #about .grid { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
   .presentation-slide #about .grid > div { grid-column: 1; }
   #presentation-stage #about h2 { font-size: 2.625rem; margin-bottom: 0; }
-  .presentation-slide #about p { font-size: 2.5rem; line-height: 1.2; margin-bottom: 1rem; }
+  .presentation-slide #about p { font-size: 2rem; line-height: 1.4; margin-bottom: 1.5rem; }
+  .presentation-slide #about [aria-label="Core skills"] { gap: .625rem; }
+  .presentation-slide #about [aria-label="Core skills"] span { font-size: 1.25rem; line-height: 1.4; padding: .375rem .75rem; }
   .presentation-slide #overview video { max-height: calc(100dvh - 390px); }
   .presentation-slide #overview .overview-images img { height: min(300px, calc(100dvh - 450px)); }
   .presentation-slide #art-motion video { max-height: calc(100dvh - 190px); }

@@ -8,11 +8,8 @@ const stops = [
   [rover, 'hardware', 'Rover: Hardware'],
   [rover, 'mechanical-design', 'Rover: Mechanical Design'],
   [rover, 'controls', 'Rover: Controls & Autonomy'],
-  [rover, 'ros-architecture', 'Rover: ROS 2 Architecture'],
   [rover, 'perception', 'Rover: Perception'],
-  [rover, 'perception-output', 'Rover: Perception Output'],
-  [rover, 'drive-mapping', 'Rover: Drive Mapping'],
-  [rover, 'wheel-control', 'Rover: Wheel Control'],
+  [rover, 'drive-mapping', 'Rover: Drive Mapping & Wheel Control'],
   [rover, 'results', 'Rover: Results'],
   [hexapod, 'overview', 'Hexapod: Overview'],
   [hexapod, 'art-motion', 'Hexapod: Art Motion'],
@@ -106,6 +103,14 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
       index = target;
       history.replaceState(null, '', url);
       element.scrollIntoView({ behavior: 'instant', block: 'start' });
+      // Start the selected clip, but leave playback controls available to the presenter.
+      const video = element.querySelector<HTMLVideoElement>('video');
+      if (video) {
+        video.muted = true;
+        video.playsInline = true;
+        video.currentTime = 0;
+        void video.play().catch(() => { /* Native play control remains available. */ });
+      }
       update();
     };
     start.addEventListener('click', () => { setMode(true); jump(index); });

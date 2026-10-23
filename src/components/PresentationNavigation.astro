@@ -17,8 +17,7 @@ const stops = [
   [hexapod, 'control', 'Hexapod: Control Architecture'],
   [hexapod, 'software-architecture', 'Hexapod: Software Architecture'],
   [hexapod, 'trajectory-generation', 'Hexapod: Trajectories'],
-  [hexapod, 'operator-interface', 'Hexapod: Operator Interface'],
-  [hexapod, 'safeguards', 'Hexapod: Safeguards'],
+  [hexapod, 'operator-interface', 'Hexapod: Operator Interface & Safeguards'],
   [hexapod, 'logging', 'Hexapod: Logging'],
   [hexapod, 'recorded-telemetry', 'Hexapod: Recorded Telemetry'],
   [hexapod, 'testing', 'Hexapod: Testing & Results'],
@@ -50,10 +49,54 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
   #presentation-navigation button:hover:not(:disabled), #presentation-start:hover { background: var(--site-chip); }
   #presentation-navigation button:disabled { opacity: .35; cursor: default; }
   #presentation-navigation :focus-visible, #presentation-start:focus-visible { outline: 2px solid var(--accent-color, #1d4ed8); outline-offset: 2px; }
-  html[data-present] { scroll-behavior: auto !important; scroll-padding-top: 24px; }
+  html[data-present] { scroll-behavior: auto !important; overflow: hidden; }
   html[data-present] [id] { scroll-margin-top: 0 !important; }
-  html[data-present] body { padding-bottom: 100px; }
-  html[data-present] #header, html[data-present] #theme-toggle { display: none; }
+  html[data-present] [data-presentation-source] { display: none !important; }
+  #presentation-stage { position: fixed; inset: 0 0 82px; padding: 28px 40px; overflow: auto; background: var(--site-bg); z-index: 66; display: flex; flex-direction: column; }
+  #presentation-stage[hidden] { display: none; }
+  .presentation-slide { width: 100%; max-width: 1280px; margin: auto; flex-shrink: 0; color: var(--site-text); line-height: 1.5; }
+  .presentation-slide > * { margin: 0 !important; min-width: 0; }
+  .presentation-slide h1 { font-size: 2.25rem; }
+  .presentation-slide h2 { font-size: 1.65rem; margin-bottom: 1rem; }
+  .presentation-slide h3 { font-size: 1.15rem; }
+  .presentation-slide img, .presentation-slide video { width: 100%; height: auto; object-fit: contain; max-height: 460px; margin-inline: auto; }
+  .presentation-slide figure { margin-inline: auto; }
+  .presentation-slide figcaption { font-size: .8rem; line-height: 1.45; }
+  .presentation-slide .points { line-height: 1.5; }
+  .presentation-slide .points li + li { margin-top: .5rem; }
+  .presentation-slide #about { padding: 0; }
+  .presentation-slide #about p { font-size: 1.25rem; }
+  .presentation-slide #overview video { max-height: calc(100dvh - 390px); }
+  .presentation-slide #art-motion video { max-height: calc(100dvh - 190px); }
+  .presentation-slide #recorded-telemetry img { max-height: calc(100dvh - 220px); }
+  .presentation-slide #installation { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem 2rem; align-items: center; }
+  .presentation-slide #installation h2 { grid-column: 1 / -1; }
+  .presentation-slide #installation figure, .presentation-slide #installation ul { margin: 0; }
+  .presentation-slide #hardware img { max-height: 250px; }
+  .presentation-slide #mechanical-design img { max-height: 235px; }
+  .presentation-slide #results video { max-height: 245px; }
+  .presentation-slide #controls > div { margin: 0; }
+  .presentation-slide #ros-architecture { margin-top: 1rem; }
+  .presentation-slide #ros-architecture figure { margin-block: .5rem; }
+  .presentation-slide #ros-architecture svg { width: auto; min-width: 0; max-width: 100%; height: calc(100dvh - 350px); margin-inline: auto; }
+  .presentation-slide #trajectory-generation { display: grid; grid-template-columns: 1.8fr 1fr; gap: 1rem 2rem; align-items: center; }
+  .presentation-slide #trajectory-generation > * { margin-block: 0; }
+  .presentation-slide #trajectory-generation h2 { grid-column: 1 / -1; }
+  .presentation-slide #trajectory-generation img { max-height: calc(100dvh - 270px); }
+  .presentation-slide #trajectory-generation ul { margin: 0; }
+  .presentation-slide[data-slide="perception"], .presentation-slide[data-slide="drive-mapping"], .presentation-slide[data-slide="operator-interface"] { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+  .presentation-slide #dashboard img { max-height: 300px; }
+  .presentation-slide #safeguards table { font-size: .8rem; line-height: 1.4; }
+  .presentation-slide #safeguards th, .presentation-slide #safeguards td { padding: .6rem; }
+  .presentation-slide #telemetry-plots { padding-top: 0; }
+  .presentation-slide #telemetry-plots img { max-height: calc(100dvh - 250px); }
+  @media (max-width: 767px) {
+    #presentation-stage { padding: 20px 16px; }
+    .presentation-slide { margin-block: 0; }
+    .presentation-slide[data-slide], .presentation-slide #installation, .presentation-slide #trajectory-generation { display: block; }
+    .presentation-slide > * + *, .presentation-slide #trajectory-generation ul { margin-top: 1.5rem !important; }
+    .presentation-slide #overview video { max-height: 420px; }
+  }
   @media print { #presentation-navigation, #presentation-start { display: none !important; } }
 </style>
 
@@ -66,6 +109,40 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
   const exit = document.querySelector<HTMLButtonElement>('#presentation-exit');
   if (start && navigation && select && previous && next && exit) {
     const options = Array.from(select.options);
+    const stage = document.createElement('main');
+    stage.id = 'presentation-stage';
+    stage.hidden = true;
+    stage.setAttribute('aria-label', 'Current presentation slide');
+    const slide = document.createElement('div');
+    slide.className = 'presentation-slide';
+    stage.append(slide);
+    document.body.append(stage);
+    for (const child of document.body.children) {
+      if (![stage, navigation, start].includes(child as HTMLElement) && !['SCRIPT', 'STYLE'].includes(child.tagName)) child.setAttribute('data-presentation-source', '');
+    }
+    // Move the real nodes, preserving media controls, SVG references and event listeners.
+    // Placeholders restore the exact portfolio DOM when navigating or exiting.
+    const moved: { node: HTMLElement; placeholder: Comment }[] = [];
+    const restore = () => {
+      for (const { node, placeholder } of moved.splice(0).reverse()) placeholder.replaceWith(node);
+    };
+    const move = (node: HTMLElement, destination?: HTMLElement) => {
+      const placeholder = document.createComment('presentation position');
+      node.replaceWith(placeholder);
+      moved.push({ node, placeholder });
+      destination?.append(node);
+    };
+    const groups: Record<string, string[]> = {
+      perception: ['perception', 'perception-output'],
+      'drive-mapping': ['drive-mapping', 'wheel-control'],
+      'operator-interface': ['operator-interface', 'safeguards'],
+    };
+    const exclusions: Record<string, string[]> = {
+      controls: ['perception', 'perception-output', 'drive-mapping', 'wheel-control'],
+      control: ['software-architecture'],
+      logging: ['recorded-telemetry'],
+      testing: ['telemetry-plots'],
+    };
     const normalize = (path: string) => path.replace(/\/$/, '') || '/';
     const localStops = options.flatMap((option, index) => {
       if (normalize(option.dataset.page!) !== normalize(location.pathname)) return [];
@@ -84,6 +161,12 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
       document.documentElement.toggleAttribute('data-present', enabled);
       start.hidden = enabled;
       navigation.hidden = !enabled;
+      stage.hidden = !enabled;
+      if (!enabled && moved.length) {
+        document.querySelectorAll('video').forEach(video => video.pause());
+        restore();
+        document.getElementById(options[index].dataset.anchor!)?.scrollIntoView();
+      }
       const url = new URL(location.href);
       if (enabled) url.searchParams.set('present', '1');
       else url.searchParams.delete('present');
@@ -93,6 +176,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
     const jump = (target: number) => {
       if (target < 0 || target >= options.length) return;
       document.querySelectorAll('video').forEach(video => video.pause());
+      restore();
       const url = new URL(options[target].value, location.origin);
       if (normalize(url.pathname) !== normalize(location.pathname)) {
         location.assign(url.href);
@@ -102,7 +186,19 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
       if (!element) return;
       index = target;
       history.replaceState(null, '', url);
-      element.scrollIntoView({ behavior: 'instant', block: 'start' });
+      const anchor = element.id;
+      slide.dataset.slide = anchor;
+      stage.setAttribute('aria-label', options[target].textContent!);
+      for (const id of exclusions[anchor] ?? []) {
+        const child = element.querySelector<HTMLElement>(`#${id}`);
+        if (child) move(child);
+      }
+      for (const id of groups[anchor] ?? [anchor]) {
+        const child = document.getElementById(id);
+        if (child) move(child, slide);
+      }
+      stage.scrollTop = 0;
+      stage.querySelectorAll<HTMLImageElement>('img').forEach(img => { img.loading = 'eager'; });
       // Start the selected clip, but leave playback controls available to the presenter.
       const video = element.querySelector<HTMLVideoElement>('video');
       if (video) {
@@ -127,17 +223,6 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
         else jump(index + (['ArrowRight', 'PageDown'].includes(event.key) ? 1 : -1));
       }
     });
-    // Keep Next/Previous aligned when the presenter scrolls manually.
-    let pending = false;
-    window.addEventListener('scroll', () => {
-      if (!active || pending) return;
-      pending = true;
-      requestAnimationFrame(() => {
-        pending = false;
-        const reached = localStops.filter(stop => stop.element.getBoundingClientRect().top <= 40);
-        if (reached.length) { index = reached[reached.length - 1].index; update(); }
-      });
-    }, { passive: true });
     setMode(active);
     if (active) requestAnimationFrame(() => jump(index));
   }

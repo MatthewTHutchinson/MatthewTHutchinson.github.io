@@ -48,11 +48,16 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
 
     <section id="trajectory-generation" class="space-y-4">
       <h2>Trajectory Generation</h2>
+      <figure>
+        <img src="/media/hexapod/recognition-trajectories.png" alt="Planned recognition cue for legs 1 and 3: three panels overlay hip yaw, hip pitch, and knee offsets, with keyframes marked" width="1980" height="1440" loading="lazy" />
+        <figcaption>Planned cue preview: legs 1 and 3, relative to the session reference. Points mark keyframes; curves use shape-preserving cubic interpolation.</figcaption>
+      </figure>
       <ul class="points">
         <li>Joint-space keyframes specify hip yaw, hip pitch, and knee angles for each leg.</li>
         <li>Shape-preserving cubic interpolation carries velocity through intermediate poses and avoids keyframe overshoot.</li>
         <li>Phase offsets coordinate traveling waves; amplitude and time scaling adjust reach and speed.</li>
-        <li>Plans are checked against calibrated travel and command limits before execution, with startup alignment and a return trajectory.</li>
+        <li>Hip-pitch peaks are 1.4 s apart. Staggered timing and different angular ranges give the gesture an organic rhythm.</li>
+        <li>Validate calibrated travel and command limits; include startup alignment and a return trajectory.</li>
       </ul>
     </section>
 
@@ -94,9 +99,9 @@ import HexapodArchitecture from "../../components/HexapodArchitecture.astro";
       </div>
       <figure id="recorded-telemetry">
         <a href="/media/hexapod/recognition-tracking.png" target="_blank" rel="noopener noreferrer" aria-label="Open recorded position and feedback-age plot at full size">
-          <img src="/media/hexapod/recognition-tracking.png" alt="Motor 22 command and measured position during a fault-triggered return, with feedback age for nine motors on can0" width="1800" height="1100" loading="lazy" />
+          <img src="/media/hexapod/recognition-tracking.png" alt="Motor 2-2 command and measured position during a fault-triggered return, with feedback age for nine motors on can0" width="1800" height="1100" loading="lazy" />
         </a>
-        <figcaption>August 24, 2026: motor 22 in motor coordinates; nine motors recorded on can0. A stale/missing-feedback report from can1 triggered the controlled return at 7.17 s.</figcaption>
+        <figcaption>August 24, 2026: motor 2-2 in motor coordinates; nine motors recorded on can0. A stale/missing-feedback report from can1 triggered the controlled return at 7.17 s.</figcaption>
       </figure>
     </section>
 

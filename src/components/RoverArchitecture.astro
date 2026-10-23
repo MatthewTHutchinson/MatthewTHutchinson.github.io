@@ -1,40 +1,40 @@
 <figure class="architecture">
   <div class="diagram-scroll" tabindex="0" role="region" aria-label="Rover architecture diagram">
-    <svg viewBox="0 0 1080 780" role="img" aria-labelledby="rover-architecture-title rover-architecture-description">
+    <svg viewBox="0 0 1080 540" role="img" aria-labelledby="rover-architecture-title rover-architecture-description">
       <title id="rover-architecture-title">Rover perception, control, and actuation</title>
       <desc id="rover-architecture-description">Three left-to-right signal paths. Camera images reach LineDetector on /image_in; LineDetector publishes /line_position to FollowLine. Its /cmd_vel output is the input to differential-drive mapping in the wheel-control row. Wheel targets pass to the Arduino Nano, then PWM and direction to the L298N driver and DC motors. Wheel encoders return velocity feedback to the controller. Separately, collection behavior commands pigpiod and the collection servos. LineDetector and FollowLine are named ROS 2 nodes; other software boxes represent functions or services.</desc>
       <defs>
         <marker id="rover-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="currentColor" /></marker>
       </defs>
 
-      <text x="20" y="40" class="lane">PERCEPTION &amp; BEHAVIOR · RASPBERRY PI / ROS 2</text>
-      <g class="device"><rect x="20" y="120" width="200" height="80" rx="6" /><text x="120" y="153">Camera</text><text x="120" y="178" class="detail">Image capture</text></g>
-      <g class="node"><rect x="300" y="120" width="200" height="80" rx="6" /><text x="400" y="153">LineDetector</text><text x="400" y="178" class="detail">ROS 2 node</text></g>
-      <g class="node"><rect x="580" y="120" width="200" height="80" rx="6" /><text x="680" y="153">FollowLine</text><text x="680" y="178" class="detail">ROS 2 node</text></g>
-      <g class="port"><rect x="860" y="120" width="200" height="80" rx="6" /><text x="960" y="153">Velocity Command</text><text x="960" y="178" class="detail">v, yaw rate · Twist</text></g>
-      <path class="signal" d="M220 160 H300" /><text x="260" y="100" class="topic">/image_in</text>
-      <path class="signal" d="M500 160 H580" /><text x="540" y="100" class="topic">/line_position</text>
-      <path class="signal" d="M780 160 H860" /><text x="820" y="100" class="topic">/cmd_vel</text>
+      <text x="20" y="25" class="lane">PERCEPTION &amp; BEHAVIOR · RASPBERRY PI / ROS 2</text>
+      <g class="device"><rect x="20" y="70" width="200" height="65" rx="6" /><text x="120" y="96">Camera</text><text x="120" y="120" class="detail">Image capture</text></g>
+      <g class="node"><rect x="300" y="70" width="200" height="65" rx="6" /><text x="400" y="96">LineDetector</text><text x="400" y="120" class="detail">ROS 2 node</text></g>
+      <g class="node"><rect x="580" y="70" width="200" height="65" rx="6" /><text x="680" y="96">FollowLine</text><text x="680" y="120" class="detail">ROS 2 node</text></g>
+      <g class="port"><rect x="860" y="70" width="200" height="65" rx="6" /><text x="960" y="96">Velocity Command</text><text x="960" y="120" class="detail">v, yaw rate · Twist</text></g>
+      <path class="signal" d="M220 102 H300" /><text x="260" y="55" class="topic">/image_in</text>
+      <path class="signal" d="M500 102 H580" /><text x="540" y="55" class="topic">/line_position</text>
+      <path class="signal" d="M780 102 H860" /><text x="820" y="55" class="topic">/cmd_vel</text>
 
-      <text x="20" y="280" class="lane">WHEEL CONTROL · /cmd_vel INPUT</text>
-      <g class="software"><rect x="20" y="360" width="200" height="80" rx="6" /><text x="120" y="393">Drive Mapping</text><text x="120" y="418" class="detail">v, yaw rate → wheels</text></g>
-      <g class="controller"><rect x="300" y="360" width="200" height="80" rx="6" /><text x="400" y="393">Arduino Nano</text><text x="400" y="418" class="detail">Motor PID controller</text></g>
-      <g class="device"><rect x="580" y="360" width="200" height="80" rx="6" /><text x="680" y="393">L298N Driver</text><text x="680" y="418" class="detail">Motor power stage</text></g>
-      <g class="device"><rect x="860" y="360" width="200" height="80" rx="6" /><text x="960" y="393">DC Motors</text><text x="960" y="418" class="detail">Left / right wheels</text></g>
-      <path class="signal" d="M220 400 H300" /><text x="260" y="340" class="topic">Wheel targets</text>
-      <path class="signal" d="M500 400 H580" /><text x="540" y="340" class="topic">PWM + direction</text>
-      <path class="signal" d="M780 400 H860" /><text x="820" y="340" class="topic">Motor power</text>
-      <g class="device"><rect x="860" y="490" width="200" height="60" rx="6" /><text x="960" y="527">Wheel Encoders</text></g>
-      <path class="signal feedback" d="M960 440 V490" />
-      <path class="signal feedback" d="M860 520 H400 V440" />
-      <text x="630" y="505" class="topic">Velocity feedback</text>
+      <text x="20" y="185" class="lane">WHEEL CONTROL · /cmd_vel INPUT</text>
+      <g class="software"><rect x="20" y="230" width="200" height="65" rx="6" /><text x="120" y="256">Drive Mapping</text><text x="120" y="280" class="detail">v, yaw rate → wheels</text></g>
+      <g class="controller"><rect x="300" y="230" width="200" height="65" rx="6" /><text x="400" y="256">Arduino Nano</text><text x="400" y="280" class="detail">Motor PID controller</text></g>
+      <g class="device"><rect x="580" y="230" width="200" height="65" rx="6" /><text x="680" y="256">L298N Driver</text><text x="680" y="280" class="detail">Motor power stage</text></g>
+      <g class="device"><rect x="860" y="230" width="200" height="65" rx="6" /><text x="960" y="256">DC Motors</text><text x="960" y="280" class="detail">Left / right wheels</text></g>
+      <path class="signal" d="M220 262 H300" /><text x="260" y="215" class="topic">Wheel targets</text>
+      <path class="signal" d="M500 262 H580" /><text x="540" y="215" class="topic">PWM + direction</text>
+      <path class="signal" d="M780 262 H860" /><text x="820" y="215" class="topic">Motor power</text>
+      <g class="device"><rect x="860" y="330" width="200" height="50" rx="6" /><text x="960" y="360">Wheel Encoders</text></g>
+      <path class="signal feedback" d="M960 295 V330" />
+      <path class="signal feedback" d="M860 355 H400 V295" />
+      <text x="630" y="340" class="topic">Velocity feedback</text>
 
-      <text x="20" y="620" class="lane">DISK COLLECTION · RASPBERRY PI GPIO</text>
-      <g class="software"><rect x="20" y="670" width="260" height="80" rx="6" /><text x="150" y="703">Disk Collection Behavior</text><text x="150" y="728" class="detail">Pickup / lift / unload</text></g>
-      <g class="software"><rect x="420" y="670" width="240" height="80" rx="6" /><text x="540" y="703">pigpiod</text><text x="540" y="728" class="detail">GPIO PWM service</text></g>
-      <g class="device"><rect x="820" y="670" width="240" height="80" rx="6" /><text x="940" y="703">Collection Servos</text><text x="940" y="728" class="detail">1 continuous, 2 positional</text></g>
-      <path class="signal" d="M280 710 H420" /><text x="350" y="655" class="topic">Servo commands</text>
-      <path class="signal" d="M660 710 H820" /><text x="740" y="655" class="topic">PWM signals</text>
+      <text x="20" y="425" class="lane">DISK COLLECTION · RASPBERRY PI GPIO</text>
+      <g class="software"><rect x="20" y="470" width="260" height="65" rx="6" /><text x="150" y="496">Disk Collection Behavior</text><text x="150" y="520" class="detail">Pickup / lift / unload</text></g>
+      <g class="software"><rect x="420" y="470" width="240" height="65" rx="6" /><text x="540" y="496">pigpiod</text><text x="540" y="520" class="detail">GPIO PWM service</text></g>
+      <g class="device"><rect x="820" y="470" width="240" height="65" rx="6" /><text x="940" y="496">Collection Servos</text><text x="940" y="520" class="detail">1 continuous, 2 positional</text></g>
+      <path class="signal" d="M280 502 H420" /><text x="350" y="455" class="topic">Servo commands</text>
+      <path class="signal" d="M660 502 H820" /><text x="740" y="455" class="topic">PWM signals</text>
     </svg>
   </div>
 </figure>

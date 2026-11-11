@@ -110,6 +110,16 @@ skills: ["Next.js", "TypeScript", "Docker", "Tailscale", "Gemini API", "PWA"],
 ],
 experience: [
 {
+company: "Alare Technologies",
+title: "Incoming Guidance, Navigation, and Controls Engineer",
+dateRange: "Nov 2026",
+bullets: [
+"Design, analyze, and tune guidance and control algorithms for unmanned aircraft, including precision actuation and pointing.",
+"Develop navigation and state estimation algorithms and maintain 6-DOF simulations to analyze vehicle performance.",
+"Develop and debug simulation and analysis software in Python, MATLAB, and C/C++; support ground and flight tests and analyze flight data."
+],
+},
+{
 company: "UCLA Engineering Makerspace",
 title: "Fabrication Lab Technician",
 dateRange: "Apr 2024 – Jul 2024",

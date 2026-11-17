@@ -1,7 +1,20 @@
 ---
 const rover = '/projects/autonomous-rover/';
 const hexapod = '/projects/hexapod/';
-const stops = [
+const tripteron = '/projects/tripteron/';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isTripteron = path === tripteron.replace(/\/$/, '');
+const stops = isTripteron ? [
+  [tripteron, 'overview', 'Tripteron'],
+  [tripteron, 'kinematics', 'Mechanism and Calibration'],
+  [tripteron, 'motion-mapping', 'Coordinates and Motion Mapping'],
+  [tripteron, 'constraints', 'Motion Constraints'],
+  [tripteron, 'path-planning', 'Path Planning'],
+  [tripteron, 'execution', 'Operator Interface and Execution'],
+  [tripteron, 'paired-motion', 'Paired-Platform Motion'],
+  [tripteron, 'paired-study', 'Paired Workspace Study'],
+  [tripteron, 'testing', 'Testing and Next Measurements'],
+] : [
   ['/', 'about', 'About'],
   [rover, 'overview', 'Rover: Overview'],
   [rover, 'course', 'Rover: Course'],
@@ -24,13 +37,12 @@ const stops = [
   [hexapod, 'telemetry-plots', 'Hexapod: Motion & Motor Load'],
   [hexapod, 'closing', 'Closing'],
 ];
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
 ---
 
 {available && <>
   <button id="presentation-start" type="button" hidden title="Start presentation" aria-label="Start presentation">&#9654; Present</button>
-  <nav id="presentation-navigation" aria-label="Presentation navigation" hidden>
+  <nav id="presentation-navigation" aria-label="Presentation navigation" data-deck={isTripteron ? 'tripteron' : 'portfolio'} data-exit={isTripteron ? `${tripteron}#overview` : '/#projects'} hidden>
     <button id="presentation-previous" type="button" title="Previous section (Left Arrow)" aria-label="Previous section">&larr;</button>
     <div class="presentation-select-wrap">
       <select id="presentation-section" aria-label="Presentation section">
@@ -139,6 +151,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
     const options = Array.from(select.options);
     const stage = document.createElement('main');
     stage.id = 'presentation-stage';
+    stage.dataset.deck = navigation.dataset.deck;
     stage.hidden = true;
     stage.setAttribute('aria-label', 'Current presentation slide');
     const slide = document.createElement('div');
@@ -164,6 +177,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
       perception: ['perception', 'perception-output'],
       'drive-mapping': ['drive-mapping', 'wheel-control'],
       'operator-interface': ['operator-interface', 'safeguards'],
+      ...(navigation.dataset.deck === 'tripteron' ? { overview: ['overview', 'tripteron-concept'] } : {}),
     };
     const exclusions: Record<string, string[]> = {
       controls: ['perception', 'perception-output', 'drive-mapping', 'wheel-control'],
@@ -241,8 +255,9 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
     next.addEventListener('click', () => jump(index + 1));
     select.addEventListener('change', () => jump(select.selectedIndex));
     const exitPresentation = () => {
+      if (navigation.dataset.deck === 'tripteron') index = localStops[0]?.index ?? 0;
       setMode(false);
-      location.assign('/#projects');
+      location.assign(navigation.dataset.exit || '/#projects');
     };
     exit.addEventListener('click', exitPresentation);
     window.addEventListener('keydown', event => {

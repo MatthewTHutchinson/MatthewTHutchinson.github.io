@@ -12,8 +12,9 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
       <ProjectTags />
     </header>
 
-    <figure>
+    <figure id="tripteron-concept">
       <img src="/media/tripteron/concept.png" alt="Concept rendering of two mirrored Tripteron platforms supporting a light" class="mx-auto w-full max-h-[426px] object-contain" width="939" height="1025" />
+      <figcaption class="text-sm text-gray-600 mt-3">Moving-light installation concept. UCLA Robotics and Mechanisms Laboratory.</figcaption>
     </figure>
 
     <section id="kinematics" class="space-y-4">
@@ -82,7 +83,12 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
 
     <section id="path-planning" class="space-y-4">
       <h2 class="text-2xl font-bold">Path planning</h2>
+      <figure>
+        <img src="/media/tripteron/path-comparison.png" alt="Offline comparison of a straight path and a smooth curve, with carriage separation along each path" width="1920" height="800" class="w-full h-auto" loading="lazy" />
+        <figcaption class="text-sm text-gray-600 mt-3">Offline path comparison. The plotted separation is a geometric proxy, not measured surface clearance or tracking performance.</figcaption>
+      </figure>
       <ul class="list-disc pl-5 space-y-2 text-gray-700 leading-relaxed">
+        <li>Direct-path check first; Dijkstra search through supplied waypoints when a checked detour is needed.</li>
         <li>Analytical linkage-span checks along straight segments.</li>
         <li>Conservative bounds and recursive subdivision for curved paths.</li>
         <li>Quintic path optimization using joint margins, carriage separation, length, and curvature.</li>
@@ -90,10 +96,28 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
       </ul>
     </section>
 
+    <section id="execution" class="space-y-4">
+      <h2 class="text-2xl font-bold">Operator interface and execution</h2>
+      <div class="execution-layout">
+        <figure>
+          <img src="/media/tripteron/operator-preview.png" alt="Tripteron browser interface showing an X/Z workspace slice, selected target, previewed route, and carriage travel" width="608" height="699" loading="lazy" />
+          <figcaption class="text-sm text-gray-600 mt-3">Recorded interface view. Candidate workspace cells still require a full path check.</figcaption>
+        </figure>
+        <div class="space-y-5">
+          <ol class="list-decimal pl-5 space-y-4 text-gray-700 leading-relaxed">
+            <li><strong>Select and preview.</strong> Check the route against linkage, rail, and modeled carriage-foot constraints. Selecting a target does not move the robot.</li>
+            <li><strong>Recheck before execution.</strong> A single-use preview expires after 120 seconds. The controller checks the reference, commanded motor positions, enabled state, and active configuration again.</li>
+            <li><strong>Coordinate the move.</strong> Checked segments enter Klipper's shared motion queue. Unexpected execution outcomes latch a fault.</li>
+          </ol>
+          <p class="text-sm text-gray-600 leading-relaxed">Supervised commissioning, with an independent stop request. XYZ is reconstructed from motor commands, not independent position sensors; skipped steps or manual movement require reference recovery.</p>
+        </div>
+      </div>
+    </section>
+
     <section id="paired-motion" class="space-y-5" aria-labelledby="paired-workspace-heading">
       <h2 id="paired-workspace-heading" class="text-2xl font-bold">Paired-platform motion</h2>
       <p class="leading-relaxed text-gray-700">The paired model treats the light as a rigid span between two opposed platforms at equal calibration heights. Robot B is rotated 180° about world Y, so its local X and Z directions oppose robot A's. Each platform translates without rotating; articulated attachments allow the light to tilt.</p>
-      <p class="leading-relaxed text-gray-700">Let p₁ = (x₁, y₁, z₁) and p₂ = (x₂, y₂, z₂) be local attachment positions. In robot A's world frame:</p>
+      <p class="leading-relaxed text-gray-700 tripteron-detail">Let p₁ = (x₁, y₁, z₁) and p₂ = (x₂, y₂, z₂) be local attachment positions. In robot A's world frame:</p>
       <div class="equation paired-equations" tabindex="0" role="region" aria-label="Paired attachment positions and rigid-length constraint">
         <p>A = (x₁, y₁, z₁)</p>
         <p>B = (−x₂, y₂, D₀ − z₂)</p>
@@ -101,8 +125,8 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
         <p class="length-equation"><span>(x₁ + x₂)² + (y₂ − y₁)²</span> <span>+ (D₀ − z₁ − z₂)² = L²</span></p>
       </div>
       <p class="text-sm leading-relaxed text-gray-600">L is the fixed distance between attachments. D₀ is their separation at calibrated zero, not the mounting-plane spacing. The model places attachments at the platform origins.</p>
-      <p class="leading-relaxed text-gray-700">The same carriage mapping applies in each robot's local frame.</p>
-      <table class="technical-table">
+      <p class="leading-relaxed text-gray-700 tripteron-detail">The same carriage mapping applies in each robot's local frame.</p>
+      <table class="technical-table tripteron-detail">
         <caption class="sr-only">Translation and tilt of the paired light</caption>
         <thead><tr><th scope="col">Light motion</th><th scope="col">Platform coordination</th></tr></thead>
         <tbody>
@@ -112,7 +136,7 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
           <tr><th scope="row">Tilt</th><td>Differential endpoint motion changes the light direction while preserving L.</td></tr>
         </tbody>
       </table>
-      <ul class="list-disc pl-5 space-y-2 text-gray-700 leading-relaxed">
+      <ul class="list-disc pl-5 space-y-2 text-gray-700 leading-relaxed paired-checks">
         <li>Both platforms must satisfy their joint, rail, and path constraints at the same time.</li>
         <li>The endpoint distance must remain constant throughout the trajectory.</li>
         <li>Attachment angular limits and robot/light swept-volume clearance need separate checks; they are excluded from the current workspace study.</li>
@@ -127,7 +151,7 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
     </section>
 
     <section id="testing" class="space-y-4">
-      <h2 class="text-2xl font-bold">Testing</h2>
+      <h2 class="text-2xl font-bold">Testing and next measurements</h2>
       <ul class="list-disc pl-5 space-y-2 text-gray-700 leading-relaxed">
         <li>Hardware: motion direction, coordinated moves, startup, and return sequences.</li>
         <li>Software: inverse consistency, path constraints, stale controller state, and queue behavior.</li>
@@ -153,9 +177,54 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
   .paired-equations p { width: max-content; min-width: 100%; margin: 0; }
   .paired-equations .length-equation { width: auto; }
   .length-equation span { display: inline-block; }
+  .execution-layout { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 2rem; align-items: start; }
+  .execution-layout img { width: 100%; max-width: 380px; height: auto; margin-inline: auto; }
   @media (max-width: 639px) {
+    .execution-layout { grid-template-columns: minmax(0, 1fr); }
     .technical-table { font-size: 0.875rem; }
     .technical-table th, .technical-table td { padding: 0.65rem 0.35rem; }
     .technical-table th:first-child { width: 34%; }
+  }
+</style>
+
+<style is:global>
+  /* The presentation moves the article's real sections, so the two views share content. */
+  #presentation-stage[data-deck="tripteron"] .tripteron-detail { display: none; }
+  #presentation-stage[data-deck="tripteron"] .presentation-slide[data-slide="overview"] { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 2.5rem; }
+  #presentation-stage[data-deck="tripteron"] #overview p { font-size: 1.2rem; line-height: 1.65; }
+  #presentation-stage[data-deck="tripteron"] #tripteron-concept img { max-height: min(490px, calc(100dvh - 220px)); }
+  #presentation-stage[data-deck="tripteron"] #kinematics { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 1.5rem 2rem; align-items: start; }
+  #presentation-stage[data-deck="tripteron"] #kinematics h2 { grid-column: 1 / -1; margin: 0; }
+  #presentation-stage[data-deck="tripteron"] #kinematics > p, #presentation-stage[data-deck="tripteron"] #kinematics > ul { grid-column: 1; margin: 0; }
+  #presentation-stage[data-deck="tripteron"] #cad { grid-column: 2; grid-row: 2 / 4; display: block; padding: 0; margin: 0; align-self: center; }
+  #presentation-stage[data-deck="tripteron"] #cad a:not(:first-child) { display: none; }
+  #presentation-stage[data-deck="tripteron"] #cad img { max-height: 420px; }
+  #presentation-stage[data-deck="tripteron"] #motion-mapping { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1.25rem 2rem; align-items: center; }
+  #presentation-stage[data-deck="tripteron"] #motion-mapping > * { margin: 0; }
+  #presentation-stage[data-deck="tripteron"] #motion-mapping h2, #presentation-stage[data-deck="tripteron"] #motion-mapping > p { grid-column: 1 / -1; }
+  #presentation-stage[data-deck="tripteron"] #path-planning img { max-height: min(330px, calc(100dvh - 440px)); }
+  #presentation-stage[data-deck="tripteron"] #path-planning ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem 2.5rem; }
+  #presentation-stage[data-deck="tripteron"] #path-planning li { margin-top: 0; }
+  #presentation-stage[data-deck="tripteron"] .execution-layout { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.3fr); gap: 3rem; align-items: center; }
+  #presentation-stage[data-deck="tripteron"] .execution-layout img { width: auto; max-width: 100%; max-height: min(470px, calc(100dvh - 290px)); }
+  #presentation-stage[data-deck="tripteron"] #paired-motion .equation { padding-block: .3rem; font-size: 1.25rem; }
+  #presentation-stage[data-deck="tripteron"] #paired-motion .paired-checks { font-size: .9rem; }
+  #presentation-stage[data-deck="tripteron"] #paired-study figure { padding: 0; border: 0; background: transparent; }
+  #presentation-stage[data-deck="tripteron"] #paired-study svg { max-height: min(300px, calc(100dvh - 440px)); }
+  #presentation-stage[data-deck="tripteron"] #paired-study details { display: none; }
+  #presentation-stage[data-deck="tripteron"] #testing li { padding-block: .4rem; max-width: 950px; }
+  @media (max-width: 767px) {
+    #presentation-stage[data-deck="tripteron"] .presentation-slide[data-slide],
+    #presentation-stage[data-deck="tripteron"] #kinematics,
+    #presentation-stage[data-deck="tripteron"] #motion-mapping,
+    #presentation-stage[data-deck="tripteron"] .execution-layout { display: block; }
+    #presentation-stage[data-deck="tripteron"] #kinematics > *,
+    #presentation-stage[data-deck="tripteron"] #motion-mapping > *,
+    #presentation-stage[data-deck="tripteron"] .execution-layout > * { margin-top: 1rem; }
+    #presentation-stage[data-deck="tripteron"] #path-planning ul { display: block; }
+    #presentation-stage[data-deck="tripteron"] #path-planning li + li { margin-top: .75rem; }
+    #presentation-stage[data-deck="tripteron"] #path-planning img,
+    #presentation-stage[data-deck="tripteron"] #paired-study svg { max-height: none; }
+    #presentation-stage[data-deck="tripteron"] .execution-layout img { max-height: 420px; }
   }
 </style>

@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { createMotionPlots, type MotionClip as Clip, type MotionManifest as Manifest } from './tripteron-plots';
 
-type Clip = { id: string; label: string; fps: number; frames: number; file: string; poses_mm: number[][] };
-type Manifest = { schema: number; groups: number[]; gap_m: number; mesh_bounds_m: number[][]; swept_bounds_m: Record<string, number[][]>; paired_ranges_mm: number[][]; single_ranges_mm: number[][]; clips: Clip[] };
 const assets = '/media/tripteron/simulation/';
+const revision = '?v=rail4000-v2';
 const ui = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const main = ui('simulation');
 const viewport = ui('viewport');
@@ -16,12 +16,14 @@ const timeline = ui<HTMLInputElement>('timeline');
 const motion = ui<HTMLSelectElement>('motion');
 const cameraMenu = ui<HTMLSelectElement>('camera');
 const pathToggle = ui<HTMLInputElement>('path');
+const follow = ui<HTMLInputElement>('follow');
+const plotsToggle = ui<HTMLInputElement>('plots');
 const speed = ui<HTMLSelectElement>('speed');
 const retry = ui<HTMLButtonElement>('retry');
 retry.onclick = () => location.reload();
 
 async function checkedFetch(path: string) {
-  const response = await fetch(assets + path);
+  const response = await fetch(assets + path + revision);
   if (!response.ok) throw new Error(`Could not load ${path} (${response.status})`);
   return response;
 }
@@ -39,15 +41,16 @@ async function initialize() {
   key.position.set(2, 3, 4); scene.add(key);
   const fill = new THREE.DirectionalLight(0xe4f7ff, .8);
   fill.position.set(-3, 1, -2); scene.add(fill);
-  const camera = new THREE.PerspectiveCamera(36, 1, 0.01, 30);
+  const camera = new THREE.PerspectiveCamera(36, 1, 0.01, 100);
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = .09;
   controls.minDistance = .25;
-  controls.maxDistance = 8;
+  controls.maxDistance = 30;
   const manifest: Manifest = await (await checkedFetch('manifest.json')).json();
-  if (manifest.schema !== 1 || !manifest.clips.length) throw new Error('Unsupported motion data');
-  const assembly = await new GLTFLoader().loadAsync(assets + 'assembly.glb');
+  if (manifest.schema !== 2 || !manifest.clips.length) throw new Error('Unsupported motion data');
+  const plots = createMotionPlots(manifest);
+  const assembly = await new GLTFLoader().loadAsync(assets + 'assembly.glb' + revision);
   const roots = [assembly.scene, assembly.scene.clone(true)];
   const groups = roots.map(root => manifest.groups.map(id => {
     const object = root.getObjectByName(`part_${id}`);
@@ -78,7 +81,7 @@ async function initialize() {
     const endpoint = new THREE.Mesh(new THREE.SphereGeometry(.014, 16, 12), new THREE.MeshStandardMaterial({ color: 0xb68c3d, roughness: .5 }));
     scene.add(endpoint); return endpoint;
   });
-  const grid = new THREE.GridHelper(3, 30, 0xc1cfd0, 0xe0e7e7);
+  const grid = new THREE.GridHelper(6, 30, 0xc1cfd0, 0xe0e7e7);
   grid.position.set(0, manifest.mesh_bounds_m[0][1] - .015, manifest.gap_m / 2);
   scene.add(grid);
   const paths = [0, 1].map(i => {
@@ -95,6 +98,7 @@ async function initialize() {
   let request = 0;
   let loading = true;
   let dirty = true;
+  const lastPlatform = new THREE.Vector3();
   const cache = new Map<string, Float32Array>();
   const stride = 2 * manifest.groups.length * 16;
   const format = (value: number) => (Math.abs(value) < .05 ? 0 : value).toFixed(1);
@@ -107,6 +111,12 @@ async function initialize() {
   function fitCamera() {
     const swept = manifest.swept_bounds_m[paired ? 'pair' : 'single'];
     const bounds = new THREE.Box3(new THREE.Vector3(...swept[0]), new THREE.Vector3(...swept[1]));
+    if (follow.checked) {
+      bounds.makeEmpty();
+      roots.forEach(root => root.updateMatrixWorld(true));
+      groups.slice(0, paired ? 2 : 1).forEach(robot => robot.slice(1).forEach(part => bounds.expandByObject(part)));
+      bounds.expandByScalar(.07);
+    }
     const center = bounds.getCenter(new THREE.Vector3());
     const directions: Record<string, THREE.Vector3> = {
       iso: new THREE.Vector3(1.5, .8, 2), front: new THREE.Vector3(0, .1, 1),
@@ -148,6 +158,12 @@ async function initialize() {
       });
     }
     const point = clip.poses_mm[frame];
+    const nextPlatform = new THREE.Vector3(...point).multiplyScalar(.001);
+    if (follow.checked) {
+      const delta = nextPlatform.clone().sub(lastPlatform);
+      camera.position.add(delta); controls.target.add(delta);
+    }
+    lastPlatform.copy(nextPlatform);
     bar.position.set(point[0] / 1000, point[1] / 1000, point[2] / 1000 + manifest.gap_m / 2);
     ends.forEach((end, index) => end.position.set(point[0] / 1000, point[1] / 1000, point[2] / 1000 + index * manifest.gap_m));
     timeline.value = String(frame);
@@ -155,6 +171,7 @@ async function initialize() {
     ui('time').textContent = `${(frame / clip.fps).toFixed(1)} / ${((clip.frames - 1) / clip.fps).toFixed(1)} s`;
     ui('position').textContent = `X ${format(point[0])}   Y ${format(point[1])}   Z ${format(point[2])} mm`;
     main.dataset.frame = String(frame);
+    plots.draw(frame);
     dirty = true;
   }
 
@@ -175,6 +192,7 @@ async function initialize() {
       if (token !== request) return;
       clip = next; matrices = data; position = 0;
       timeline.max = String(clip.frames - 1);
+      plots.configure(clip, paired);
       setPaths(); applyFrame();
       status.hidden = true;
       main.dataset.state = 'ready';
@@ -202,6 +220,11 @@ async function initialize() {
   cameraMenu.onchange = fitCamera;
   ui('fit').onclick = fitCamera;
   pathToggle.onchange = () => { setPaths(); dirty = true; };
+  follow.onchange = fitCamera;
+  plotsToggle.onchange = () => {
+    main.dataset.plots = plotsToggle.checked ? 'on' : 'off';
+    plots.setVisible(plotsToggle.checked);
+  };
   for (const input of document.querySelectorAll<HTMLInputElement>('input[name="assembly"]')) {
     input.onchange = () => {
       paired = input.value === 'pair'; roots[1].visible = paired;
@@ -229,7 +252,7 @@ async function initialize() {
   });
   resize.observe(viewport);
   const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; dirty = true; });
-  visibility.observe(canvas);
+  visibility.observe(document.querySelector('.workbench')!);
   let last = performance.now();
   renderer.setAnimationLoop(now => {
     const delta = Math.min((now - last) / 1000, .1); last = now;
@@ -246,7 +269,7 @@ async function initialize() {
     showError(new Error('The 3D view was interrupted. Reload to continue.'));
   });
   window.addEventListener('pagehide', event => {
-    if (!event.persisted) { renderer.setAnimationLoop(null); controls.dispose(); resize.disconnect(); visibility.disconnect(); renderer.dispose(); }
+    if (!event.persisted) { renderer.setAnimationLoop(null); controls.dispose(); resize.disconnect(); visibility.disconnect(); plots.dispose(); renderer.dispose(); }
   });
   showRanges();
   updatePlay();

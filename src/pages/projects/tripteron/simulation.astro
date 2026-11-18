@@ -27,16 +27,40 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
           <label><input type="radio" name="assembly" value="pair" checked /><span>Pair</span></label>
           <label><input type="radio" name="assembly" value="single" /><span>Single</span></label>
         </fieldset>
-        <label class="select-label"><span class="sr-only">Motion</span><select id="motion" disabled><option value="sweep">ROM sweep</option><option value="lift">Up / down</option><option value="line">Straight line</option></select></label>
+        <label class="select-label"><span class="sr-only">Motion</span><select id="motion" disabled><option value="tour">Workspace tour</option><option value="sweep">Axis sweep</option><option value="lift">Up / down</option><option value="line">Straight line</option></select></label>
         <label class="select-label"><span class="sr-only">Camera</span><select id="camera"><option value="iso">Isometric</option><option value="front">Front</option><option value="side">Side</option><option value="top">Top</option></select></label>
         <button class="icon" id="fit" title="Fit assembly" aria-label="Fit assembly" set:html={fit} />
         <label class="check"><input id="path" type="checkbox" checked />Path</label>
+        <label class="check"><input id="follow" type="checkbox" />Follow</label>
+        <label class="check"><input id="plots" type="checkbox" checked />Plots</label>
       </div>
+      <div class="workbench">
       <div id="viewport">
-        <canvas aria-label="Interactive 3D Tripteron assembly" tabindex="0"></canvas>
+        <canvas id="scene" aria-label="Interactive 3D Tripteron assembly" tabindex="0"></canvas>
         <div id="status" role="status"><span>Loading CAD assembly...</span><button id="retry" hidden>Reload</button></div>
         <div class="readout" aria-label="Robot A displacement from CAD reference"><span>A</span><output id="position">X 0 &nbsp; Y 0 &nbsp; Z 0 mm</output></div>
         <span class="axes-label">Y up · X lateral · Z outward</span>
+      </div>
+      <aside id="analysis" aria-label="Synchronized motion analysis">
+        <section class="plot-section">
+          <h2>Workspace <output id="slice-height">Y = 0 mm</output></h2>
+          <canvas id="workspace-plot" role="img" aria-label="XZ workspace slice at the current platform height"></canvas>
+          <div class="plot-legend"><span><i class="swatch available"></i>Current height</span><span><i class="swatch excluded"></i>Other heights</span></div>
+          <p class="plot-caption">5 mm sampled hinge + rail feasibility</p>
+        </section>
+        <section class="plot-section">
+          <h2>Platform displacement <span>mm · 1x time</span></h2>
+          <canvas id="position-plot" role="img" aria-label="Platform X, Y and Z displacement over time, each on its own scale"></canvas>
+          <p class="plot-caption">Separate axis scales · <output id="nominal-speed">0 mm/s</output> at 1x</p>
+        </section>
+        <section class="plot-section">
+          <h2>Carriage displacement
+            <fieldset class="segments"><legend class="sr-only">Carriage plot robot</legend><label><input type="radio" name="plot-robot" value="0" checked /><span>A</span></label><label id="robot-b-choice"><input type="radio" name="plot-robot" value="1" /><span>B</span></label></fieldset>
+          </h2>
+          <canvas id="carriage-plot" role="img" aria-label="M, L and R carriage displacements against rail travel bounds"></canvas>
+          <p class="plot-caption">From CAD reference · <output id="rail-margin">Rail margin -- mm</output></p>
+        </section>
+      </aside>
       </div>
       <div class="playback" aria-label="Playback controls">
         <button class="icon" id="play" title="Pause" aria-label="Pause" disabled><span class="play-icon" set:html={play} /><span class="pause-icon" set:html={pause} /></button>
@@ -46,11 +70,13 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
         <label><span class="sr-only">Playback speed</span><select id="speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option></select></label>
       </div>
       <details id="model-details">
-        <summary>Offline kinematics <span>700 mm CAD rails</span></summary>
+        <summary>Offline kinematics <span>4,000 mm rail study</span></summary>
         <div class="model-notes">
-          <p>Actual STEP solids, animated with the project's inverse kinematics. The sweep reaches the modeled X, Y and Z limits through the CAD reference pose, one axis at a time. It is not a workspace-volume scan.</p>
+          <p>The original linkage CAD is unchanged. The source rail profile and 40 mm hole pattern are repeated to 4,000 mm; fixed end hardware moves to the new ends. This is a design study, not an updated hardware calibration.</p>
           <dl id="ranges"></dl>
-          <p>Paired motion keeps a 1 m span level within both robots' shared reach. Single mode uses the single robot's axis limits. Limits use the 700 mm CAD rails, a 5 mm carriage inset, and provisional 15-163 degree hinge bounds. Later hardware uses longer travel.</p>
+          <p>The default tour follows near-boundary loops in XZ, XY and ZY, with a 0.5% inward margin. Paths that cannot connect directly return through the reference. Every displayed segment is checked. The axis sweep reaches closer to the exact modeled axis limits. Neither is an exhaustive workspace scan.</p>
+          <p>Paired motion keeps a 1 m span level. Single mode has its own range. Bounds use a 5 mm carriage inset and provisional 15-163 degree hinge angles. Graphs show computed motion, not sensor telemetry. Workspace shading tests sampled endpoints; it does not prove connected paths or collision clearance. The white marker is robot A in its local frame.</p>
+          <p>Plot time and speed use nominal 1x playback. Motion timing is illustrative, not motor-rated. Carriage plots can switch to robot B, whose local X and Z are reversed.</p>
           <p>Collision clearance, belts, loads, attachment geometry and tracking error are not simulated. This page cannot command hardware.</p>
         </div>
       </details>
@@ -88,6 +114,21 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
   .check { display: flex; align-items: center; gap: 5px; padding-inline: 4px; }
   input { accent-color: #267d83; }
   #viewport { position: relative; overflow: hidden; min-height: 0; }
+  .workbench { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 330px; overflow: hidden; }
+  #simulation[data-plots="off"] .workbench { grid-template-columns: minmax(0, 1fr); }
+  #simulation[data-plots="off"] #analysis { display: none; }
+  #analysis { min-height: 0; overflow-y: auto; border-left: 1px solid #dce2e3; background: #fafcfc; }
+  .plot-section { padding: 12px 16px 10px; border-bottom: 1px solid #dce2e3; }
+  .plot-section h2 { margin: 0 0 8px; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 5px; }
+  .plot-section h2 > span, .plot-section h2 output { font-weight: 400; color: #5c696e; font-size: 10px; }
+  #workspace-plot { height: 205px; }
+  #position-plot { height: 148px; }
+  #carriage-plot { height: 142px; }
+  .plot-caption { font-size: 10px; line-height: 1.5; color: #5c696e; margin: 5px 0 0; }
+  .plot-legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; color: #5c696e; }
+  .swatch { display: inline-block; width: 9px; height: 9px; margin-right: 5px; }
+  .available { background: #90c5c5; } .excluded { background: #e0e5e7; }
+  .plot-section .segments span { padding: 2px 7px; font-size: 10px; }
   canvas { display: block; width: 100%; height: 100%; touch-action: none; }
   #status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 16px; padding: 24px; background: #f6f8f8e8; }
   #status[hidden] { display: none; }
@@ -112,6 +153,13 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
   #ranges dt { font-weight: 600; }
   #ranges dd { margin: 0; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  @media (max-width: 800px) {
+    .workbench { display: flex; flex-direction: column; overflow-y: auto; }
+    #viewport { flex: 0 0 calc(100% - 34px); min-height: 300px; }
+    #analysis { flex: none; overflow: visible; border-left: 0; border-top: 1px solid #dce2e3; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    #simulation[data-plots="off"] #viewport { flex: 1; }
+    .axes-label { display: none; }
+  }
   @media (max-width: 540px) {
     header, .toolbar, .playback { padding-inline: 8px; gap: 4px; }
     h1 span { display: block; margin: 3px 0 0; }

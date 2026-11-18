@@ -2,7 +2,8 @@
 
 The standalone scene lives at `/projects/tripteron/simulation/` and is embedded in
 the Tripteron project presentation. Three.js renders actual STEP solids, grouped
-into the fixed assembly, platform, three carriages and eight links.
+into the fixed assembly, platform, three carriages and eight links. The current
+design study has 4,000 mm rails; the linkage geometry remains unchanged.
 
 ## Motion Data
 
@@ -13,15 +14,25 @@ and matrix translations are metres; displacement readouts are millimetres.
 
 The source/exporter is `tools/onshape/export_web_simulation.py` in the Tripteron
 repository. It uses the existing inverse kinematics and checks continuous hinge
-and rail feasibility along each straight segment before sampling a quintic
-time law. Part assignment is checked against both compressed and extended STEP
+and rail feasibility along every displayed straight segment. Long segments are
+subdivided to at most 12 mm per frame for presentation playback. Part assignment
+is checked against both compressed and extended source STEP
 assemblies. The web client plays these poses; it cannot contact the controller.
 
 Single and paired clips have separate axis limits. Paired clips hold a 1 m span
-level. The ROM sweep visits each axis limit through the reference pose, not the
-entire 3D workspace. These are 700 mm CAD rails with a 5 mm inset, not the longer
-hardware rails. Belts, collisions, loads, attachment details and tracking error
+level. The default tour follows near-boundary loops in XZ, XY and ZY, using a 0.5%
+inward margin and checked returns through the reference where necessary. The
+axis sweep visits each axis limit directly. Neither covers the entire 3D workspace.
+The rail model repeats a 40 mm section of the source CAD and translates fixed end
+hardware symmetrically. Rail bounds have a 5 mm inset. Belts, collisions, loads, attachment details and tracking error
 are excluded. The tube is a conceptual light, not another imported CAD part.
+
+The plots show computed values, not telemetry: a sampled XZ feasibility slice at
+current Y, independently scaled XYZ time traces, and M/L/R carriage displacement
+with rail bounds. The carriage mapping and sampled grid are exported from the
+same model. The grid does not certify connected paths. Speeds and time axes use
+nominal 1x playback, not a motor-rated trajectory. Follow-camera mode tracks the
+moving assembly; full view fits the complete rails and motion.
 
 ## Check
 

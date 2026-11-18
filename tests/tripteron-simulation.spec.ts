@@ -1,5 +1,6 @@
 import { test, expect, type Page, type FrameLocator } from '@playwright/test';
 import sharp from 'sharp';
+import { createKinematics } from '../src/scripts/tripteron-kinematics';
 
 async function pixels(buffer: Buffer) {
   return sharp(buffer).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -113,7 +114,7 @@ test('reduced motion and missing asset states', async ({ browser }) => {
 });
 
 test('default camera frames the carriages closely throughout the tour', async ({ page }, testInfo) => {
-  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=rail2000-paired-v3')).json();
+  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=clearance-manual-v4')).json();
   const clip = manifest.clips.find(c => c.id === 'tour');
   const frames = new Set<number>([0, clip.frames - 1]);
   for (const phase of clip.phases) {
@@ -171,7 +172,7 @@ test('simulation survives presentation navigation', async ({ page }) => {
 });
 
 test('plots match the displayed pose, bounds and mirrored robot', async ({ page }, testInfo) => {
-  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=rail2000-paired-v3')).json();
+  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=clearance-manual-v4')).json();
   expect(manifest.rail_length_mm).toBe(2000);
   expect(manifest.source_rail_length_mm).toBe(700);
   await page.goto('/projects/tripteron/simulation/');
@@ -210,7 +211,7 @@ test('plots match the displayed pose, bounds and mirrored robot', async ({ page 
 });
 
 test('tour alternates matching and opposing motion without stretching a rigid bar', async ({ page }, testInfo) => {
-  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=rail2000-paired-v3')).json();
+  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=clearance-manual-v4')).json();
   const clip = manifest.clips.find(c => c.id === 'tour');
   expect(clip.phases.map(p => p.coordination)).toEqual(['together', 'opposite']);
   for (const id of ['sweep', 'single-sweep']) {
@@ -260,3 +261,101 @@ test('project opens with a centered, width-limited simulation in the first viewp
     await page.screenshot({path:testInfo.outputPath(`hero-${viewport.width}.png`)});
   }
 });
+
+test('browser IK matches exported CAD transforms and rejects the reported bad poses', async ({ request }) => {
+  const manifest = await (await request.get('/media/tripteron/simulation/manifest.json?v=clearance-manual-v4')).json();
+  expect(manifest.schema).toBe(4);
+  expect(manifest.validation.omitted_fixed_bodies).toContain(1);
+  expect(manifest.validation.omitted_fixed_bodies).toContain(11);
+  const kinematics = createKinematics(manifest);
+  for (const p of [[-122.7, 0, -212.4], [-162.1, 0, -145.9]]) {
+    expect(kinematics.segmentReason(p, p)).not.toBe('');
+    expect(kinematics.segmentReason([0,0,0], p)).not.toBe('');
+  }
+  for (const clip of manifest.clips) {
+    const buffer = await (await request.get('/media/tripteron/simulation/' + clip.file + '?v=clearance-manual-v4')).body();
+    const matrices = new Float32Array(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength));
+    for (const path of [clip.poses_mm, clip.poses_b_mm]) {
+      for (let i = 1; i < path.length; i++) expect(kinematics.segmentReason(path[i-1], path[i])).toBe('');
+    }
+    for (let frame = 0; frame < clip.frames; frame += 73) {
+      for (let robot = 0; robot < 2; robot++) {
+        const pose = (robot ? clip.poses_b_mm : clip.poses_mm)[frame];
+        const computed = kinematics.matrices(pose);
+        computed.forEach((matrix, group) => matrix.elements.forEach((value, i) => {
+          const index = ((frame * 2 + robot) * manifest.groups.length + group) * 16 + i;
+          expect(Math.abs(value - matrices[index])).toBeLessThan(2e-5);
+        }));
+      }
+    }
+  }
+  let current = [0, 0, 0];
+  for (let i = 0; i < 300; i++) {
+    const target = [Math.sin(i * 1.7) * 500, Math.cos(i * .7) * 2500, Math.sin(i * .3) * 500];
+    const moved = kinematics.move(current, target);
+    expect(kinematics.segmentReason(current, moved.point)).toBe('');
+    expect(moved.point.every(Number.isFinite)).toBe(true);
+    current = moved.point;
+  }
+  expect(kinematics.move(current, [NaN, 0, 0]).point).toEqual(current);
+});
+
+for (const viewport of [{ width:1440, height:900 }, { width:390, height:844 }]) {
+  test(`manual XYZ control, limits and mode transitions at ${viewport.width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize(viewport);
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.goto('/projects/tripteron/simulation/');
+    await expect(page.locator('#simulation')).toHaveAttribute('data-state', 'ready');
+    await scrub(page, 120);
+    await page.selectOption('#motion', 'manual');
+    await expect(page.locator('#manual-controls')).toBeVisible();
+    await expect(page.locator('#play')).toBeDisabled();
+    const pose = async () => JSON.parse((await page.locator('#simulation').getAttribute('data-manual-pose'))!);
+    const type = async (axis: string, value: number) => {
+      await page.locator(`#manual-${axis}-value`).fill(String(value));
+      await page.locator(`#manual-${axis}-value`).press('Tab');
+    };
+    const reference = await page.locator('#scene').screenshot();
+    for (const [axis, value] of [['X',30], ['Y',120], ['Z',20]] as const) await type(axis, value);
+    (await pose())[0].forEach((v, i) => expect(v).toBeCloseTo([30,120,20][i],3));
+    await changed(reference, await page.locator('#scene').screenshot());
+    await expect(page.locator('#simulation')).toHaveAttribute('data-connector', 'none');
+    await page.locator('input[name="manual-robot"][value="1"]').check();
+    await type('X', -25);
+    expect((await pose())[1][0]).toBe(-25);
+    expect((await pose())[0]).toEqual([30,120,20]);
+    await expect(page.locator('#analysis')).toHaveAttribute('data-robot', '1');
+    await type('Z', -5000);
+    await expect(page.locator('#manual-status')).toHaveAttribute('data-limited', '');
+    expect((await pose())[1][2]).toBeGreaterThan(-100);
+    await page.locator('#manual-home').click();
+    (await pose())[1].forEach(v => expect(v).toBeCloseTo(0,3));
+    await page.locator('input[name="assembly"][value="single"]').check();
+    await expect(page.locator('input[name="manual-robot"][value="1"]')).toBeDisabled();
+    await page.locator('#manual-X').focus();
+    await page.locator('#manual-X').press('ArrowRight');
+    expect((await pose())[0][0]).toBeGreaterThan(0);
+    await type('Y', 500);
+    await type('Z', 40);
+    await checkModel(await page.locator('#scene').screenshot());
+    await page.screenshot({ path:testInfo.outputPath(`manual-${viewport.width}.png`) });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth-innerWidth)).toBe(0);
+    await page.selectOption('#motion', 'tour');
+    await expect(page.locator('#simulation')).toHaveAttribute('data-motion', 'single-tour');
+    await expect(page.locator('#manual-controls')).toBeHidden();
+    await expect(page.locator('#play')).toBeEnabled();
+    await page.locator('#play').click();
+    await expect.poll(async () => Number(await page.locator('#simulation').getAttribute('data-frame'))).toBeGreaterThan(0);
+    expect(errors).toEqual([]);
+    await page.goto('/projects/tripteron/');
+    const embedded = page.frameLocator('article #simulation iframe');
+    await expect(embedded.locator('#simulation')).toHaveAttribute('data-state', 'ready');
+    await embedded.locator('#motion').selectOption('manual');
+    const scene = await embedded.locator('#viewport').boundingBox();
+    const workbench = await embedded.locator('.workbench').boundingBox();
+    expect(scene!.y + scene!.height).toBeLessThanOrEqual(workbench!.y + workbench!.height + 1);
+    await checkModel(await embedded.locator('#scene').screenshot());
+    await page.screenshot({ path:testInfo.outputPath(`manual-embedded-${viewport.width}.png`) });
+  });
+}

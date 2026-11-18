@@ -2,9 +2,10 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createMotionPlots, motionPhase, type MotionManifest as Manifest } from './tripteron-plots';
+import { createKinematics } from './tripteron-kinematics';
 
 const assets = '/media/tripteron/simulation/';
-const revision = '?v=rail2000-paired-v3';
+const revision = '?v=clearance-manual-v4';
 const ui = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const main = ui('simulation');
 const viewport = ui('viewport');
@@ -48,7 +49,8 @@ async function initialize() {
   controls.minDistance = .25;
   controls.maxDistance = 30;
   const manifest: Manifest = await (await checkedFetch('manifest.json')).json();
-  if (manifest.schema !== 3 || !manifest.clips.length) throw new Error('Unsupported motion data');
+  if (manifest.schema !== 4 || !manifest.clips.length) throw new Error('Unsupported motion data');
+  const kinematics = createKinematics(manifest);
   const plots = createMotionPlots(manifest);
   const assembly = await new GLTFLoader().loadAsync(assets + 'assembly.glb' + revision);
   const roots = [assembly.scene, assembly.scene.clone(true)];
@@ -109,6 +111,9 @@ async function initialize() {
   const lastPlatform = new THREE.Vector3();
   const cache = new Map<string, Float32Array>();
   const stride = 2 * manifest.groups.length * 16;
+  let manualRobot = 0;
+  let manualPoses = [[0, 0, 0], [0, 0, 0]];
+  const isManual = () => motion.value === 'manual';
   const format = (value: number) => (Math.abs(value) < .05 ? 0 : value).toFixed(1);
 
   function updatePlay() {
@@ -116,19 +121,27 @@ async function initialize() {
     play.title = play.ariaLabel = paused ? 'Play' : 'Pause';
   }
 
-  function fitCamera() {
+  function fitCamera(preserveView = false) {
     const swept = manifest.swept_bounds_m[paired ? 'pair' : 'single'];
     const bounds = new THREE.Box3(new THREE.Vector3(...swept[0]), new THREE.Vector3(...swept[1]));
     if (follow.checked) {
       bounds.set(new THREE.Vector3(...clip.follow_bounds_m[0]), new THREE.Vector3(...clip.follow_bounds_m[1]));
       bounds.translate(lastPlatform);
+      if (isManual()) {
+        bounds.makeEmpty();
+        for (let robot = 0; robot < (paired ? 2 : 1); robot++) {
+          roots[robot].updateWorldMatrix(true, true);
+          for (const group of groups[robot].slice(1)) bounds.expandByObject(group);
+        }
+        bounds.expandByScalar(.035);
+      }
     }
     const center = bounds.getCenter(new THREE.Vector3());
     const directions: Record<string, THREE.Vector3> = {
       iso: new THREE.Vector3(1.5, .8, 2), front: new THREE.Vector3(0, .1, 1),
       side: new THREE.Vector3(1, .05, 0), top: new THREE.Vector3(0, 1, .001),
     };
-    const direction = directions[cameraMenu.value].normalize();
+    const direction = (preserveView ? camera.position.clone().sub(controls.target) : directions[cameraMenu.value]).normalize();
     camera.position.copy(center).add(direction);
     camera.up.set(0, 1, 0);
     camera.lookAt(center);
@@ -139,7 +152,7 @@ async function initialize() {
       p.applyQuaternion(inverse);
       distance = Math.max(distance, Math.abs(p.x) / (tanV * camera.aspect) + p.z, Math.abs(p.y) / tanV + p.z);
     };
-    if (follow.checked && matrices) {
+    if (follow.checked && matrices && !isManual()) {
       // Fit each moving part's projected extent, not the empty corners of a swept box.
       // Use the whole clip so playback never needs to change the user's zoom.
       const offset = center.clone().sub(lastPlatform);
@@ -188,13 +201,15 @@ async function initialize() {
     if (!matrices) return;
     const frame = Math.min(clip.frames - 1, Math.floor(position));
     for (let robot = 0; robot < 2; robot++) {
+      const manualMatrices = isManual() ? kinematics.matrices(manualPoses[robot]) : null;
       groups[robot].forEach((group, index) => {
-        group.matrix.fromArray(matrices, frame * stride + (robot * manifest.groups.length + index) * 16);
+        if (manualMatrices) group.matrix.copy(manualMatrices[index]);
+        else group.matrix.fromArray(matrices, frame * stride + (robot * manifest.groups.length + index) * 16);
         group.matrixWorldNeedsUpdate = true;
       });
     }
-    const point = clip.poses_mm[frame];
-    const a = worldPoint(point, 0), b = worldPoint(clip.poses_b_mm[frame], 1);
+    const point = isManual() ? manualPoses[0] : clip.poses_mm[frame];
+    const a = worldPoint(point, 0), b = worldPoint(isManual() ? manualPoses[1] : clip.poses_b_mm[frame], 1);
     const nextPlatform = paired ? a.clone().add(b).multiplyScalar(.5) : a.clone();
     if (follow.checked) {
       const delta = nextPlatform.clone().sub(lastPlatform);
@@ -202,12 +217,13 @@ async function initialize() {
     }
     lastPlatform.copy(nextPlatform);
     const phase = motionPhase(clip, frame);
-    bar.visible = paired && phase.connector === 'rigid';
+    bar.visible = paired && !isManual() && phase.connector === 'rigid';
     bar.position.copy(a).add(b).multiplyScalar(.5);
     bar.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), b.clone().sub(a).normalize());
     ends[0].position.copy(a); ends[1].position.copy(b);
     ends.forEach(end => { end.visible = paired; });
     ui('coordination').textContent = phase.coordination === 'together' ? 'Together · fixed span' : phase.coordination === 'opposite' ? 'Opposite · independent platforms' : 'Single platform';
+    if (isManual()) ui('coordination').textContent = paired ? 'Manual · independent platforms' : 'Manual · single platform';
     main.dataset.coordination = phase.coordination;
     main.dataset.connector = bar.visible ? 'rigid' : 'none';
     main.dataset.endpoints = JSON.stringify([a.toArray(), b.toArray()]);
@@ -217,12 +233,36 @@ async function initialize() {
     ui('position').textContent = `X ${format(point[0])}   Y ${format(point[1])}   Z ${format(point[2])} mm`;
     main.dataset.frame = String(frame);
     plots.draw(frame);
+    if (isManual()) {
+      plots.manual(manualPoses[0], manualPoses[1]);
+      ui('time').textContent = 'Manual';
+    }
     dirty = true;
   }
 
   async function selectClip(motionId: string) {
     const id = paired ? motionId : 'single-' + motionId;
     const token = ++request;
+    ui('manual-controls').hidden = motionId !== 'manual';
+    main.dataset.manual = String(motionId === 'manual');
+    if (motionId === 'manual') {
+      paused = true; loading = false; position = 0; updatePlay();
+      manualPoses = [[0, 0, 0], [0, 0, 0]];
+      manualRobot = 0;
+      const base = manifest.clips.find(c => c.id === (paired ? 'tour' : 'single-tour'))!;
+      clip = { ...base, id: 'manual', manual: true, frames: 2, fps: 1,
+        poses_mm: [manualPoses[0], manualPoses[0]], poses_b_mm: [manualPoses[1], manualPoses[1]],
+        phases: [{ start_frame: 0, end_frame: 1, coordination: paired ? 'opposite' : 'single', connector: 'none' }] };
+      plots.configure(clip, paired);
+      const plotChoice = document.querySelector<HTMLInputElement>('input[name="plot-robot"][value="0"]')!;
+      plotChoice.checked = true; plotChoice.dispatchEvent(new Event('change'));
+      paths.forEach(path => { path.visible = false; });
+      play.disabled = timeline.disabled = speed.disabled = pathToggle.disabled = true;
+      reset.disabled = false;
+      updateManualControls(); applyFrame(); fitCamera();
+      main.dataset.motion = id;
+      return;
+    }
     const next = manifest.clips.find(c => c.id === id)!;
     loading = true;
     play.disabled = reset.disabled = timeline.disabled = true;
@@ -243,10 +283,69 @@ async function initialize() {
       main.dataset.state = 'ready';
       main.dataset.motion = id;
       play.disabled = reset.disabled = timeline.disabled = motion.disabled = false;
+      speed.disabled = pathToggle.disabled = false;
       loading = false;
     } catch (error) {
       if (token === request) showError(error);
     }
+  }
+
+  function updateManualControls(reason = '') {
+    for (const [axis, label] of ['X', 'Y', 'Z'].entries()) {
+      const slider = ui<HTMLInputElement>('manual-' + label);
+      const number = ui<HTMLInputElement>('manual-' + label + '-value');
+      const [lo, hi] = kinematics.axisBounds(manualPoses[manualRobot], axis);
+      slider.min = String(Math.min(Math.ceil(lo * 10) / 10, manualPoses[manualRobot][axis]));
+      slider.max = String(Math.max(Math.floor(hi * 10) / 10, manualPoses[manualRobot][axis]));
+      slider.value = number.value = manualPoses[manualRobot][axis].toFixed(1);
+      slider.setAttribute('aria-valuetext', `${number.value} millimetres`);
+    }
+    const status = ui('manual-status');
+    status.textContent = reason ? `Stopped: ${reason}` : 'mm from reference';
+    status.toggleAttribute('data-limited', !!reason);
+    for (const radio of document.querySelectorAll<HTMLInputElement>('input[name="manual-robot"]')) {
+      radio.checked = Number(radio.value) === manualRobot;
+      radio.disabled = !paired && radio.value === '1';
+    }
+    main.dataset.manualPose = JSON.stringify(manualPoses);
+  }
+
+  function moveManual(target: number[]) {
+    if (!isManual()) return;
+    const result = kinematics.move(manualPoses[manualRobot], target);
+    manualPoses[manualRobot] = result.point;
+    updateManualControls(result.reason); applyFrame();
+    // Widen only when a manual move would take a mechanism off screen; retain orbit.
+    if (follow.checked) {
+      scene.updateMatrixWorld(true); camera.updateMatrixWorld();
+      let outside = false;
+      for (let robot = 0; robot < (paired ? 2 : 1); robot++) {
+        movingCorners.forEach((corners, index) => {
+          for (const corner of corners) {
+            const p = corner.clone().applyMatrix4(groups[robot][index + 1].matrixWorld).project(camera);
+            if (Math.abs(p.x) > .88 || Math.abs(p.y) > .88 || p.z > 1) outside = true;
+          }
+        });
+      }
+      if (outside) fitCamera(true);
+    }
+  }
+
+  for (const [axis, label] of ['X', 'Y', 'Z'].entries()) {
+    const change = (input: HTMLInputElement) => {
+      const target = manualPoses[manualRobot].slice(); target[axis] = input.value === '' ? NaN : Number(input.value);
+      moveManual(target);
+    };
+    const slider = ui<HTMLInputElement>('manual-' + label), number = ui<HTMLInputElement>('manual-' + label + '-value');
+    slider.oninput = () => change(slider); number.onchange = () => change(number);
+  }
+  ui('manual-home').onclick = () => moveManual([0, 0, 0]);
+  for (const input of document.querySelectorAll<HTMLInputElement>('input[name="manual-robot"]')) {
+    input.onchange = () => {
+      manualRobot = Number(input.value); updateManualControls();
+      const plotChoice = document.querySelector<HTMLInputElement>(`input[name="plot-robot"][value="${manualRobot}"]`)!;
+      plotChoice.checked = true; plotChoice.dispatchEvent(new Event('change'));
+    };
   }
 
   function showRanges() {
@@ -259,13 +358,13 @@ async function initialize() {
     }
   }
   play.onclick = () => { paused = !paused; updatePlay(); };
-  reset.onclick = () => { position = 0; paused = true; updatePlay(); applyFrame(); };
+  reset.onclick = () => { if (isManual()) moveManual([0, 0, 0]); else { position = 0; paused = true; updatePlay(); applyFrame(); } };
   timeline.oninput = () => { position = Number(timeline.value); paused = true; updatePlay(); applyFrame(); };
   motion.onchange = () => void selectClip(motion.value);
-  cameraMenu.onchange = fitCamera;
-  ui('fit').onclick = fitCamera;
+  cameraMenu.onchange = () => fitCamera();
+  ui('fit').onclick = () => fitCamera();
   pathToggle.onchange = () => { setPaths(); dirty = true; };
-  follow.onchange = fitCamera;
+  follow.onchange = () => fitCamera();
   plotsToggle.onchange = () => {
     main.dataset.plots = plotsToggle.checked ? 'on' : 'off';
     plots.setVisible(plotsToggle.checked);
@@ -283,7 +382,7 @@ async function initialize() {
     } catch { window.open(location.pathname, '_blank', 'noopener'); }
   };
   canvas.onkeydown = event => {
-    if (event.code === 'Space') { event.preventDefault(); paused = !paused; updatePlay(); }
+    if (event.code === 'Space' && !isManual()) { event.preventDefault(); paused = !paused; updatePlay(); }
   };
   controls.addEventListener('change', () => { dirty = true; });
   const resize = new ResizeObserver(() => {

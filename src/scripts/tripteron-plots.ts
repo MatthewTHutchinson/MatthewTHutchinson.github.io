@@ -1,11 +1,13 @@
 export type MotionPhase = { start_frame: number; end_frame: number; coordination: 'together' | 'opposite' | 'single'; connector: 'rigid' | 'none' };
-export type MotionClip = { id: string; label: string; fps: number; frames: number; file: string; poses_mm: number[][]; poses_b_mm: number[][]; phases: MotionPhase[]; follow_bounds_m: number[][] };
+import type { KinematicModel } from './tripteron-kinematics';
+export type MotionClip = { id: string; label: string; fps: number; frames: number; file: string; poses_mm: number[][]; poses_b_mm: number[][]; phases: MotionPhase[]; follow_bounds_m: number[][]; manual?: boolean };
 export const motionPhase = (clip: MotionClip, frame: number) => clip.phases.find(p => frame >= p.start_frame && frame <= p.end_frame)!;
 type Grid = { x_mm: number[]; z_mm: number[]; step_mm: number; y_bounds_mm: ([number, number] | null)[] };
 export type MotionManifest = {
   schema: number; groups: number[]; gap_m: number; mesh_bounds_m: number[][];
   swept_bounds_m: Record<string, number[][]>; paired_ranges_mm: number[][]; single_ranges_mm: number[][];
   carriage_matrix: number[][]; carriage_bounds_mm: number[][]; workspace_grids: Record<string, Grid>; clips: MotionClip[];
+  kinematics: KinematicModel;
 };
 
 const colors = ['#bd563f', '#167d83', '#4b68ae'];
@@ -41,7 +43,7 @@ export function createMotionPlots(manifest: MotionManifest) {
   const railBounds = manifest.carriage_bounds_mm;
 
   function configure(next: MotionClip, isPair: boolean) {
-    clip = next; paired = isPair;
+    clip = next; paired = isPair; frame = 0;
     if (!paired) {
       robot = 0;
       (document.querySelector('input[name="plot-robot"][value="0"]') as HTMLInputElement).checked = true;
@@ -60,7 +62,7 @@ export function createMotionPlots(manifest: MotionManifest) {
 
   function setLimits() {
     limits = [0, 1, 2].map(axis => {
-      const values = poses().map(p => p[axis]);
+      const values = clip.manual ? manifest.single_ranges_mm[axis] : poses().map(p => p[axis]);
       const min = Math.min(...values), max = Math.max(...values);
       const pad = Math.max((max-min)*.08, 1);
       return [min-pad, max+pad];
@@ -145,10 +147,14 @@ export function createMotionPlots(manifest: MotionManifest) {
     el('analysis').dataset.robot = String(robot);
     el('analysis').dataset.pose = poses()[frame].join(',');
   }
+  function manual(a: number[], b: number[]) {
+    clip.poses_mm = [a, a]; clip.poses_b_mm = [b, b];
+    draw(0);
+  }
   for (const input of document.querySelectorAll<HTMLInputElement>('input[name="plot-robot"]')) {
     input.onchange = () => { robot = Number(input.value); if (clip) { setLimits(); draw(); } };
   }
   const resize = new ResizeObserver(() => draw());
   resize.observe(el('analysis'));
-  return { configure, draw, setVisible(value: boolean) { shown = value; draw(); }, dispose() { resize.disconnect(); } };
+  return { configure, draw, manual, setVisible(value: boolean) { shown = value; draw(); }, dispose() { resize.disconnect(); } };
 }

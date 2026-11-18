@@ -31,13 +31,33 @@ returns through reference where needed. The opposing tour uses a symmetric XZ
 footprint to avoid the single-platform model's nonconvex pockets. Axis sweep visits X and Z limits with
 constant Y; the diagonal line is also in XZ. Neither covers the entire workspace.
 The rail model repeats a 40 mm section of the source CAD and translates fixed end
-hardware symmetrically. Rail bounds have a 5 mm inset. Belts, collisions, loads, attachment details and tracking error
-are excluded. The tube is a conceptual light, not another imported CAD part.
+hardware symmetrically in the source study, but the web export omits all fixed
+accessories except the two rails: the unmated hardware otherwise floats in space.
+Rail bounds have a 5 mm inset. Additional 2 mm conservative CAD-box guards keep
+the upper carriage above both lower carriages and the platform in front of the
+carriage feet. These fix single-robot poses that passed hinge checks despite
+crossed carriages. They are not calibrated hardware limits or a complete
+collision model. Belts, link-to-link contact, loads, attachment details and
+tracking error remain excluded. The tube is a conceptual light.
 
-Schema 3 stores both robots' local poses, per-phase coordination/connector state,
+Schema 4 stores both robots' local poses, per-phase coordination/connector state,
 and camera bounds relative to the moving pair's center. B has a 180-degree world-Y
 rotation plus a 1 m world-Z translation. Matching uses B_local = A_local * [-1,1,-1];
 opposing uses B_local = A_local * [1,-1,1]. Each local path is checked independently.
+The schema also exports the analytic leg geometry and linear clearance guards.
+
+## Manual Control
+
+Manual mode has X/Y/Z sliders and numeric millimetre inputs, with a reference
+return and independent A/B selection. The sliders show conditional ranges with
+the other two axes fixed. `tripteron-kinematics.ts` implements the existing STEP
+model's analytic equations; tests compare its rigid transforms with the Python
+export for every preset. There is no interpolation between unrelated animations.
+Each requested straight move checks exact hinge-span extrema plus linear rail
+and clearance constraints. Invalid input is rejected; an out-of-range move stops
+just inside the first boundary. Paired manual motion has no connecting bar.
+The camera widens if needed after a manual move while retaining the orbit angle.
+The browser has no hardware connection.
 
 The plots show computed values, not telemetry: the selected robot's individual
 XZ feasibility slice at its Y, independently scaled XYZ time traces, and M/L/R

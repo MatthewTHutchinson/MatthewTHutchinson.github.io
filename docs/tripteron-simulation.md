@@ -45,7 +45,9 @@ carriage displacement with rail bounds. A/B switches all three plots. The carria
 mapping and sampled grid use the same model. The grid does not certify joint
 feasibility or connected paths. Speeds and time axes use
 nominal 1x playback, not a motor-rated trajectory. Follow-camera mode tracks the
-moving assembly; full view fits the complete rails and motion.
+moving assembly. Its closer framing uses the projected bounds of individual
+moving parts across the clip, keeping both mechanisms in view without changing
+zoom during playback. Full view fits the complete rails and motion.
 
 ## Check
 

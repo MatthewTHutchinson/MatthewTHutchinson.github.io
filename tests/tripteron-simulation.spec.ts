@@ -112,6 +112,45 @@ test('reduced motion and missing asset states', async ({ browser }) => {
   await context.close();
 });
 
+test('default camera frames the carriages closely throughout the tour', async ({ page }, testInfo) => {
+  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=rail2000-paired-v3')).json();
+  const clip = manifest.clips.find(c => c.id === 'tour');
+  const frames = new Set<number>([0, clip.frames - 1]);
+  for (const phase of clip.phases) {
+    for (let axis = 0; axis < 3; axis++) {
+      for (const sign of [-1, 1]) {
+        let best = phase.start_frame;
+        for (let frame = phase.start_frame; frame <= phase.end_frame; frame++) {
+          if (sign * clip.poses_mm[frame][axis] > sign * clip.poses_mm[best][axis]) best = frame;
+        }
+        frames.add(best);
+      }
+    }
+  }
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/projects/tripteron/');
+    const frame = page.frameLocator('article #simulation iframe');
+    const simulation = frame.locator('#simulation');
+    await expect(simulation).toHaveAttribute('data-state', 'ready');
+    const distance = Number(await simulation.getAttribute('data-camera-distance'));
+    // The previous swept-box framing was 3.52 m from the moving pair.
+    expect(distance).toBeLessThan(2.9);
+    expect(distance).toBeGreaterThan(2);
+    for (const index of frames) {
+      await scrub(frame, index);
+      await checkModel(await frame.locator('#scene').screenshot());
+      expect(Number(await simulation.getAttribute('data-camera-distance'))).toBe(distance);
+    }
+    await scrub(frame, 0);
+    await page.screenshot({ path: testInfo.outputPath(`close-carriages-${viewport.width}.png`) });
+    await frame.locator('#follow').uncheck();
+    expect(Number(await simulation.getAttribute('data-camera-distance'))).toBeGreaterThan(distance * 1.4);
+    await frame.locator('#follow').check();
+    expect(Number(await simulation.getAttribute('data-camera-distance'))).toBeCloseTo(distance, 3);
+  }
+});
+
 test('simulation survives presentation navigation', async ({ page }) => {
   await page.goto('/projects/tripteron/?present=1#overview');
   await expect(page.locator('#presentation-section option')).toHaveCount(10);

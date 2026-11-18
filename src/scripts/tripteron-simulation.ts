@@ -58,6 +58,14 @@ async function initialize() {
     object.matrixAutoUpdate = false;
     return object;
   }));
+  const movingCorners = groups[0].slice(1).map(group => {
+    group.updateWorldMatrix(true, true);
+    const bounds = new THREE.Box3().setFromObject(group)
+      .applyMatrix4(group.matrixWorld.clone().invert());
+    return [bounds.min.x, bounds.max.x].flatMap(x =>
+      [bounds.min.y, bounds.max.y].flatMap(y =>
+        [bounds.min.z, bounds.max.z].map(z => new THREE.Vector3(x, y, z))));
+  });
   roots.forEach(root => {
     root.traverse(object => {
       if (object instanceof THREE.Mesh) {
@@ -114,7 +122,6 @@ async function initialize() {
     if (follow.checked) {
       bounds.set(new THREE.Vector3(...clip.follow_bounds_m[0]), new THREE.Vector3(...clip.follow_bounds_m[1]));
       bounds.translate(lastPlatform);
-      bounds.expandByScalar(.07);
     }
     const center = bounds.getCenter(new THREE.Vector3());
     const directions: Record<string, THREE.Vector3> = {
@@ -128,14 +135,38 @@ async function initialize() {
     const inverse = camera.quaternion.clone().invert();
     const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     let distance = 0;
-    // Fit projected corners across the entire motion, with room for the readout.
-    for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) {
-      const p = new THREE.Vector3(x, y, z).sub(center).applyQuaternion(inverse);
+    const fitPoint = (p: THREE.Vector3) => {
+      p.applyQuaternion(inverse);
       distance = Math.max(distance, Math.abs(p.x) / (tanV * camera.aspect) + p.z, Math.abs(p.y) / tanV + p.z);
+    };
+    if (follow.checked && matrices) {
+      // Fit each moving part's projected extent, not the empty corners of a swept box.
+      // Use the whole clip so playback never needs to change the user's zoom.
+      const offset = center.clone().sub(lastPlatform);
+      const transform = new THREE.Matrix4();
+      const point = new THREE.Vector3();
+      roots.forEach(root => root.updateWorldMatrix(true, false));
+      for (let frame = 0; frame < clip.frames; frame++) {
+        const midpoint = worldPoint(clip.poses_mm[frame], 0);
+        if (paired) midpoint.add(worldPoint(clip.poses_b_mm[frame], 1)).multiplyScalar(.5);
+        midpoint.add(offset);
+        for (let robot = 0; robot < (paired ? 2 : 1); robot++) {
+          movingCorners.forEach((corners, index) => {
+            transform.fromArray(matrices, frame * stride + (robot * manifest.groups.length + index + 1) * 16);
+            transform.premultiply(roots[robot].matrixWorld);
+            for (const corner of corners) fitPoint(point.copy(corner).applyMatrix4(transform).sub(midpoint));
+          });
+        }
+      }
+    } else {
+      for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) {
+        fitPoint(new THREE.Vector3(x, y, z).sub(center));
+      }
     }
     camera.position.copy(center).addScaledVector(direction, distance * 1.13);
     controls.target.copy(center);
     controls.update();
+    main.dataset.cameraDistance = controls.getDistance().toFixed(4);
     dirty = true;
   }
 

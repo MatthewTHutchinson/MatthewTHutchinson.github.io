@@ -201,8 +201,8 @@ test('tour alternates matching and opposing motion without stretching a rigid ba
   }
 });
 
-test('project opens with the live simulation in the first viewport', async ({ page }, testInfo) => {
-  for (const viewport of [{width:1440,height:900}, {width:390,height:844}]) {
+test('project opens with a centered, width-limited simulation in the first viewport', async ({ page }, testInfo) => {
+  for (const viewport of [{width:1920,height:1080}, {width:1440,height:900}, {width:900,height:900}, {width:390,height:844}]) {
     await page.setViewportSize(viewport);
     await page.goto('/projects/tripteron/');
     const frame = page.frameLocator('article #simulation iframe');
@@ -211,10 +211,13 @@ test('project opens with the live simulation in the first viewport', async ({ pa
     await checkModel(await frame.locator('#scene').screenshot());
     const box = await page.locator('article #simulation iframe').boundingBox();
     expect(box!.y).toBeLessThan(200);
-    expect(box!.width).toBe(viewport.width);
+    const gutters = viewport.width <= 639 ? 32 : 48;
+    expect(box!.width).toBe(Math.min(1200, viewport.width-gutters));
+    expect(box!.x).toBeCloseTo((viewport.width-box!.width)/2, 1);
     const summary = await page.locator('#project-summary').boundingBox();
     expect(summary!.y).toBeLessThan(viewport.height);
     expect(await page.evaluate(() => document.documentElement.scrollWidth-innerWidth)).toBe(0);
+    expect(await frame.locator('body').evaluate(() => document.documentElement.scrollWidth-innerWidth)).toBe(0);
     await page.screenshot({path:testInfo.outputPath(`hero-${viewport.width}.png`)});
   }
 });

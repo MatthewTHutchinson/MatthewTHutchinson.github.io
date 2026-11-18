@@ -178,6 +178,7 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
   #overview { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
   #overview a { font-size: 12px; text-decoration: underline; white-space: nowrap; }
   #simulation { margin-top: 20px; }
+  .tripteron-article > #simulation { width: calc(100% - 48px); max-width: 1200px; margin-inline: auto; }
   .simulation-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   #simulation iframe { display: block; width: 100%; height: min(760px, calc(100svh - 250px)); min-height: 480px; border: 0; }
   #project-summary { margin-top: 24px; }
@@ -197,6 +198,7 @@ import TripteronWorkspaceStudy from "../../components/TripteronWorkspaceStudy.as
   .execution-layout { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 2rem; align-items: start; }
   .execution-layout img { width: 100%; max-width: 380px; height: auto; margin-inline: auto; }
   @media (max-width: 639px) {
+    .tripteron-article > #simulation { width: calc(100% - 32px); }
     .execution-layout { grid-template-columns: minmax(0, 1fr); }
     .technical-table { font-size: 0.875rem; }
     .technical-table th, .technical-table td { padding: 0.65rem 0.35rem; }

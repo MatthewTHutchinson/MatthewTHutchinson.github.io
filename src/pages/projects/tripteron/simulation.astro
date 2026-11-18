@@ -1,0 +1,128 @@
+---
+import play from '@tabler/icons/outline/player-play.svg?raw';
+import pause from '@tabler/icons/outline/player-pause.svg?raw';
+import reset from '@tabler/icons/outline/rotate-2.svg?raw';
+import fit from '@tabler/icons/outline/focus-2.svg?raw';
+import fullscreen from '@tabler/icons/outline/arrows-maximize.svg?raw';
+import back from '@tabler/icons/outline/arrow-left.svg?raw';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Interactive Tripteron CAD assembly with offline single and paired kinematic motion." />
+    <link rel="icon" href="/favicon_v2.svg" type="image/svg+xml" />
+    <title>Tripteron Motion | Matthew Hutchinson</title>
+  </head>
+  <body>
+    <main id="simulation" data-state="loading">
+      <header>
+        <a class="icon" href="/projects/tripteron/#simulation" target="_top" title="Tripteron project" aria-label="Tripteron project" set:html={back} />
+        <h1>Tripteron <span>CAD motion</span></h1>
+        <button class="icon" id="fullscreen" title="Full screen" aria-label="Full screen" set:html={fullscreen} />
+      </header>
+      <div class="toolbar" aria-label="Scene controls">
+        <fieldset class="segments"><legend class="sr-only">Assembly</legend>
+          <label><input type="radio" name="assembly" value="pair" checked /><span>Pair</span></label>
+          <label><input type="radio" name="assembly" value="single" /><span>Single</span></label>
+        </fieldset>
+        <label class="select-label"><span class="sr-only">Motion</span><select id="motion" disabled><option value="sweep">ROM sweep</option><option value="lift">Up / down</option><option value="line">Straight line</option></select></label>
+        <label class="select-label"><span class="sr-only">Camera</span><select id="camera"><option value="iso">Isometric</option><option value="front">Front</option><option value="side">Side</option><option value="top">Top</option></select></label>
+        <button class="icon" id="fit" title="Fit assembly" aria-label="Fit assembly" set:html={fit} />
+        <label class="check"><input id="path" type="checkbox" checked />Path</label>
+      </div>
+      <div id="viewport">
+        <canvas aria-label="Interactive 3D Tripteron assembly" tabindex="0"></canvas>
+        <div id="status" role="status"><span>Loading CAD assembly...</span><button id="retry" hidden>Reload</button></div>
+        <div class="readout" aria-label="Robot A displacement from CAD reference"><span>A</span><output id="position">X 0 &nbsp; Y 0 &nbsp; Z 0 mm</output></div>
+        <span class="axes-label">Y up · X lateral · Z outward</span>
+      </div>
+      <div class="playback" aria-label="Playback controls">
+        <button class="icon" id="play" title="Pause" aria-label="Pause" disabled><span class="play-icon" set:html={play} /><span class="pause-icon" set:html={pause} /></button>
+        <button class="icon" id="reset" title="Return to reference" aria-label="Return to reference" disabled set:html={reset} />
+        <input id="timeline" type="range" min="0" max="540" step="1" value="0" aria-label="Motion position" disabled />
+        <output id="time">0.0 / 18.0 s</output>
+        <label><span class="sr-only">Playback speed</span><select id="speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option></select></label>
+      </div>
+      <details id="model-details">
+        <summary>Offline kinematics <span>700 mm CAD rails</span></summary>
+        <div class="model-notes">
+          <p>Actual STEP solids, animated with the project's inverse kinematics. The sweep reaches the modeled X, Y and Z limits through the CAD reference pose, one axis at a time. It is not a workspace-volume scan.</p>
+          <dl id="ranges"></dl>
+          <p>Paired motion keeps a 1 m span level within both robots' shared reach. Single mode uses the single robot's axis limits. Limits use the 700 mm CAD rails, a 5 mm carriage inset, and provisional 15-163 degree hinge bounds. Later hardware uses longer travel.</p>
+          <p>Collision clearance, belts, loads, attachment geometry and tracking error are not simulated. This page cannot command hardware.</p>
+        </div>
+      </details>
+      <noscript>Enable JavaScript to view the 3D assembly.</noscript>
+    </main>
+    <script>
+      import '../../../scripts/tripteron-simulation';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root { color-scheme: light; font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px; color: #222c30; background: #f6f8f8; }
+  * { box-sizing: border-box; letter-spacing: 0; }
+  body { margin: 0; }
+  button, select, input { font: inherit; color: inherit; }
+  button, select { cursor: pointer; }
+  button:disabled, input:disabled, select:disabled { opacity: .45; cursor: wait; }
+  :focus-visible { outline: 2px solid #007d80; outline-offset: 3px; }
+  #simulation { height: 100dvh; min-height: 380px; display: grid; grid-template-rows: auto auto minmax(140px, 1fr) auto auto; }
+  header { display: flex; align-items: center; gap: 12px; padding: 8px 16px; border-bottom: 1px solid #dce2e3; }
+  h1 { font-size: 16px; font-weight: 600; margin: 0; flex: 1; }
+  h1 span { font-size: 12px; font-weight: 400; margin-left: 10px; color: #5c696e; }
+  .icon { width: 36px; height: 36px; flex: 0 0 36px; display: inline-flex; justify-content: center; align-items: center; background: transparent; border: 1px solid transparent; border-radius: 4px; text-decoration: none; color: inherit; padding: 7px; }
+  .icon:hover { background: #e4ebeb; border-color: #cbd6d7; }
+  .icon svg { width: 21px; height: 21px; display: block; padding: 0; border: 0; background: none; }
+  .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 8px 16px; border-bottom: 1px solid #dce2e3; }
+  .segments { border: 1px solid #c5d0d2; padding: 2px; display: flex; gap: 2px; margin: 0; border-radius: 4px; }
+  .segments label { position: relative; cursor: pointer; }
+  .segments input { position: absolute; opacity: 0; }
+  .segments span { display: block; padding: 6px 12px; border-radius: 2px; }
+  .segments input:checked + span { background: #315e63; color: white; }
+  .segments input:focus-visible + span { outline: 2px solid #007d80; outline-offset: 1px; }
+  select { height: 36px; border: 1px solid #c5d0d2; border-radius: 4px; background: #fff; padding: 0 8px; max-width: 100%; }
+  .check { display: flex; align-items: center; gap: 5px; padding-inline: 4px; }
+  input { accent-color: #267d83; }
+  #viewport { position: relative; overflow: hidden; min-height: 0; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  #status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 16px; padding: 24px; background: #f6f8f8e8; }
+  #status[hidden] { display: none; }
+  #retry { padding: 8px 12px; background: white; border: 1px solid #c5d0d2; border-radius: 4px; }
+  .readout, .axes-label { position: absolute; pointer-events: none; bottom: 14px; font-size: 11px; color: #4e5b60; background: #f6f8f8e8; padding: 5px 8px; }
+  .readout { left: 16px; display: flex; gap: 10px; font-variant-numeric: tabular-nums; }
+  .readout > span { color: #167b84; font-weight: 700; }
+  .axes-label { right: 16px; }
+  .playback { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-top: 1px solid #dce2e3; background: #f6f8f8; }
+  #timeline { flex: 1; width: 60px; min-width: 50px; }
+  #time { font-size: 11px; font-variant-numeric: tabular-nums; width: 100px; white-space: nowrap; text-align: center; }
+  #play .play-icon { display: none; }
+  #play[data-paused] .play-icon { display: block; }
+  #play[data-paused] .pause-icon { display: none; }
+  #model-details { position: relative; border-top: 1px solid #dce2e3; font-size: 11px; background: #f6f8f8; }
+  summary { cursor: pointer; padding: 10px 24px; }
+  summary > span { color: #647277; margin-left: 16px; }
+  .model-notes { position: absolute; z-index: 3; bottom: 100%; left: 0; width: 100%; max-height: min(340px, 60dvh); overflow-y: auto; padding: 16px 24px; background: #fffffff5; border-block: 1px solid #c5d0d2; line-height: 1.6; box-shadow: 0 -5px 14px #0001; }
+  .model-notes p { max-width: 880px; margin: 8px 0; }
+  #ranges { display: flex; gap: 20px; flex-wrap: wrap; margin: 12px 0; font-variant-numeric: tabular-nums; }
+  #ranges div { display: flex; gap: 8px; }
+  #ranges dt { font-weight: 600; }
+  #ranges dd { margin: 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  @media (max-width: 540px) {
+    header, .toolbar, .playback { padding-inline: 8px; gap: 4px; }
+    h1 span { display: block; margin: 3px 0 0; }
+    .toolbar { gap: 6px; }
+    .segments span { padding: 6px 8px; }
+    select { font-size: 12px; padding-inline: 5px; }
+    .axes-label { display: none; }
+    .readout { left: 8px; bottom: 8px; }
+    #time { width: 84px; font-size: 10px; }
+    #reset { display: none; }
+    summary { padding-inline: 14px; }
+    summary > span { margin-left: 7px; }
+  }
+</style>

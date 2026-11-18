@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { createMotionPlots, type MotionClip as Clip, type MotionManifest as Manifest } from './tripteron-plots';
+import { createMotionPlots, motionPhase, type MotionManifest as Manifest } from './tripteron-plots';
 
 const assets = '/media/tripteron/simulation/';
-const revision = '?v=rail4000-v2';
+const revision = '?v=rail2000-paired-v3';
 const ui = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const main = ui('simulation');
 const viewport = ui('viewport');
@@ -48,7 +48,7 @@ async function initialize() {
   controls.minDistance = .25;
   controls.maxDistance = 30;
   const manifest: Manifest = await (await checkedFetch('manifest.json')).json();
-  if (manifest.schema !== 2 || !manifest.clips.length) throw new Error('Unsupported motion data');
+  if (manifest.schema !== 3 || !manifest.clips.length) throw new Error('Unsupported motion data');
   const plots = createMotionPlots(manifest);
   const assembly = await new GLTFLoader().loadAsync(assets + 'assembly.glb' + revision);
   const roots = [assembly.scene, assembly.scene.clone(true)];
@@ -112,9 +112,8 @@ async function initialize() {
     const swept = manifest.swept_bounds_m[paired ? 'pair' : 'single'];
     const bounds = new THREE.Box3(new THREE.Vector3(...swept[0]), new THREE.Vector3(...swept[1]));
     if (follow.checked) {
-      bounds.makeEmpty();
-      roots.forEach(root => root.updateMatrixWorld(true));
-      groups.slice(0, paired ? 2 : 1).forEach(robot => robot.slice(1).forEach(part => bounds.expandByObject(part)));
+      bounds.set(new THREE.Vector3(...clip.follow_bounds_m[0]), new THREE.Vector3(...clip.follow_bounds_m[1]));
+      bounds.translate(lastPlatform);
       bounds.expandByScalar(.07);
     }
     const center = bounds.getCenter(new THREE.Vector3());
@@ -143,9 +142,15 @@ async function initialize() {
   function setPaths() {
     paths.forEach((path, index) => {
       path.geometry.dispose();
-      path.geometry = new THREE.BufferGeometry().setFromPoints(clip.poses_mm.map(p => new THREE.Vector3(p[0] / 1000, p[1] / 1000, p[2] / 1000 + index * manifest.gap_m)));
+      const poses = index === 0 ? clip.poses_mm : clip.poses_b_mm;
+      path.geometry = new THREE.BufferGeometry().setFromPoints(poses.map(p => worldPoint(p, index)));
       path.visible = pathToggle.checked && (paired || index === 0);
     });
+  }
+
+  function worldPoint(point: number[], robot: number) {
+    return new THREE.Vector3(point[0] * (robot ? -.001 : .001), point[1] / 1000,
+      point[2] * (robot ? -.001 : .001) + robot * manifest.gap_m);
   }
 
   function applyFrame() {
@@ -158,14 +163,23 @@ async function initialize() {
       });
     }
     const point = clip.poses_mm[frame];
-    const nextPlatform = new THREE.Vector3(...point).multiplyScalar(.001);
+    const a = worldPoint(point, 0), b = worldPoint(clip.poses_b_mm[frame], 1);
+    const nextPlatform = paired ? a.clone().add(b).multiplyScalar(.5) : a.clone();
     if (follow.checked) {
       const delta = nextPlatform.clone().sub(lastPlatform);
       camera.position.add(delta); controls.target.add(delta);
     }
     lastPlatform.copy(nextPlatform);
-    bar.position.set(point[0] / 1000, point[1] / 1000, point[2] / 1000 + manifest.gap_m / 2);
-    ends.forEach((end, index) => end.position.set(point[0] / 1000, point[1] / 1000, point[2] / 1000 + index * manifest.gap_m));
+    const phase = motionPhase(clip, frame);
+    bar.visible = paired && phase.connector === 'rigid';
+    bar.position.copy(a).add(b).multiplyScalar(.5);
+    bar.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), b.clone().sub(a).normalize());
+    ends[0].position.copy(a); ends[1].position.copy(b);
+    ends.forEach(end => { end.visible = paired; });
+    ui('coordination').textContent = phase.coordination === 'together' ? 'Together · fixed span' : phase.coordination === 'opposite' ? 'Opposite · independent platforms' : 'Single platform';
+    main.dataset.coordination = phase.coordination;
+    main.dataset.connector = bar.visible ? 'rigid' : 'none';
+    main.dataset.endpoints = JSON.stringify([a.toArray(), b.toArray()]);
     timeline.value = String(frame);
     timeline.setAttribute('aria-valuetext', `${(frame / clip.fps).toFixed(1)} seconds`);
     ui('time').textContent = `${(frame / clip.fps).toFixed(1)} / ${((clip.frames - 1) / clip.fps).toFixed(1)} s`;
@@ -193,7 +207,7 @@ async function initialize() {
       clip = next; matrices = data; position = 0;
       timeline.max = String(clip.frames - 1);
       plots.configure(clip, paired);
-      setPaths(); applyFrame();
+      setPaths(); applyFrame(); fitCamera();
       status.hidden = true;
       main.dataset.state = 'ready';
       main.dataset.motion = id;
@@ -228,8 +242,7 @@ async function initialize() {
   for (const input of document.querySelectorAll<HTMLInputElement>('input[name="assembly"]')) {
     input.onchange = () => {
       paired = input.value === 'pair'; roots[1].visible = paired;
-      bar.visible = paired; ends.forEach(end => end.visible = paired);
-      void selectClip(motion.value); showRanges(); fitCamera(); main.dataset.assembly = input.value;
+      void selectClip(motion.value); showRanges(); main.dataset.assembly = input.value;
     };
   }
   ui('fullscreen').onclick = async () => {

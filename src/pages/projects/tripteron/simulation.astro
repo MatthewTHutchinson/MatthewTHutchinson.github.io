@@ -27,21 +27,25 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
           <label><input type="radio" name="assembly" value="pair" checked /><span>Pair</span></label>
           <label><input type="radio" name="assembly" value="single" /><span>Single</span></label>
         </fieldset>
-        <label class="select-label"><span class="sr-only">Motion</span><select id="motion" disabled><option value="tour">Workspace tour</option><option value="sweep">Axis sweep</option><option value="lift">Up / down</option><option value="line">Straight line</option></select></label>
+        <label class="select-label"><span class="sr-only">Motion</span><select id="motion" disabled><option value="tour">Workspace tour</option><option value="sweep">X / Z sweep</option><option value="line">Straight line</option></select></label>
         <label class="select-label"><span class="sr-only">Camera</span><select id="camera"><option value="iso">Isometric</option><option value="front">Front</option><option value="side">Side</option><option value="top">Top</option></select></label>
         <button class="icon" id="fit" title="Fit assembly" aria-label="Fit assembly" set:html={fit} />
         <label class="check"><input id="path" type="checkbox" checked />Path</label>
-        <label class="check"><input id="follow" type="checkbox" />Follow</label>
+        <label class="check"><input id="follow" type="checkbox" checked />Follow</label>
         <label class="check"><input id="plots" type="checkbox" checked />Plots</label>
       </div>
       <div class="workbench">
       <div id="viewport">
         <canvas id="scene" aria-label="Interactive 3D Tripteron assembly" tabindex="0"></canvas>
         <div id="status" role="status"><span>Loading CAD assembly...</span><button id="retry" hidden>Reload</button></div>
+        <output id="coordination" class="phase-readout">Together · fixed span</output>
         <div class="readout" aria-label="Robot A displacement from CAD reference"><span>A</span><output id="position">X 0 &nbsp; Y 0 &nbsp; Z 0 mm</output></div>
         <span class="axes-label">Y up · X lateral · Z outward</span>
       </div>
       <aside id="analysis" aria-label="Synchronized motion analysis">
+        <div class="analysis-header"><span>Local frame</span>
+          <fieldset class="segments"><legend class="sr-only">Plot robot</legend><label><input type="radio" name="plot-robot" value="0" checked /><span>A</span></label><label id="robot-b-choice"><input type="radio" name="plot-robot" value="1" /><span>B</span></label></fieldset>
+        </div>
         <section class="plot-section">
           <h2>Workspace <output id="slice-height">Y = 0 mm</output></h2>
           <canvas id="workspace-plot" role="img" aria-label="XZ workspace slice at the current platform height"></canvas>
@@ -54,9 +58,7 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
           <p class="plot-caption">Separate axis scales · <output id="nominal-speed">0 mm/s</output> at 1x</p>
         </section>
         <section class="plot-section">
-          <h2>Carriage displacement
-            <fieldset class="segments"><legend class="sr-only">Carriage plot robot</legend><label><input type="radio" name="plot-robot" value="0" checked /><span>A</span></label><label id="robot-b-choice"><input type="radio" name="plot-robot" value="1" /><span>B</span></label></fieldset>
-          </h2>
+          <h2>Carriage displacement</h2>
           <canvas id="carriage-plot" role="img" aria-label="M, L and R carriage displacements against rail travel bounds"></canvas>
           <p class="plot-caption">From CAD reference · <output id="rail-margin">Rail margin -- mm</output></p>
         </section>
@@ -70,13 +72,14 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
         <label><span class="sr-only">Playback speed</span><select id="speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option></select></label>
       </div>
       <details id="model-details">
-        <summary>Offline kinematics <span>4,000 mm rail study</span></summary>
+        <summary>Offline kinematics <span>2,000 mm rail study</span></summary>
         <div class="model-notes">
-          <p>The original linkage CAD is unchanged. The source rail profile and 40 mm hole pattern are repeated to 4,000 mm; fixed end hardware moves to the new ends. This is a design study, not an updated hardware calibration.</p>
+          <p>The original linkage CAD is unchanged. The source rail profile and 40 mm hole pattern are repeated to 2,000 mm; fixed end hardware moves to the new ends. This is a design study, not an updated hardware calibration.</p>
           <dl id="ranges"></dl>
-          <p>The default tour follows near-boundary loops in XZ, XY and ZY, with a 0.5% inward margin. Paths that cannot connect directly return through the reference. Every displayed segment is checked. The axis sweep reaches closer to the exact modeled axis limits. Neither is an exhaustive workspace scan.</p>
-          <p>Paired motion keeps a 1 m span level. Single mode has its own range. Bounds use a 5 mm carriage inset and provisional 15-163 degree hinge angles. Graphs show computed motion, not sensor telemetry. Workspace shading tests sampled endpoints; it does not prove connected paths or collision clearance. The white marker is robot A in its local frame.</p>
-          <p>Plot time and speed use nominal 1x playback. Motion timing is illustrative, not motor-rated. Carriage plots can switch to robot B, whose local X and Z are reversed.</p>
+          <p>The tour combines XZ loops with changing height, first together and then in opposite world directions. Both robots return to reference between phases. XZ paths have a 0.5% inward margin; each displayed segment is checked in both robots' local frames. The X / Z sweep holds Y constant. Neither is an exhaustive workspace scan.</p>
+          <p>The together phase keeps a rigid 1 m span level. Opposing motion uses independent platforms with no connecting bar: opposite in/out motion cannot preserve a rigid span. Opposing height excursions are limited to 250 mm each. This is a choreography study, not a model of a flexible or telescoping light.</p>
+          <p>Bounds use a 5 mm carriage inset and provisional 15-163 degree hinge angles. All plots switch between robot A and B in their own local frame. Shading shows individual sampled endpoint feasibility, not a jointly feasible or connected path. Graphs are computed motion, not sensor telemetry.</p>
+          <p>Plot time and speed use nominal 1x playback. Motion timing is illustrative, not motor-rated. Robot B's local X and Z point opposite robot A's world directions.</p>
           <p>Collision clearance, belts, loads, attachment geometry and tracking error are not simulated. This page cannot command hardware.</p>
         </div>
       </details>
@@ -118,6 +121,8 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
   #simulation[data-plots="off"] .workbench { grid-template-columns: minmax(0, 1fr); }
   #simulation[data-plots="off"] #analysis { display: none; }
   #analysis { min-height: 0; overflow-y: auto; border-left: 1px solid #dce2e3; background: #fafcfc; }
+  .analysis-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; border-bottom: 1px solid #dce2e3; font-size: 11px; }
+  .analysis-header .segments span { padding: 3px 10px; }
   .plot-section { padding: 12px 16px 10px; border-bottom: 1px solid #dce2e3; }
   .plot-section h2 { margin: 0 0 8px; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 5px; }
   .plot-section h2 > span, .plot-section h2 output { font-weight: 400; color: #5c696e; font-size: 10px; }
@@ -135,6 +140,7 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
   #retry { padding: 8px 12px; background: white; border: 1px solid #c5d0d2; border-radius: 4px; }
   .readout, .axes-label { position: absolute; pointer-events: none; bottom: 14px; font-size: 11px; color: #4e5b60; background: #f6f8f8e8; padding: 5px 8px; }
   .readout { left: 16px; display: flex; gap: 10px; font-variant-numeric: tabular-nums; }
+  .phase-readout { position: absolute; top: 12px; left: 16px; max-width: calc(100% - 32px); font-size: 11px; color: #315e63; background: #f6f8f8e8; padding: 5px 8px; pointer-events: none; }
   .readout > span { color: #167b84; font-weight: 700; }
   .axes-label { right: 16px; }
   .playback { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-top: 1px solid #dce2e3; background: #f6f8f8; }
@@ -157,6 +163,7 @@ import back from '@tabler/icons/outline/arrow-left.svg?raw';
     .workbench { display: flex; flex-direction: column; overflow-y: auto; }
     #viewport { flex: 0 0 calc(100% - 34px); min-height: 300px; }
     #analysis { flex: none; overflow: visible; border-left: 0; border-top: 1px solid #dce2e3; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .analysis-header { grid-column: 1 / -1; }
     #simulation[data-plots="off"] #viewport { flex: 1; }
     .axes-label { display: none; }
   }

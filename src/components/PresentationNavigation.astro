@@ -6,8 +6,8 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isTripteron = path === tripteron.replace(/\/$/, '');
 const stops = isTripteron ? [
   [tripteron, 'overview', 'Tripteron'],
-  [tripteron, 'kinematics', 'Mechanism and Calibration'],
   [tripteron, 'simulation', 'CAD Motion Simulation'],
+  [tripteron, 'kinematics', 'Mechanism and Calibration'],
   [tripteron, 'motion-mapping', 'Coordinates and Motion Mapping'],
   [tripteron, 'constraints', 'Motion Constraints'],
   [tripteron, 'path-planning', 'Path Planning'],
@@ -178,7 +178,7 @@ const available = stops.some(([p]) => (p.replace(/\/$/, '') || '/') === path);
       perception: ['perception', 'perception-output'],
       'drive-mapping': ['drive-mapping', 'wheel-control'],
       'operator-interface': ['operator-interface', 'safeguards'],
-      ...(navigation.dataset.deck === 'tripteron' ? { overview: ['overview', 'tripteron-concept'] } : {}),
+      ...(navigation.dataset.deck === 'tripteron' ? { overview: ['overview', 'project-summary', 'tripteron-concept'] } : {}),
     };
     const exclusions: Record<string, string[]> = {
       controls: ['perception', 'perception-output', 'drive-mapping', 'wheel-control'],

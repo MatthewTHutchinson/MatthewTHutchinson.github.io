@@ -42,12 +42,13 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
     await page.goto('/projects/tripteron/simulation/');
     await expect(page.locator('#simulation')).toHaveAttribute('data-state', 'ready');
     await expect(page.locator('#motion')).toHaveValue('tour');
+    await expect(page.locator('#follow')).toBeChecked();
     const start = await page.locator('#simulation').getAttribute('data-frame');
     await expect.poll(() => page.locator('#simulation').getAttribute('data-frame')).not.toBe(start);
     await page.locator('#play').click();
     for (const assembly of ['pair', 'single']) {
       await page.locator(`input[name="assembly"][value="${assembly}"]`).check();
-      for (const motion of ['tour', 'sweep', 'lift', 'line']) {
+      for (const motion of ['tour', 'sweep', 'line']) {
         await page.selectOption('#motion', motion);
         await expect(page.locator('#simulation')).toHaveAttribute('data-motion', assembly === 'pair' ? motion : 'single-' + motion);
         await scrub(page, 0);
@@ -114,7 +115,7 @@ test('reduced motion and missing asset states', async ({ browser }) => {
 test('simulation survives presentation navigation', async ({ page }) => {
   await page.goto('/projects/tripteron/?present=1#overview');
   await expect(page.locator('#presentation-section option')).toHaveCount(10);
-  await page.selectOption('#presentation-section', { label: '3. CAD Motion Simulation' });
+  await page.selectOption('#presentation-section', { label: '2. CAD Motion Simulation' });
   const frame = page.frameLocator('#presentation-stage iframe');
   await expect(frame.locator('#simulation')).toHaveAttribute('data-state', 'ready');
   await scrub(frame, 120);
@@ -131,8 +132,8 @@ test('simulation survives presentation navigation', async ({ page }) => {
 });
 
 test('plots match the displayed pose, bounds and mirrored robot', async ({ page }, testInfo) => {
-  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=rail4000-v2')).json();
-  expect(manifest.rail_length_mm).toBe(4000);
+  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=rail2000-paired-v3')).json();
+  expect(manifest.rail_length_mm).toBe(2000);
   expect(manifest.source_rail_length_mm).toBe(700);
   await page.goto('/projects/tripteron/simulation/');
   await expect(page.locator('#simulation')).toHaveAttribute('data-state', 'ready');
@@ -155,7 +156,7 @@ test('plots match the displayed pose, bounds and mirrored robot', async ({ page 
   await scrub(page, sideFrame);
   for (const robot of [0, 1]) {
     await page.locator(`input[name="plot-robot"][value="${robot}"]`).check();
-    const p = clip.poses_mm[sideFrame].map((v, axis) => robot && axis !== 1 ? -v : v);
+    const p = (robot ? clip.poses_b_mm : clip.poses_mm)[sideFrame];
     const expected = manifest.carriage_matrix.map(row => row.reduce((sum, v, axis) => sum+v*p[axis], 0));
     const actual = (await page.locator('#carriage-plot').getAttribute('data-values'))!.split(',').map(Number);
     actual.forEach((v, i) => expect(v).toBeCloseTo(expected[i], 2));
@@ -167,4 +168,53 @@ test('plots match the displayed pose, bounds and mirrored robot', async ({ page 
   await expect.poll(() => page.locator('#analysis').getAttribute('data-frame')).not.toBe(frame);
   await page.locator('#play').click();
   await page.screenshot({ path: testInfo.outputPath('mobile-plots.png') });
+});
+
+test('tour alternates matching and opposing motion without stretching a rigid bar', async ({ page }, testInfo) => {
+  const manifest = await (await page.request.get('/media/tripteron/simulation/manifest.json?v=rail2000-paired-v3')).json();
+  const clip = manifest.clips.find(c => c.id === 'tour');
+  expect(clip.phases.map(p => p.coordination)).toEqual(['together', 'opposite']);
+  for (const id of ['sweep', 'single-sweep']) {
+    const sweep = manifest.clips.find(c => c.id === id);
+    expect(sweep.poses_mm.every(p => p[1] === 0)).toBe(true);
+  }
+  await page.goto('/projects/tripteron/simulation/');
+  await expect(page.locator('#simulation')).toHaveAttribute('data-state', 'ready');
+  for (const phase of clip.phases) {
+    for (const fraction of [.2, .6, .8]) {
+      const frame = Math.floor(phase.start_frame+(phase.end_frame-phase.start_frame)*fraction);
+      await scrub(page, frame);
+      await expect(page.locator('#simulation')).toHaveAttribute('data-coordination', phase.coordination);
+      await expect(page.locator('#simulation')).toHaveAttribute('data-connector', phase.connector);
+      const [a, b] = JSON.parse((await page.locator('#simulation').getAttribute('data-endpoints'))!);
+      const sign = phase.coordination === 'together' ? 1 : -1;
+      a.forEach((v, axis) => expect(b[axis]-(axis === 2 ? 1 : 0)).toBeCloseTo(sign*v, 6));
+      await checkModel(await page.locator('#scene').screenshot());
+      await page.locator('input[name="plot-robot"][value="1"]').check();
+      const p = clip.poses_b_mm[frame];
+      const expected = manifest.carriage_matrix.map(row => row.reduce((sum,v,i) => sum+v*p[i],0));
+      const actual = (await page.locator('#carriage-plot').getAttribute('data-values'))!.split(',').map(Number);
+      actual.forEach((v,i) => expect(v).toBeCloseTo(expected[i],2));
+      (await page.locator('#analysis').getAttribute('data-pose'))!.split(',').map(Number).forEach((v,i) => expect(v).toBeCloseTo(p[i],6));
+    }
+    await page.screenshot({ path: testInfo.outputPath(`${phase.coordination}.png`) });
+  }
+});
+
+test('project opens with the live simulation in the first viewport', async ({ page }, testInfo) => {
+  for (const viewport of [{width:1440,height:900}, {width:390,height:844}]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/projects/tripteron/');
+    const frame = page.frameLocator('article #simulation iframe');
+    await expect(frame.locator('#simulation')).toHaveAttribute('data-state', 'ready');
+    await expect(frame.locator('#follow')).toBeChecked();
+    await checkModel(await frame.locator('#scene').screenshot());
+    const box = await page.locator('article #simulation iframe').boundingBox();
+    expect(box!.y).toBeLessThan(200);
+    expect(box!.width).toBe(viewport.width);
+    const summary = await page.locator('#project-summary').boundingBox();
+    expect(summary!.y).toBeLessThan(viewport.height);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth-innerWidth)).toBe(0);
+    await page.screenshot({path:testInfo.outputPath(`hero-${viewport.width}.png`)});
+  }
 });

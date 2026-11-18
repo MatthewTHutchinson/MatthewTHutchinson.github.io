@@ -9,6 +9,7 @@ const path = Astro.url.pathname.replace(/\/$/, "");
 const project = [...siteConfig.projects, ...siteConfig.archivedProjects].find((item) => item.link === path);
 const title = Astro.props.title ?? project?.name ?? "Project";
 const description = project?.description ?? siteConfig.description;
+const immersive = Astro.props.immersive ?? false;
 ---
 
 <!DOCTYPE html>
@@ -41,7 +42,7 @@ const description = project?.description ?? siteConfig.description;
     <BackgroundLayer />
     <Header />
 
-    <main class="relative z-10 max-w-4xl mx-auto px-4 pt-48 pb-32">
+    <main class:list={['relative z-10 mx-auto pb-32', immersive ? 'w-full pt-24' : 'max-w-4xl px-4 pt-48']}>
       <slot />
     </main>
 

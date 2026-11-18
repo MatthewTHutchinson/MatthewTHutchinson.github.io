@@ -1,4 +1,6 @@
-export type MotionClip = { id: string; label: string; fps: number; frames: number; file: string; poses_mm: number[][] };
+export type MotionPhase = { start_frame: number; end_frame: number; coordination: 'together' | 'opposite' | 'single'; connector: 'rigid' | 'none' };
+export type MotionClip = { id: string; label: string; fps: number; frames: number; file: string; poses_mm: number[][]; poses_b_mm: number[][]; phases: MotionPhase[]; follow_bounds_m: number[][] };
+export const motionPhase = (clip: MotionClip, frame: number) => clip.phases.find(p => frame >= p.start_frame && frame <= p.end_frame)!;
 type Grid = { x_mm: number[]; z_mm: number[]; step_mm: number; y_bounds_mm: ([number, number] | null)[] };
 export type MotionManifest = {
   schema: number; groups: number[]; gap_m: number; mesh_bounds_m: number[][];
@@ -45,14 +47,20 @@ export function createMotionPlots(manifest: MotionManifest) {
       (document.querySelector('input[name="plot-robot"][value="0"]') as HTMLInputElement).checked = true;
     }
     (document.querySelector('input[name="plot-robot"][value="1"]') as HTMLInputElement).disabled = !paired;
-    grid = manifest.workspace_grids[paired ? 'pair' : 'single'];
+    grid = manifest.workspace_grids.single;
     visibleCells = grid.y_bounds_mm.flatMap((range, index) => range ? [{
       x: grid.x_mm[index % grid.x_mm.length], z: grid.z_mm[Math.floor(index / grid.x_mm.length)], low: range[0], high: range[1],
     }] : []);
     footprint = [Math.min(...visibleCells.map(c => c.x))-10, Math.max(...visibleCells.map(c => c.x))+10,
       Math.min(...visibleCells.map(c => c.z))-10, Math.max(...visibleCells.map(c => c.z))+10];
+    setLimits();
+  }
+
+  function poses() { return robot === 1 ? clip.poses_b_mm : clip.poses_mm; }
+
+  function setLimits() {
     limits = [0, 1, 2].map(axis => {
-      const values = next.poses_mm.map(p => p[axis]);
+      const values = poses().map(p => p[axis]);
       const min = Math.min(...values), max = Math.max(...values);
       const pad = Math.max((max-min)*.08, 1);
       return [min-pad, max+pad];
@@ -62,7 +70,7 @@ export function createMotionPlots(manifest: MotionManifest) {
   function workspace() {
     const surface = context('workspace-plot'); if (!surface) return;
     const { ctx, width, height } = surface;
-    const point = clip.poses_mm[frame];
+    const point = poses()[frame];
     const [xmin, xmax, zmin, zmax] = footprint;
     const scale = Math.min((width-52)/(xmax-xmin), (height-32)/(zmax-zmin));
     const left = 35 + (width-52-(xmax-xmin)*scale)/2;
@@ -76,7 +84,7 @@ export function createMotionPlots(manifest: MotionManifest) {
     ctx.strokeStyle = '#c0cbce'; ctx.setLineDash([3, 3]); ctx.beginPath();
     ctx.moveTo(x(0), z(zmin)); ctx.lineTo(x(0), z(zmax)); ctx.moveTo(x(xmin), z(0)); ctx.lineTo(x(xmax), z(0)); ctx.stroke(); ctx.setLineDash([]);
     ctx.strokeStyle = '#8d7a56'; ctx.lineWidth = 1; ctx.beginPath();
-    clip.poses_mm.forEach((p, i) => { if (i === 0) ctx.moveTo(x(p[0]), z(p[2])); else ctx.lineTo(x(p[0]), z(p[2])); }); ctx.stroke();
+    poses().forEach((p, i) => { if (i === 0) ctx.moveTo(x(p[0]), z(p[2])); else ctx.lineTo(x(p[0]), z(p[2])); }); ctx.stroke();
     ctx.fillStyle = '#fff'; ctx.strokeStyle = '#203c40'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x(point[0]), z(point[2]), 4, 0, Math.PI*2); ctx.fill(); ctx.stroke();
     ctx.fillStyle = '#536168'; ctx.textAlign = 'center';
     for (const value of [xmin+10, 0, xmax-10]) ctx.fillText(round(value), x(value), height-12);
@@ -98,20 +106,20 @@ export function createMotionPlots(manifest: MotionManifest) {
       ctx.fillStyle = '#637077'; ctx.textAlign = 'right'; ctx.fillText(round(max), left-7, top+7); ctx.fillText(round(min), left-7, bottom);
       ctx.fillStyle = colors[axis]; ctx.textAlign = 'left'; ctx.fillText(['X', 'Y', 'Z'][axis], 0, top+rowHeight/2);
       ctx.strokeStyle = colors[axis]; ctx.beginPath();
-      clip.poses_mm.forEach((p, i) => { if (i === 0) ctx.moveTo(x(i), y(p[axis])); else ctx.lineTo(x(i), y(p[axis])); }); ctx.stroke();
-      ctx.fillStyle = colors[axis]; ctx.beginPath(); ctx.arc(x(frame), y(clip.poses_mm[frame][axis]), 3, 0, Math.PI*2); ctx.fill();
+      poses().forEach((p, i) => { if (i === 0) ctx.moveTo(x(i), y(p[axis])); else ctx.lineTo(x(i), y(p[axis])); }); ctx.stroke();
+      ctx.fillStyle = colors[axis]; ctx.beginPath(); ctx.arc(x(frame), y(poses()[frame][axis]), 3, 0, Math.PI*2); ctx.fill();
     }
     ctx.strokeStyle = '#394d56'; ctx.setLineDash([2, 2]); ctx.beginPath(); ctx.moveTo(x(frame), 0); ctx.lineTo(x(frame), height-16); ctx.stroke(); ctx.setLineDash([]);
     ctx.fillStyle = '#637077'; ctx.textAlign = 'left'; ctx.fillText('0', left, height-1); ctx.textAlign = 'right'; ctx.fillText(`${((clip.frames-1)/clip.fps).toFixed(1)} s`, right, height-1);
     const a = Math.max(0, frame-1), b = Math.min(clip.frames-1, frame+1);
-    const velocity = Math.hypot(...clip.poses_mm[b].map((n, i) => (n-clip.poses_mm[a][i])*clip.fps/(b-a || 1)));
+    const velocity = Math.hypot(...poses()[b].map((n, i) => (n-poses()[a][i])*clip.fps/(b-a || 1)));
     el('nominal-speed').textContent = `${round(velocity)} mm/s`;
   }
 
   function carriages() {
     const surface = context('carriage-plot'); if (!surface) return;
     const { ctx, width } = surface;
-    const point = clip.poses_mm[frame].map((n, axis) => robot === 1 && axis !== 1 ? -n : n);
+    const point = poses()[frame];
     let margin = Infinity;
     const values = matrix.map(row => row.reduce((sum, n, i) => sum+n*point[i], 0));
     values.forEach((value, axis) => {
@@ -134,9 +142,11 @@ export function createMotionPlots(manifest: MotionManifest) {
     if (!shown || !clip) return;
     workspace(); positionPlot(); carriages();
     el('analysis').dataset.frame = String(frame);
+    el('analysis').dataset.robot = String(robot);
+    el('analysis').dataset.pose = poses()[frame].join(',');
   }
   for (const input of document.querySelectorAll<HTMLInputElement>('input[name="plot-robot"]')) {
-    input.onchange = () => { robot = Number(input.value); draw(); };
+    input.onchange = () => { robot = Number(input.value); if (clip) { setLimits(); draw(); } };
   }
   const resize = new ResizeObserver(() => draw());
   resize.observe(el('analysis'));

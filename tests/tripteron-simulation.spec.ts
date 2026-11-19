@@ -44,9 +44,14 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
     await expect(page.locator('#simulation')).toHaveAttribute('data-state', 'ready');
     await expect(page.locator('#motion')).toHaveValue('tour');
     await expect(page.locator('#follow')).toBeChecked();
+    await expect(page.locator('#path')).not.toBeChecked();
     const start = await page.locator('#simulation').getAttribute('data-frame');
     await expect.poll(() => page.locator('#simulation').getAttribute('data-frame')).not.toBe(start);
     await page.locator('#play').click();
+    const withoutPath = await page.locator('#scene').screenshot();
+    await page.locator('#path').check();
+    await changed(withoutPath, await page.locator('#scene').screenshot());
+    await page.locator('#path').uncheck();
     for (const assembly of ['pair', 'single']) {
       await page.locator(`input[name="assembly"][value="${assembly}"]`).check();
       for (const motion of ['tour', 'sweep', 'line']) {
